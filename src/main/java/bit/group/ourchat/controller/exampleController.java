@@ -15,6 +15,8 @@ import javax.servlet.http.HttpSession;
 
 
 @Controller
+@RequestMapping("/example")
+
 public class exampleController {
     @Autowired
     private exampleService exampleService;
