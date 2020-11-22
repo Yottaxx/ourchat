@@ -7,6 +7,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
 
+
 @Entity
 public class exampleEntity {
     @Id
@@ -57,6 +58,7 @@ public class exampleEntity {
     public void setRole(String role) {
         this.role = role;
     }
+
 
 //    public List<exampleEntity> getMoments() {
 //        return moments;
