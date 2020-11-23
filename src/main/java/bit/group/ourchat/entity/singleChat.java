@@ -18,7 +18,7 @@ public class singleChat {
     private user user2;
 
     @OneToMany(mappedBy = "singleChat",cascade= CascadeType.ALL,fetch = FetchType.LAZY)
-    private List<chatRecord> chatRecordList;//地址
+    private List<singleChatRecord> singleChatRecordList;//地址
 
 
     public Integer getId() {
@@ -45,12 +45,12 @@ public class singleChat {
         this.userID2 = userID2;
     }
 
-    public List<chatRecord> getChatRecordList() {
-        return chatRecordList;
+    public List<singleChatRecord> getSingleChatRecordList() {
+        return singleChatRecordList;
     }
 
-    public void setChatRecordList(List<chatRecord> chatRecordList) {
-        this.chatRecordList = chatRecordList;
+    public void setSingleChatRecordList(List<singleChatRecord> singleChatRecordList) {
+        this.singleChatRecordList = singleChatRecordList;
     }
 
     public user getUser1() {

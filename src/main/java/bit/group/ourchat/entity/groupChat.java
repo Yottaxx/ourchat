@@ -14,6 +14,8 @@ public class groupChat {
     private String notice; //群公告
 
     @OneToMany(mappedBy = "groupChat", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<groupChatRecord> groupChatRecordList;
+    @OneToMany(mappedBy = "groupChat", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<groupMembers> groupMembersList;
     @ManyToOne()
     private user admin;
@@ -70,6 +72,14 @@ public class groupChat {
         this.id = groupChatId;
         this.adminID = adminID;
         this.groupName = groupName;
+    }
+
+    public List<groupChatRecord> getGroupChatRecordList() {
+        return groupChatRecordList;
+    }
+
+    public void setGroupChatRecordList(List<groupChatRecord> groupChatRecordList) {
+        this.groupChatRecordList = groupChatRecordList;
     }
 
     public groupChat()
