@@ -1,6 +1,7 @@
 package bit.group.ourchat.Interceptor;
 
 import bit.group.ourchat.entity.exampleEntity;
+import bit.group.ourchat.entity.user;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
@@ -17,8 +18,8 @@ public class SecurityInterceptor extends HandlerInterceptorAdapter {
         HttpSession session = request.getSession();
 
 //            判断是否已有该用户登录的session
-        if(session.getAttribute("customer") != null){
-            exampleEntity customer= (exampleEntity) session.getAttribute("customer");
+        if(session.getAttribute("user") != null){
+            user user1= (user) session.getAttribute("user");
 //            System.out.println(customer.getName()+" "+customer.getPassword());
             return true;
         }
