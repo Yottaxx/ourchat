@@ -6,11 +6,13 @@ import bit.group.ourchat.service.friendService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.util.HashMap;
+import java.util.Map;
 
 @Controller
 public class friendController {
@@ -18,24 +20,16 @@ public class friendController {
     private userService userService;
     @Autowired
     private friendService friendService;
+    @GetMapping(value = {"/homepage"})
+    public String ChatHtml(HttpSession session, Model model){
+        return "homepage";
+    }
     //查找好友
-    @PostMapping("/search_friend")
-    private void lookup_friend(HttpServletRequest request, HttpServletResponse response, Model model){
-        user user0 = new user();
-        user0 = userService.findByName(request.getParameter("name"));
-        user user1 = new user();
-        user1 = userService.findByName(request.getParameter("lookup_name"));
-        int currentUserId = user0.getId();
-        int lookupUserId = user1.getId();
-        boolean isSelf = (currentUserId==lookupUserId);
-        boolean isFriend = friendService.isFriend(currentUserId,lookupUserId);
-        model.addAttribute("lookup_name",user1.getName());
-        model.addAttribute("lookup_nickname",user1.getNickname());
-        model.addAttribute("lookup_profile_photo",user1.getProfile_photo());
-        model.addAttribute("lookup_sign",user1.getSign());
-        model.addAttribute("lookup_role",user1.getRole());
-        model.addAttribute("lookup_address",user1.getAddress());
-        model.addAttribute("lookup_isFriend",isSelf||isFriend);
+    @RequestMapping(value={"/homepage_search"},method = RequestMethod.GET)
+    private  @ResponseBody int search_user(String getName){
+
+        System.out.println(getName);
+        return 1;
     }
     //发送好友申请
     //接收好友申请

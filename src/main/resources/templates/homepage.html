@@ -1,20 +1,17 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
-    <title>OURCHAT</title>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-    <link rel="stylesheet" type="text/css" href="../static/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="../static/css/bootstrap.css">
-    <link rel="stylesheet" type="text/css" href="../static/css/public.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
 
-<!--    <meta name="description" content="">-->
-<!--    <meta name="author" content="">-->
     <title>OURCHAT|好友列表</title>
     <link href="../static/css/bootstrap.min.css" rel="stylesheet">
     <link href="../static/css/font-awesome.min.css" rel="stylesheet">
     <link href="../static/css/lightbox.css" rel="stylesheet">
     <link href="../static/css/animate.min.css" rel="stylesheet">
+    <link href="../static/css/main.css" rel="stylesheet">
     <link href="../static/css/responsive.css" rel="stylesheet">
 
     <!--[if lt IE 9]>
@@ -26,7 +23,27 @@
     <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../static/img/ico/apple-touch-icon-114-precomposed.png">
     <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../static/img/ico/apple-touch-icon-72-precomposed.png">
     <link rel="apple-touch-icon-precomposed" href="../static/img/ico/apple-touch-icon-57-precomposed.png">
-
+    <script type="text/javascript" src="../static/js/jquery.js"></script>
+    <script src="../static/js/bootstrap.min.js"></script>
+    <script th:inline="javascript">
+        function search_user(){
+            var getName = $('#getName').val();
+            $.ajax({
+                url: "/homepage_search",
+                type: "get",
+                //获取某个文本框的值
+                //data: "id=" + id + "&name=" + $("#name").val(),
+                data: "getName=" + getName,
+                // 或者(注意：若参数为中文时，以下这种传参不会造成后台接收到的是乱码)
+                success: function (returnValue) {
+                    alert(returnValue)
+                },
+                error: function (returnValue) {
+                    alert("对不起！数据加载失败search！");
+                }
+            })
+        }
+    </script>
 </head>
 <body>
 <div id="bg"></div>
@@ -42,94 +59,44 @@
                         <h2 th:text="${nickname+'('+name+')'}">
                             用户昵称
                         </h2>
+
                         <p th:text="${sign}">
                             个性签名
                         </p>
                     </div>
                 </div>
-                <div class="row clearfix">
-                    <form role="form" class="form-inline d-flex justify-content-center pt-5" action="/add_friend" method="post">
-                            <input class="form-control" id="InputName" type="name" name="lookup_name" placeholder=" 输入用户名" />
-                             <button type="button" class="btn btn-default"  id= lookup_user >添加好友</button>
-<!--                            <button type="button" class="btn btn-default"  id= lookup_user data-toggle="modal" data-target="#addFriends" data-backdrop="static">添加好友</button>-->
-                    </form>
-                </div>
-                <div class="row clearfix">
-                    <ul class="list-unstyled pt-5">
-                        <strong>ID：</strong><span th:text="${lookup_id}">显示id</span>
-                        <li><br></li>
-                        <strong>用户名：</strong><span th:text="${lookup_name}">显示用户名</span>
-                        <li><br></li>
-                        <strong>昵称：</strong><span th:text="${lookup_nickname}">显示昵称</span>
-                        <li><br></li>
-                        <strong>个性签名：</strong><span th:text="${lookup_sign}">显示个性签名</span>
-                        <li><br></li>
-                        <strong>地区：</strong><span th:text="${lookup_address}">显示地区</span>
-                        <li><br></li>
-                        <strong>备注：</strong>
-<!--                        <textarea  class="form-control"  name="remark" value="{remark}" id="remark0" placeholder="备注">-->
-<!--                        </textarea>-->
-                    </ul>
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-default" data-dismiss="modal">发送好友申请</button>
+                <div id="user_info">
+                    <div class="row clearfix" >
+                        <form role="form" class="form-inline d-flex justify-content-center pt-5" action="/add_friend" method="post">
+                            <input class="form-control"  type="name" name="getName" id="search_name" placeholder=" 输入用户名" />
+                            <button class="btn btn-default" type="button" id="search" onclick="search_user()">添加好友</button>
+    <!--                    <button type="button" class="btn btn-default"  id= lookup_user data-toggle="modal" data-target="#addFriends" data-backdrop="static">添加好友</button>-->
+                        </form>
+                    </div>
+                    <div class="row clearfix">
+                        <ul class="list-unstyled w-flex pt-5">
+                            <strong>ID：</strong><span th:text="${lookup_id}">显示id{{}}</span>
+                            <li><br></li>
+                            <strong>用户名：</strong><span th:text="${lookup_name}">显示用户名</span>
+                            <li><br></li>
+                            <strong>昵称：</strong><span th:text="${lookup_nickname}">显示昵称</span>
+                            <li><br></li>
+                            <strong>个性签名：</strong><span th:text="${lookup_sign}">显示个性签名</span>
+                            <li><br></li>
+                            <strong>地区：</strong><span th:text="${lookup_address}">显示地区</span>
+                            <li><br></li>
+                            <strong>备注：</strong>
+                            <!--    <textarea  class="form-control"  name="remark" value="{remark}" id="remark0" placeholder="备注">-->
+                            <!--    </textarea>-->
+                        </ul>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-default" data-dismiss="modal">发送好友申请</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-<!--<div class="modal fade" id="addFriends">-->
-<!--    <div class="modal-dialog">-->
-<!--        <div class="modal-content">-->
-<!--            <div class="modal-header">-->
-<!--                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>-->
-<!--                <h4 class="modal-title">好友用户名</h4>-->
-<!--            </div>-->
-<!--            <div class="modal-body">-->
-<!--                <ul class="list-unstyled">-->
-<!--                    <strong>ID：</strong><span th:text="${lookup_id}">显示id</span>-->
-<!--                    <li><br></li>-->
-<!--                    <strong>用户名：</strong><span th:text="${lookup_name}">显示用户名</span>-->
-<!--                    <li><br></li>-->
-<!--                    <strong>昵称：</strong><span th:text="${lookup_nickname}">显示昵称</span>-->
-<!--                    <li><br></li>-->
-<!--                    <strong>个性签名：</strong><span th:text="${lookup_sign}">显示个性签名</span>-->
-<!--                    <li><br></li>-->
-<!--                    <strong>地区：</strong><span th:text="${lookup_address}">显示地区</span>-->
-<!--                    <li><br></li>-->
-<!--                    <strong>备注：</strong>-->
-<!--                            <textarea  class="form-control"  name="remark" value="{remark}" id="remark" placeholder="备注">-->
-<!--                        </textarea>-->
-<!--                </ul>-->
-<!--            </div>-->
-<!--            <div class="modal-footer">-->
-<!--                <button type="submit" class="btn btn-default" data-dismiss="modal">发送好友申请</button>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</div>-->
-<script src="../static/js/jquery-3.3.1.min.js"></script>
-<script src="../static/js/bootstrap.min.js"></script>
-<!--<script>$('#addFriends').modal(show)</script>-->
-<script>
-    $('#lookup_user').click(function () {
-        var lookup_name = $('#lookup_name').val();
-        $.ajax({
-            url:"/search_friend",
-            type:"post",
-            dataType:"json",
-            data:{
-                "lookup_name":lookup_name
-            },
-            success:function(data){
-               console.log("success lookup")
-
-            },
-            error:function(data){
-                console.log("failed lookup")
-            }
-        })
-    })
-</script>
 </body>
 </html>

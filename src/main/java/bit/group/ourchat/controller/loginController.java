@@ -28,6 +28,7 @@ public class loginController {
     public String login(){
         return "login";
     }
+
     @PostMapping(value = "/login")
     public String Login_User(HttpServletRequest request,HttpServletResponse response,Model model) throws IOException {
         user user1 = new user();
