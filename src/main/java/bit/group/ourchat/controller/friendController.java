@@ -50,7 +50,6 @@ public class friendController {
         isSelf = (currentId==lookupId);
         isFriend = friendService.isFriend(currentId,lookupId);
         result.put("isFriend",isSelf||isFriend);
-
         return result;
     }
     //发送好友申请

@@ -1,6 +1,7 @@
 package bit.group.ourchat.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import org.hibernate.annotations.OnDelete;
 

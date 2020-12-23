@@ -4,6 +4,7 @@ package bit.group.ourchat.entity;
 import javax.persistence.*;
 
 import bit.group.ourchat.entity.user;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 @IdClass(user_friend_request.class)
@@ -31,6 +32,7 @@ public class friend_request {
 
     public bit.group.ourchat.entity.user getUser() {return user;}
 
+    @JsonBackReference
     public void setUser(bit.group.ourchat.entity.user user){this.user = user;}
 
     public friend_request(Integer id,Integer requestId){
