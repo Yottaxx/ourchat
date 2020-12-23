@@ -25,6 +25,7 @@ public class registerController {
     public String register(){
         return "register";
     }
+
     @PostMapping(value = "/register")
     public String Register_newUser(HttpServletRequest request, HttpServletResponse response) throws IOException {
         user user1 = new user();

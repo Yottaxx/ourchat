@@ -7,43 +7,114 @@
     <meta name="author" content="">
 
     <title>OURCHAT|好友列表</title>
-    <link href="../static/css/bootstrap.min.css" rel="stylesheet">
-    <link href="../static/css/font-awesome.min.css" rel="stylesheet">
-    <link href="../static/css/lightbox.css" rel="stylesheet">
-    <link href="../static/css/animate.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="../static/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../static/css/public.css">
+<!--    <link href="../static/css/font-awesome.min.css" rel="stylesheet">-->
+<!--    <link href="../static/css/lightbox.css" rel="stylesheet">-->
+<!--    <link href="../static/css/animate.min.css" rel="stylesheet">-->
     <link href="../static/css/main.css" rel="stylesheet">
-    <link href="../static/css/responsive.css" rel="stylesheet">
+<!--    <link href="../static/css/responsive.css" rel="stylesheet">-->
 
     <!--[if lt IE 9]>
     <script src="../static/js/html5shiv.js"></script>
     <script src="../static/js/respond.min.js"></script>
     <![endif]-->
-    <link rel="shortcut icon" href="../static/img/ico/favicon.ico">
-    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../static/img/ico/apple-touch-icon-144-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../static/img/ico/apple-touch-icon-114-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../static/img/ico/apple-touch-icon-72-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" href="../static/img/ico/apple-touch-icon-57-precomposed.png">
+    <link rel="shortcut icon" href="../static/images/ico/favicon.ico">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../static/images/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../static/images/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../static/images/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="../static/images/ico/apple-touch-icon-57-precomposed.png">
     <script type="text/javascript" src="../static/js/jquery.js"></script>
     <script src="../static/js/bootstrap.min.js"></script>
     <script th:inline="javascript">
         function search_user(){
-            var getName = $('#getName').val();
+            var search_name = $('#search_name').val();
+            var current_name =$('#current_name').text();
             $.ajax({
+                async:false,
                 url: "/homepage_search",
-                type: "get",
+                type: "post",
                 //获取某个文本框的值
                 //data: "id=" + id + "&name=" + $("#name").val(),
-                data: "getName=" + getName,
+                dataType:"json",
+                data: {
+                    "search_name":search_name,
+                    "current_name":current_name
+                },
                 // 或者(注意：若参数为中文时，以下这种传参不会造成后台接收到的是乱码)
                 success: function (returnValue) {
-                    alert(returnValue)
+                    var div;
+                    var nickname,sign;
+                    var isFriend="添加好友";
+                    if(returnValue.user.nickname == null)
+                        nickname="——";
+                    if(returnValue.user.sign==null)
+                        sign="——";
+                    div ='<div class="col-md-2 column">'
+                            +'<ul class="list-unstyled w-flex">'
+                            +'<strong>用户名：</strong><span th:text="${lookup_name}" id="friend_name">'+returnValue.user.name+'</span>'
+                            +'<li><br></li>'
+                            +'<strong>昵称：</strong><span th:text="${lookup_nickname}">'+nickname+'</span>'
+                            +'<li><br></li>'
+                            +'<strong>个性签名：</strong><span th:text="${lookup_sign}">'+sign+'</span>'
+                            +'<li><br></li>'
+                            +'<strong>地区：</strong><span th:text="${lookup_address}">'+returnValue.user.address+'</span>'
+                            +'<li><br></li>'
+                            +'</ul>'
+                            +'<div class="modal-footer">'
+                    if(returnValue.isFriend)
+                        div = div + '</div></div>'
+                    else
+                        div = div +'<button type="button" class="btn btn-default" data-dismiss="modal" onclick="send_FriendReq()">'+isFriend+'</button>'
+                            +'</div></div>'
+                    $('#user_info').html(div)
                 },
                 error: function (returnValue) {
-                    alert("对不起！数据加载失败search！");
+                    $('#user_info').html(div = '<div></div>')
+                    alert("对不起！该用户不存在！");
                 }
             })
         }
+        function send_FriendReq() {
+            var current_name = $('#current_name').text();
+            var friend_name = $('#friend_name').text();
+            $.ajax({
+                async:false,
+                url: "/homepage_sendReq",
+                type: "post",
+                //获取某个文本框的值
+                //data: "id=" + id + "&name=" + $("#name").val(),
+                dataType:"text",
+                data: {
+                    "current_name":current_name,
+                    "friend_name":friend_name
+                },
+                // 或者(注意：若参数为中文时，以下这种传参不会造成后台接收到的是乱码)
+                success: function (returnValue) {
+                    $('#user_info').html(div = '<div></div>')
+                    alert(returnValue)
+                },
+                error: function (returnValue) {
+                    $('#user_info').html(div = '<div></div>')
+                    alert("发送好友申请失败！");
+                }
+            })
+
+        }
     </script>
+    <style>
+        .top5 { margin-top:5px; }
+
+        .top7 { margin-top:7px; }
+
+        .top10 { margin-top:10px; }
+
+        .top15 { margin-top:15px; }
+
+        .top17 { margin-top:17px; }
+
+        .top30 { margin-top:30px; }
+    </style>
 </head>
 <body>
 <div id="bg"></div>
@@ -53,45 +124,25 @@
             <div class="col-md-12 column">
                 <div class="row clearfix">
                     <div class="col-md-2 column">
-                        <img alt="140x140" src="../static/img/logo.png" class="img-circle" />
+                        <img alt="140x140" src="../static/images/logo.png" class="img-circle" />
                     </div>
                     <div class="col-md-10 column" >
-                        <h2 th:text="${nickname+'('+name+')'}">
-                            用户昵称
-                        </h2>
-
-                        <p th:text="${sign}">
-                            个性签名
-                        </p>
+                        <h2  th:text="${nickname}">用户昵称</h2>
+                        <h3 id="current_name" th:text="${'('+name+')'}">用户名</h3>
+                        <p th:text="${sign}">个性签名</p>
                     </div>
                 </div>
-                <div id="user_info">
-                    <div class="row clearfix" >
-                        <form role="form" class="form-inline d-flex justify-content-center pt-5" action="/add_friend" method="post">
-                            <input class="form-control"  type="name" name="getName" id="search_name" placeholder=" 输入用户名" />
-                            <button class="btn btn-default" type="button" id="search" onclick="search_user()">添加好友</button>
+                <div class="row clearfix top30" >
+                    <form role="form" class="form-inline d-flex justify-content-center" method="post">
+                        <input class="form-control"  type="name" name="getName" id="search_name" placeholder=" 输入用户名" />
+                        <button class="btn btn-default" type="button" id="search" onclick="search_user()">添加好友</button>
     <!--                    <button type="button" class="btn btn-default"  id= lookup_user data-toggle="modal" data-target="#addFriends" data-backdrop="static">添加好友</button>-->
-                        </form>
-                    </div>
-                    <div class="row clearfix">
-                        <ul class="list-unstyled w-flex pt-5">
-                            <strong>ID：</strong><span th:text="${lookup_id}">显示id{{}}</span>
-                            <li><br></li>
-                            <strong>用户名：</strong><span th:text="${lookup_name}">显示用户名</span>
-                            <li><br></li>
-                            <strong>昵称：</strong><span th:text="${lookup_nickname}">显示昵称</span>
-                            <li><br></li>
-                            <strong>个性签名：</strong><span th:text="${lookup_sign}">显示个性签名</span>
-                            <li><br></li>
-                            <strong>地区：</strong><span th:text="${lookup_address}">显示地区</span>
-                            <li><br></li>
-                            <strong>备注：</strong>
+                    </form>
+                </div>
+                    <div id="user_info" class="row clearfix">
+<!--                            <strong>备注：</strong>-->
                             <!--    <textarea  class="form-control"  name="remark" value="{remark}" id="remark0" placeholder="备注">-->
                             <!--    </textarea>-->
-                        </ul>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-default" data-dismiss="modal">发送好友申请</button>
-                        </div>
                     </div>
                 </div>
             </div>
