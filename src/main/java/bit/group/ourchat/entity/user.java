@@ -1,7 +1,6 @@
 package bit.group.ourchat.entity;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import org.hibernate.annotations.OnDelete;
 
@@ -42,9 +41,6 @@ public class user {
     @OneToMany(mappedBy = "admin",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     private List<groupChat> groupChatList;
 
-    //好友请求表
-    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
-    private List<friend_request> friend_requestList;
 
     public Integer getId() {
         return id;
@@ -156,11 +152,6 @@ public class user {
 
     public void setGroupMembersList(List<groupMembers> groupMembersList) {
         this.groupMembersList = groupMembersList;
-    }
-
-    public List<friend_request> getFriend_requestList() {return friend_requestList;}
-
-    public void setFriend_requestList(List<friend_request> friend_requestList){this.friend_requestList = friend_requestList;
     }
 
     public user(Integer id, String name, String email, String password, String nickname, String sign, String profile_photo,

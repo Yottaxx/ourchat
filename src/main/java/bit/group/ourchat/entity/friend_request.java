@@ -5,8 +5,13 @@ import javax.persistence.*;
 
 import bit.group.ourchat.entity.user;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 @Entity
+@DynamicInsert
+@DynamicUpdate
 @IdClass(user_friend_request.class)
 public class friend_request {
     @Id
@@ -20,6 +25,9 @@ public class friend_request {
     //@JoinColumn(name="user_id", nullable = false)
     @ManyToOne()
     private user user;
+
+    @ColumnDefault("0")
+    private Integer status=0;
 
     public Integer getId() {return id;}
 
@@ -35,9 +43,14 @@ public class friend_request {
     @JsonBackReference
     public void setUser(bit.group.ourchat.entity.user user){this.user = user;}
 
-    public friend_request(Integer id,Integer requestId){
+    public Integer getStatus(){return status;}
+
+    public void setStatus(Integer status){this.status = status;}
+
+    public friend_request(Integer id,Integer requestId,Integer status){
         this.id = id;
         this.requestId = requestId;
+        this.status = status;
     }
     public friend_request(){
 

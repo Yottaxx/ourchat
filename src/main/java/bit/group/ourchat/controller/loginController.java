@@ -23,6 +23,10 @@ public class loginController {
     private userService userService;
 
 
+    @RequestMapping("/blogthree")
+    public String blogthree(){
+        return "blogthree";
+    }
 //    去到登录页面
     @RequestMapping("/login")
     public String login(){

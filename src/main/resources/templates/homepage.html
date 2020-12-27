@@ -101,6 +101,150 @@
             })
 
         }
+        function request_msg(){
+            console.log("show function run")
+            var current_name = $('#current_name').text();
+            $.ajax({
+                async:false,
+                url: "/homepage_requestMsg",
+                type: "post",
+                //获取某个文本框的值
+                //data: "id=" + id + "&name=" + $("#name").val(),
+                dataType:"json",
+                data: {
+                    "current_name":current_name,
+                },
+                // 或者(注意：若参数为中文时，以下这种传参不会造成后台接收到的是乱码)
+                success: function (returnValue) {
+                    console.log(returnValue)
+                    showReqMsg(returnValue)
+                },
+                error: function (returnValue) {
+                    alert("无消息");
+                }
+            })
+        }
+        function showReqMsg(data) {
+            var total_div=''
+            if(data.length==0){
+                var div = '<div>无</div>'
+                total_div = div
+            }
+            for(var i=0;i<data.length;i++){
+                if(data[i].request=="request"){
+                    var div ='<div>'
+                        +'<ul>'
+                        +'<span>用户-</span><strong id="requstName"+i>'+data[i].Name+'</strong>'
+                        +'<span>（昵称-'+data[i].Nickname+'），请求添加您为好友</span>'
+                        +'<li><br></li>'
+                        +'</ul>'
+                        +'<div class="modal-footer">'
+                        +'<button type="button" class="btn btn-default" onclick="RequestAgree(this)" >同意</button>'
+                        +'<button type="button" class="btn btn-default" onclick="RequestReject(this)" >拒绝</button>'
+                        +'<button type="button" class="btn btn-default" onclick="RequestIgnore(this)" >忽略</button>'
+                        +'</div></div>'
+                    total_div +=div
+                }
+                if(data[i].request=="reject"){
+                    var div ='<div>'
+                        +'<ul>'
+                        +'<span>用户-</span><strong id="requstName"+i>'+data[i].Name+'</strong>'
+                        +'<span>（昵称-'+data[i].Nickname+'），已拒绝您的好友请求</span>'
+                        +'<li><br></li>'
+                        +'</ul>'
+                        +'<div class="modal-footer">'
+                        +'<button type="button" class="btn btn-default">确定</button>'
+                        +'</div></div>'
+                    total_div +=div
+                }
+
+            }
+            $('#request_info').html(total_div)
+           // $('Model_request_info').model('show')
+        }
+        function RequestAgree(obj){
+            var Name = $(obj).parent().parent().find('strong').text()
+            var current_name = $('#current_name').text()
+            console.log(Name)
+            $.ajax({
+                async:false,
+                url: "/Request_Agree",
+                type: "post",
+                //获取某个文本框的值
+                //data: "id=" + id + "&name=" + $("#name").val(),
+                dataType:"json",
+                data: {
+                    "request_name":Name,
+                    "current_name":current_name,
+                },
+                // 或者(注意：若参数为中文时，以下这种传参不会造成后台接收到的是乱码)
+                success: function (returnValue) {
+                    console.log(returnValue)
+                    send_FriendReq()
+                    alert("已经成功添加好友")
+                },
+                error: function (returnValue) {
+                    alert("好友添加失败");
+                }
+            })
+        }
+        function RequestReject() {
+            var butId = $(this).attr("id");
+            console.log(butId)
+            alert(butId)
+        }
+        function RequestIgnore(){
+            var butId = $(this).attr("id");
+            console.log(butId)
+            alert(butId)
+        }
+        $().ready(function(){
+            var current_name = $('#current_name').text();
+            $.ajax({
+                async:false,
+                url: "/Allfriends",
+                type: "post",
+                //获取某个文本框的值
+                //data: "id=" + id + "&name=" + $("#name").val(),
+                dataType:"json",
+                data: {
+                    "current_name":current_name,
+                },
+                // 或者(注意：若参数为中文时，以下这种传参不会造成后台接收到的是乱码)
+                success: function (returnValue) {
+                    var total_div=''
+                    if(returnValue.length==0){
+                        var div = '<div></div>'
+                        total_div = div
+                    }
+                    console.log(returnValue.length)
+                    for(var i=0;i<returnValue.length;i++){
+                        var div ='<div><ul>'
+                        console.log(returnValue[i])
+                        console.log(returnValue[i].remark)
+                        console.log(returnValue[i].name)
+                        if(returnValue[i].remark==null){
+                            div += '<span >'+returnValue[i].name+'</span>'
+                            console.log("into if")
+                        }
+                        else{
+                            div += '<span >'+returnValue[i].remark+'</span>'
+                        }
+                        div += '<li><br></li>'
+                        +'</ul>'
+                        +'</div>'
+                        total_div +=div
+                    }
+                    $('#friend_info').html(total_div)
+                    alert(returnValue)
+
+                },
+                error: function (returnValue) {
+                    $('#friend_info').html(div = '<div></div>')
+                    alert("好友信息加载失败")
+                }
+            })
+        })
     </script>
     <style>
         .top5 { margin-top:5px; }
@@ -130,19 +274,41 @@
                         <h2  th:text="${nickname}">用户昵称</h2>
                         <h3 id="current_name" th:text="${'('+name+')'}">用户名</h3>
                         <p th:text="${sign}">个性签名</p>
+                        <!-- 按钮触发模态框 -->
+                        <button class="btn btn-default btn-xs" data-toggle="modal" data-target="#Model_request_info" type="button" id="requestMsg" onclick="request_msg()">
+                            消息
+                        </button>
+                        <!--  好友请求消息 模态框（Modal） -->
+                        <div class="modal fade" id="Model_request_info" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+                            <div class="modal-dialog">
+                                <div class="modal-content" >
+                                    <div class="modal-header">
+                                        <button type="button" class="close"
+                                                data-dismiss="modal" aria-hidden="true">
+                                            &times;
+                                        </button>
+                                        <h4 class="modal-title" id = "myModalLabel">
+                                            好友通知
+                                        </h4>
+                                    </div>
+                                    <div class="modal-body" id = "request_info">
+                                        暂无好友申请
+                                    </div>
+                                </div>
+                            </div>
                     </div>
+                </div>
                 </div>
                 <div class="row clearfix top30" >
                     <form role="form" class="form-inline d-flex justify-content-center" method="post">
                         <input class="form-control"  type="name" name="getName" id="search_name" placeholder=" 输入用户名" />
                         <button class="btn btn-default" type="button" id="search" onclick="search_user()">添加好友</button>
-    <!--                    <button type="button" class="btn btn-default"  id= lookup_user data-toggle="modal" data-target="#addFriends" data-backdrop="static">添加好友</button>-->
                     </form>
                 </div>
                     <div id="user_info" class="row clearfix">
-<!--                            <strong>备注：</strong>-->
-                            <!--    <textarea  class="form-control"  name="remark" value="{remark}" id="remark0" placeholder="备注">-->
-                            <!--    </textarea>-->
+                    </div>
+                    <div id="friend_info" class="row clearfix">
+
                     </div>
                 </div>
             </div>
