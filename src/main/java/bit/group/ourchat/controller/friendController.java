@@ -78,6 +78,8 @@ public class friendController {
     @PostMapping(path = "/homepage_requestMsg")
     @ResponseBody
     public List<Map> request_msg(String current_name) throws JSONException {
+        System.out.println("request_msg_------------------------");
+        System.out.println(current_name);
         current_name = current_name.substring(current_name.indexOf("(")+1, current_name.indexOf(")"));
         user u1 = userService.findByName(current_name);
         List<friend_request> fri_req_list = friendService.findAllRequestByUserId(u1.getId());

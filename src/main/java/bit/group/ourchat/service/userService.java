@@ -24,7 +24,6 @@ public class userService {
     }
     public boolean Login(user user)
     {
-
         if(userRepository.findByName(user.getName()) == null)
             return false;
         user u1 = userRepository.findByName(user.getName());

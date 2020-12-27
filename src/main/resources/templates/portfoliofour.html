@@ -1,27 +1,254 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
     <title>Portfolio Three Columns | Triangle</title>
-    <link href="../static/css/bootstrap.min.css" rel="stylesheet">
-    <link href="../static/css/font-awesome.min.css" rel="stylesheet">
-    <link href="../static/css/lightbox.css" rel="stylesheet">
-    <link href="../static/css/animate.min.css" rel="stylesheet">
-    <link href="../static/css/main.css" rel="stylesheet">
-    <link href="../static/css/responsive.css" rel="stylesheet">
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/font-awesome.min.css" rel="stylesheet">
+    <link href="/css/lightbox.css" rel="stylesheet">
+    <link href="/css/animate.min.css" rel="stylesheet">
+    <link href="/css/main.css" rel="stylesheet">
+    <link href="/css/responsive.css" rel="stylesheet">
+
+
+    <script type="text/javascript" src="/js/jquery.js"></script>
+    <script type="text/javascript" src="/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/js/jquery.isotope.min.js"></script>
+    <script type="text/javascript" src="/js/lightbox.min.js"></script>
+    <script type="text/javascript" src="/js/wow.min.js"></script>
+    <script type="text/javascript" src="/js/main.js"></script>
 
     <!--[if lt IE 9]>
-    <script src="../static/js/html5shiv.js"></script>
-    <script src="../static/js/respond.min.js"></script>
+    <script src="/js/html5shiv.js"></script>
+    <script src="/js/respond.min.js"></script>
     <![endif]-->
-    <link rel="shortcut icon" href="../static/images/ico/favicon.ico">
-    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../static/images/ico/apple-touch-icon-144-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../static/images/ico/apple-touch-icon-114-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../static/images/ico/apple-touch-icon-72-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" href="../static/images/ico/apple-touch-icon-57-precomposed.png">
+    <link rel="shortcut icon" href="/images/ico/favicon.ico">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/images/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="/images/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="/images/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="/images/ico/apple-touch-icon-57-precomposed.png">
+
+    <script th:inline="javascript">
+        function search_user(){
+            var search_name = $('#search_name').val();
+            var current_name =$('#current_name').text();
+            $.ajax({
+                async:false,
+                url: "/homepage_search",
+                type: "post",
+                //获取某个文本框的值
+                //data: "id=" + id + "&name=" + $("#name").val(),
+                dataType:"json",
+                data: {
+                    "search_name":search_name,
+                    "current_name":current_name
+                },
+                // 或者(注意：若参数为中文时，以下这种传参不会造成后台接收到的是乱码)
+                success: function (returnValue) {
+                    var div;
+                    var nickname,sign;
+                    var isFriend="添加好友";
+                    if(returnValue.user.nickname == null)
+                        nickname="——";
+                    if(returnValue.user.sign==null)
+                        sign="——";
+                    div ='<div class="col-md-2 column">'
+                        +'<ul class="list-unstyled w-flex">'
+                        +'<strong>用户名：</strong><span th:text="${lookup_name}" id="friend_name">'+returnValue.user.name+'</span>'
+                        +'<li><br></li>'
+                        +'<strong>昵称：</strong><span th:text="${lookup_nickname}">'+nickname+'</span>'
+                        +'<li><br></li>'
+                        +'<strong>个性签名：</strong><span th:text="${lookup_sign}">'+sign+'</span>'
+                        +'<li><br></li>'
+                        +'<strong>地区：</strong><span th:text="${lookup_address}">'+returnValue.user.address+'</span>'
+                        +'<li><br></li>'
+                        +'</ul>'
+                        +'<div class="modal-footer">'
+                    if(returnValue.isFriend)
+                        div = div + '</div></div>'
+                    else
+                        div = div +'<button type="button" class="btn btn-default" data-dismiss="modal" onclick="send_FriendReq()">'+isFriend+'</button>'
+                            +'</div></div>'
+                    $('#user_info').html(div)
+                },
+                error: function (returnValue) {
+                    $('#user_info').html(div = '<div></div>')
+                    alert("对不起！该用户不存在！");
+                }
+            })
+        }
+        function send_FriendReq() {
+            var current_name = $('#current_name').text();
+            var friend_name = $('#friend_name').text();
+            $.ajax({
+                async:false,
+                url: "/homepage_sendReq",
+                type: "post",
+                //获取某个文本框的值
+                //data: "id=" + id + "&name=" + $("#name").val(),
+                dataType:"text",
+                data: {
+                    "current_name":current_name,
+                    "friend_name":friend_name
+                },
+                // 或者(注意：若参数为中文时，以下这种传参不会造成后台接收到的是乱码)
+                success: function (returnValue) {
+                    $('#user_info').html(div = '<div></div>')
+                    alert(returnValue)
+                },
+                error: function (returnValue) {
+                    $('#user_info').html(div = '<div></div>')
+                    alert("发送好友申请失败！");
+                }
+            })
+
+        }
+        function request_msg(){
+            console.log("show function run")
+            var current_name = $('#user_name').text();
+            console.log("--------here------------current_name:")
+            console.log(current_name)
+            $.ajax({
+                async:false,
+                url: "/homepage_requestMsg",
+                type: "post",
+                //获取某个文本框的值
+                //data: "id=" + id + "&name=" + $("#name").val(),
+                dataType:"json",
+                data: {
+                    "current_name":current_name,
+                },
+                // 或者(注意：若参数为中文时，以下这种传参不会造成后台接收到的是乱码)
+                success: function (returnValue) {
+                    console.log(returnValue)
+                    showReqMsg(returnValue)
+                },
+                error: function (returnValue) {
+                    alert("好友通知加载失败");
+                }
+            })
+        }
+        function showReqMsg(data) {
+            var total_div=''
+            if(data.length==0){
+                var div = '<div>无</div>'
+                total_div = div
+            }
+            for(var i=0;i<data.length;i++){
+                if(data[i].request=="request"){
+                    var div ='<div>'
+                        +'<ul>'
+                        +'<span>用户-</span><strong id="requstName"+i>'+data[i].Name+'</strong>'
+                        +'<span>（昵称-'+data[i].Nickname+'），请求添加您为好友</span>'
+                        +'<li><br></li>'
+                        +'</ul>'
+                        +'<div class="modal-footer">'
+                        +'<button type="button" class="btn btn-default" onclick="RequestAgree(this)" >同意</button>'
+                        +'<button type="button" class="btn btn-default" onclick="RequestReject(this)" >拒绝</button>'
+                        +'</div></div>'
+                    total_div +=div
+                }
+                if(data[i].request=="reject"){
+                    var div ='<div>'
+                        +'<ul>'
+                        +'<span>用户-</span><strong id="requstName"+i>'+data[i].Name+'</strong>'
+                        +'<span>（昵称-'+data[i].Nickname+'），已拒绝您的好友请求</span>'
+                        +'<li><br></li>'
+                        +'</ul>'
+                        +'<div class="modal-footer">'
+                        +'<button type="button" class="btn btn-default">确定</button>'
+                        +'</div></div>'
+                    total_div +=div
+                }
+
+            }
+            $('#request_info').html(total_div)
+            // $('Model_request_info').model('show')
+        }
+        function RequestAgree(obj){
+            var Name = $(obj).parent().parent().find('strong').text()
+            var current_name = $('#current_name').text()
+            console.log(Name)
+            $.ajax({
+                async:false,
+                url: "/Request_Agree",
+                type: "post",
+                //获取某个文本框的值
+                //data: "id=" + id + "&name=" + $("#name").val(),
+                dataType:"json",
+                data: {
+                    "request_name":Name,
+                    "current_name":current_name,
+                },
+                // 或者(注意：若参数为中文时，以下这种传参不会造成后台接收到的是乱码)
+                success: function (returnValue) {
+                    console.log(returnValue)
+                    send_FriendReq()
+                    alert("已经成功添加好友")
+                },
+                error: function (returnValue) {
+                    alert("好友添加失败");
+                }
+            })
+        }
+        function RequestReject() {
+            var butId = $(this).attr("id");
+            console.log(butId)
+            alert(butId)
+        }
+        $().ready(function(){
+            request_msg()
+            var current_name = $('#current_name').text();
+            $.ajax({
+                async:false,
+                url: "/Allfriends",
+                type: "post",
+                //获取某个文本框的值
+                //data: "id=" + id + "&name=" + $("#name").val(),
+                dataType:"json",
+                data: {
+                    "current_name":current_name,
+                },
+                // 或者(注意：若参数为中文时，以下这种传参不会造成后台接收到的是乱码)
+                success: function (returnValue) {
+                    var total_div=''
+                    if(returnValue.length==0){
+                        var div = '<div></div>'
+                        total_div = div
+                    }
+                    console.log(returnValue.length)
+                    for(var i=0;i<returnValue.length;i++){
+                        var div ='<div><ul>'
+                        console.log(returnValue[i])
+                        console.log(returnValue[i].remark)
+                        console.log(returnValue[i].name)
+                        if(returnValue[i].remark==null){
+                            div += '<span >'+returnValue[i].name+'</span>'
+                            console.log("into if")
+                        }
+                        else{
+                            div += '<span >'+returnValue[i].remark+'</span>'
+                        }
+                        div += '<li><br></li>'
+                            +'</ul>'
+                            +'</div>'
+                        total_div +=div
+                    }
+                    $('#friend_info').html(total_div)
+                    alert(returnValue)
+
+                },
+                error: function (returnValue) {
+                    $('#friend_info').html(div = '<div></div>')
+                    alert("好友信息加载失败")
+                }
+            })
+        })
+    </script>
+
 </head><!--/head-->
 
 <body>
@@ -52,7 +279,7 @@
                 </button>
 
                 <a class="navbar-brand" href="index.html">
-                    <h1><img src="../static/images/logo.png" alt="logo"></h1>
+                    <h1><img src="/images/logo.png" alt="logo"></h1>
                 </a>
 
             </div>
@@ -114,8 +341,9 @@
             <div class="row">
                 <div class="action">
                     <div class="col-sm-12">
-                        <h1 class="title">Portfolio</h1>
-                        <p>Be Creative</p>
+                        <h1 class="title"  th:text="${user_nickname}">用户昵称</h1>
+                        <h2  th:text="${'('+user_name+')'}" id="user_name">用户名</h2>
+                        <p th:text="${user_sign}">signnn</p>
                     </div>
                 </div>
             </div>
@@ -144,12 +372,12 @@
                             <div class="portfolio-wrapper">
                                 <div class="portfolio-single">
                                     <div class="portfolio-thumb">
-                                        <img src="../static/images/portfolio/1.jpg" class="img-responsive" alt="">
+                                        <img src="/images/portfolio/1.jpg" class="img-responsive" alt="">
                                     </div>
                                     <div class="portfolio-view">
                                         <ul class="nav nav-pills">
                                             <li><a href="portfolio-details.html"><i class="fa fa-link"></i></a></li>
-                                            <li><a href="../static/images/portfolio/1.jpg" data-lightbox="example-set"><i
+                                            <li><a href="/images/portfolio/1.jpg" data-lightbox="example-set"><i
                                                     class="fa fa-eye"></i></a></li>
                                         </ul>
                                     </div>
@@ -163,12 +391,12 @@
                             <div class="portfolio-wrapper">
                                 <div class="portfolio-single">
                                     <div class="portfolio-thumb">
-                                        <img src="../static/images/portfolio/2.jpg" class="img-responsive" alt="">
+                                        <img src="/images/portfolio/2.jpg" class="img-responsive" alt="">
                                     </div>
                                     <div class="portfolio-view">
                                         <ul class="nav nav-pills">
                                             <li><a href="portfolio-details.html"><i class="fa fa-link"></i></a></li>
-                                            <li><a href="../static/images/portfolio/2.jpg" data-lightbox="example-set"><i
+                                            <li><a href="/images/portfolio/2.jpg" data-lightbox="example-set"><i
                                                     class="fa fa-eye"></i></a></li>
                                         </ul>
                                     </div>
@@ -182,12 +410,12 @@
                             <div class="portfolio-wrapper">
                                 <div class="portfolio-single">
                                     <div class="portfolio-thumb">
-                                        <img src="../static/images/portfolio/3.jpg" class="img-responsive" alt="">
+                                        <img src="/images/portfolio/3.jpg" class="img-responsive" alt="">
                                     </div>
                                     <div class="portfolio-view">
                                         <ul class="nav nav-pills">
                                             <li><a href="portfolio-details.html"><i class="fa fa-link"></i></a></li>
-                                            <li><a href="../static/images/portfolio/3.jpg" data-lightbox="example-set"><i
+                                            <li><a href="/images/portfolio/3.jpg" data-lightbox="example-set"><i
                                                     class="fa fa-eye"></i></a></li>
                                         </ul>
                                     </div>
@@ -201,12 +429,12 @@
                             <div class="portfolio-wrapper">
                                 <div class="portfolio-single">
                                     <div class="portfolio-thumb">
-                                        <img src="../static/images/portfolio/4.jpg" class="img-responsive" alt="">
+                                        <img src="/images/portfolio/4.jpg" class="img-responsive" alt="">
                                     </div>
                                     <div class="portfolio-view">
                                         <ul class="nav nav-pills">
                                             <li><a href="portfolio-details.html"><i class="fa fa-link"></i></a></li>
-                                            <li><a href="../static/images/portfolio/4.jpg" data-lightbox="example-set"><i
+                                            <li><a href="/images/portfolio/4.jpg" data-lightbox="example-set"><i
                                                     class="fa fa-eye"></i></a></li>
                                         </ul>
                                     </div>
@@ -220,12 +448,12 @@
                             <div class="portfolio-wrapper">
                                 <div class="portfolio-single">
                                     <div class="portfolio-thumb">
-                                        <img src="../static/images/portfolio/5.jpg" class="img-responsive" alt="">
+                                        <img src="/images/portfolio/5.jpg" class="img-responsive" alt="">
                                     </div>
                                     <div class="portfolio-view">
                                         <ul class="nav nav-pills">
                                             <li><a href="portfolio-details.html"><i class="fa fa-link"></i></a></li>
-                                            <li><a href="../static/images/portfolio/5.jpg" data-lightbox="example-set"><i
+                                            <li><a href="/images/portfolio/5.jpg" data-lightbox="example-set"><i
                                                     class="fa fa-eye"></i></a></li>
                                         </ul>
                                     </div>
@@ -239,12 +467,11 @@
                             <div class="portfolio-wrapper">
                                 <div class="portfolio-single">
                                     <div class="portfolio-thumb">
-                                        <img src="../static/images/portfolio/6.jpg" class="img-responsive" alt="">
+                                        <img src="/images/portfolio/6.jpg" class="img-responsive" alt="">
                                     </div>
                                     <div class="portfolio-view">
                                         <ul class="nav nav-pills">
                                             <li><a href="portfolio-details.html"><i class="fa fa-link"></i></a></li>
-                                            <li><a href="../static/images/portfolio/6.jpg" data-lightbox="example-set"><i
                                                     class="fa fa-eye"></i></a></li>
                                         </ul>
                                     </div>
@@ -258,12 +485,12 @@
                             <div class="portfolio-wrapper">
                                 <div class="portfolio-single">
                                     <div class="portfolio-thumb">
-                                        <img src="../static/images/portfolio/7.jpg" class="img-responsive" alt="">
+                                        <img src="/images/portfolio/7.jpg" class="img-responsive" alt="">
                                     </div>
                                     <div class="portfolio-view">
                                         <ul class="nav nav-pills">
                                             <li><a href="portfolio-details.html"><i class="fa fa-link"></i></a></li>
-                                            <li><a href="../static/images/portfolio/7.jpg" data-lightbox="example-set"><i
+                                            <li><a href="/images/portfolio/7.jpg" data-lightbox="example-set"><i
                                                     class="fa fa-eye"></i></a></li>
                                         </ul>
                                     </div>
@@ -277,12 +504,12 @@
                             <div class="portfolio-wrapper">
                                 <div class="portfolio-single">
                                     <div class="portfolio-thumb">
-                                        <img src="../static/images/portfolio/8.jpg" class="img-responsive" alt="">
+                                        <img src="/images/portfolio/8.jpg" class="img-responsive" alt="">
                                     </div>
                                     <div class="portfolio-view">
                                         <ul class="nav nav-pills">
                                             <li><a href="portfolio-details.html"><i class="fa fa-link"></i></a></li>
-                                            <li><a href="../static/images/portfolio/8.jpg" data-lightbox="example-set"><i
+                                            <li><a href="/images/portfolio/8.jpg" data-lightbox="example-set"><i
                                                     class="fa fa-eye"></i></a></li>
                                         </ul>
                                     </div>
@@ -296,12 +523,12 @@
                             <div class="portfolio-wrapper">
                                 <div class="portfolio-single">
                                     <div class="portfolio-thumb">
-                                        <img src="../static/images/portfolio/9.jpg" class="img-responsive" alt="">
+                                        <img src="/images/portfolio/9.jpg" class="img-responsive" alt="">
                                     </div>
                                     <div class="portfolio-view">
                                         <ul class="nav nav-pills">
                                             <li><a href="portfolio-details.html"><i class="fa fa-link"></i></a></li>
-                                            <li><a href="../static/images/portfolio/9.jpg" data-lightbox="example-set"><i
+                                            <li><a href="/images/portfolio/9.jpg" data-lightbox="example-set"><i
                                                     class="fa fa-eye"></i></a></li>
                                         </ul>
                                     </div>
@@ -345,10 +572,19 @@
                         </ul>
                     </div>
                     <div class="sidebar-item  recent">
-                        <h3>Recent Projects</h3>
+                        <h3>好友通知</h3>
+                        <div class="media" id = "request_info">
+                            <div class="pull-left">
+                                <a href="#"><img src="/images/portfolio/project1.jpg" alt=""></a>
+                            </div>
+                            <div class="media-body">
+                                <h4><a href="#">xxx 申请您为好友，是否同意？</a></h4>
+                                <p>posted on 07 March 2014</p>
+                            </div>
+                        </div>
                         <div class="media">
                             <div class="pull-left">
-                                <a href="#"><img src="../static/images/portfolio/project1.jpg" alt=""></a>
+                                <a href="#"><img src="/images/portfolio/project2.jpg" alt=""></a>
                             </div>
                             <div class="media-body">
                                 <h4><a href="#">Lorem ipsum dolor sit amet consectetur adipisicing elit,</a></h4>
@@ -357,16 +593,7 @@
                         </div>
                         <div class="media">
                             <div class="pull-left">
-                                <a href="#"><img src="../static/images/portfolio/project2.jpg" alt=""></a>
-                            </div>
-                            <div class="media-body">
-                                <h4><a href="#">Lorem ipsum dolor sit amet consectetur adipisicing elit,</a></h4>
-                                <p>posted on 07 March 2014</p>
-                            </div>
-                        </div>
-                        <div class="media">
-                            <div class="pull-left">
-                                <a href="#"><img src="../static/images/portfolio/project3.jpg" alt=""></a>
+                                <a href="#"><img src="/images/portfolio/project3.jpg" alt=""></a>
                             </div>
                             <div class="media-body">
                                 <h4><a href="#">Lorem ipsum dolor sit amet consectetur adipisicing elit,</a></h4>
@@ -377,12 +604,12 @@
                     <div class="sidebar-item popular">
                         <h3>Popular Projects</h3>
                         <ul class="gallery">
-                            <li><a href="#"><img src="../static/images/portfolio/popular1.jpg" alt=""></a></li>
-                            <li><a href="#"><img src="../static/images/portfolio/popular2.jpg" alt=""></a></li>
-                            <li><a href="#"><img src="../static/images/portfolio/popular3.jpg" alt=""></a></li>
-                            <li><a href="#"><img src="../static/images/portfolio/popular4.jpg" alt=""></a></li>
-                            <li><a href="#"><img src="../static/images/portfolio/popular5.jpg" alt=""></a></li>
-                            <li><a href="#"><img src="../static/images/portfolio/popular1.jpg" alt=""></a></li>
+                            <li><a href="#"><img src="/images/portfolio/popular1.jpg" alt=""></a></li>
+                            <li><a href="#"><img src="/images/portfolio/popular2.jpg" alt=""></a></li>
+                            <li><a href="#"><img src="/images/portfolio/popular3.jpg" alt=""></a></li>
+                            <li><a href="#"><img src="/images/portfolio/popular4.jpg" alt=""></a></li>
+                            <li><a href="#"><img src="/images/portfolio/popular5.jpg" alt=""></a></li>
+                            <li><a href="#"><img src="/images/portfolio/popular1.jpg" alt=""></a></li>
                         </ul>
                     </div>
                 </div>
@@ -397,14 +624,14 @@
     <div class="container">
         <div class="row">
             <div class="col-sm-12 text-center bottom-separator">
-                <img src="../static/images/home/under.png" class="img-responsive inline" alt="">
+                <img src="/images/home/under.png" class="img-responsive inline" alt="">
             </div>
             <div class="col-md-4 col-sm-6">
                 <div class="testimonial bottom">
                     <h2>Testimonial</h2>
                     <div class="media">
                         <div class="pull-left">
-                            <a href="#"><img src="../static/images/home/profile1.png" alt=""></a>
+                            <a href="#"><img src="/images/home/profile1.png" alt=""></a>
                         </div>
                         <div class="media-body">
                             <blockquote>Nisi commodo bresaola, leberkas venison eiusmod bacon occaecat labore tail.
@@ -414,7 +641,7 @@
                     </div>
                     <div class="media">
                         <div class="pull-left">
-                            <a href="#"><img src="../static/images/home/profile2.png" alt=""></a>
+                            <a href="#"><img src="/images/home/profile2.png" alt=""></a>
                         </div>
                         <div class="media-body">
                             <blockquote>Capicola nisi flank sed minim sunt aliqua rump pancetta leberkas venison
@@ -476,11 +703,5 @@
 <!--/#footer-->
 
 
-<script type="text/javascript" src="../static/js/jquery.js"></script>
-<script type="text/javascript" src="../static/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="../static/js/jquery.isotope.min.js"></script>
-<script type="text/javascript" src="../static/js/lightbox.min.js"></script>
-<script type="text/javascript" src="../static/js/wow.min.js"></script>
-<script type="text/javascript" src="../static/js/main.js"></script>
 </body>
 </html>
