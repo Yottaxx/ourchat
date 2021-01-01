@@ -3,6 +3,8 @@ import bit.group.ourchat.entity.user;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface userRepository extends CrudRepository<user,Integer>{
     user findById(int id);

@@ -10,6 +10,7 @@ import java.util.List;
 
 // user 用户信息表
 @Entity
+@Table(name = "user")
 public class user {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -27,19 +28,23 @@ public class user {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<friend> friendList;
 
-    //单聊表
-    @OneToMany(mappedBy = "user1",cascade= CascadeType.ALL,fetch = FetchType.LAZY)
-    private List<singleChat> singleChatList1;
-    @OneToMany(mappedBy = "user2",cascade= CascadeType.ALL,fetch = FetchType.LAZY)
-    private List<singleChat> singleChatList2;
+    //好友请求表
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<friend_request> friend_requestList;
 
+//    //单聊表
+//    @OneToMany(mappedBy = "user1",cascade= CascadeType.ALL,fetch = FetchType.LAZY)
+//    private List<singleChat> singleChatList1;
+//    @OneToMany(mappedBy = "user2",cascade= CascadeType.ALL,fetch = FetchType.LAZY)
+//    private List<singleChat> singleChatList2;
+//
     //群聊用户表，用户所参加的群聊
-    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
-    private List<groupMembers> groupMembersList;
-
-    //群聊表，user所管理的群聊表
-    @OneToMany(mappedBy = "admin",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
-    private List<groupChat> groupChatList;
+//    @ManyToMany(mappedBy = "userList",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+//    private List<GroupMembers_new> groupMembers_newList;
+//
+//    //群聊表，user所管理的群聊表
+//    @OneToMany(mappedBy = "admin",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+//    private List<GroupChat_new> groupChat_newList;
 
 
     public Integer getId() {
@@ -122,41 +127,36 @@ public class user {
         this.friendList = friendList;
     }
 
-    public List<singleChat> getSingleChatList1() {
-        return singleChatList1;
+    public void addFriend(friend friend){
+        this.friendList.add(friend);
     }
 
-    public void setSingleChatList1(List<singleChat> singleChatList1) {
-        this.singleChatList1 = singleChatList1;
+    public List<friend_request> getFriend_requestList() {return friend_requestList;}
+
+    public  void setFriend_requestList(List<friend_request> friend_requestList){this.friend_requestList = friend_requestList;}
+
+    public void addFriend_request(friend_request friend_request){
+        this.friend_requestList.add(friend_request);
     }
 
-    public List<singleChat> getSingleChatList2() {
-        return singleChatList2;
-    }
-
-    public void setSingleChatList2(List<singleChat> singleChatList2) {
-        this.singleChatList2 = singleChatList2;
-    }
-
-    public List<groupChat> getGroupChatList() {
-        return groupChatList;
-    }
-
-    public void setGroupChatList(List<groupChat> groupChatList) {
-        this.groupChatList = groupChatList;
-    }
-
-    public List<groupMembers> getGroupMembersList() {
-        return groupMembersList;
-    }
-
-    public void setGroupMembersList(List<groupMembers> groupMembersList) {
-        this.groupMembersList = groupMembersList;
-    }
+//    public List<GroupChat_new> getGroupChat_newList() {
+//        return groupChat_newList;
+//    }
+//
+//    public void setGroupChat_newList(List<GroupChat_new> groupChat_newList) {
+//        this.groupChat_newList = groupChat_newList;
+//    }
+//
+//    public List<GroupMembers_new> getGroupMembers_newList() {
+//        return groupMembers_newList;
+//    }
+//
+//    public void setGroupMembers_newList(List<GroupMembers_new> groupMembers_newList) {
+//        this.groupMembers_newList = groupMembers_newList;
+//    }
 
     public user(Integer id, String name, String email, String password, String nickname, String sign, String profile_photo,
-                List<singleChat> singleChatList1, List<singleChat> singleChatList2, List<friend> friendList,
-                List<groupMembers> groupMembersList, List<groupChat> groupChatList) {
+                List<friend> friendList,List<friend_request> friend_requestList) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -164,15 +164,17 @@ public class user {
         this.nickname = nickname;
         this.sign =sign;
         this.profile_photo = profile_photo;
-        this.singleChatList1 = singleChatList1;
-        this.singleChatList2 = singleChatList2;
         this.friendList = friendList;
-        this.groupMembersList = groupMembersList;
-        this.groupChatList = groupChatList;
+        this.friend_requestList = friend_requestList;
     }
 
-    public user()
+    public user(Integer id, String name)
     {
+        this.id = id;
+        this.name = name;
+    }
+
+    public user(){
 
     }
 }

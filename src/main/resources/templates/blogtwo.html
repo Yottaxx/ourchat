@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>Blog Timeline | Triangle</title>
+    <title>Ourchat | FriendsGroups</title>
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <link href="/css/font-awesome.min.css" rel="stylesheet">
     <link href="/css/lightbox.css" rel="stylesheet">
@@ -22,6 +22,34 @@
     <link rel="apple-touch-icon-precomposed" sizes="114x114" href="/images/ico/apple-touch-icon-114-precomposed.png">
     <link rel="apple-touch-icon-precomposed" sizes="72x72" href="/images/ico/apple-touch-icon-72-precomposed.png">
     <link rel="apple-touch-icon-precomposed" href="/images/ico/apple-touch-icon-57-precomposed.png">
+    <script th:inline="javascript">
+        function add_group_div() {
+            console.log("add_group_div")
+            var div = ' <div class="padding-left padding-bottom arrow-left wow fadeInRight"  data-wow-duration="1000ms" data-wow-delay="300ms">\n' +
+                '                        <div class="single-blog timeline">\n' +
+                '                            <div class="post-content overflow">\n' +
+                '                                <input class="form-control" placeholder="新分组">\n' +
+                '                                <div class="post-bottom overflow">\n' +
+                '                                    <button class="btn btn-link pull-right" onclick="add_group_cancel(this)" >取消</button>\n' +
+                '                                    <button class="btn btn-link pull-right" onclick="add_group(this)" >确定</button>\n' +
+                '                                </div>\n' +
+                '                            </div>\n' +
+                '                        </div>\n' +
+                '                    </div>'
+            $("#friendGroups").prepend(div)
+        }
+        function update_group_div(obj){
+            console.log("update_group_div ")
+           var div =  $(obj).parent().parent();
+           var group_name =  div.find('h2').text();
+           var newdiv = '<input class="form-control" value="'+group_name+'">\n' +
+               '                <div class="post-bottom overflow">\n' +
+               '                      <button class="btn btn-link pull-right" onclick="update_group_cancel(this)" >取消</button>\n' +
+               '                       <button class="btn btn-link pull-right" onclick="update_group(this)" >确定</button>\n' +
+               '                </div>'
+            $(obj).parent().parent().html(newdiv)
+        }
+    </script>
 </head><!--/head-->
 
 <body>
@@ -52,7 +80,7 @@
                 </button>
 
                 <a class="navbar-brand" href="index.html">
-                    <h1><img src="../static/images/logo.png" alt="logo"></h1>
+                    <h1><img src="/images/logo.png" alt="logo"></h1>
                 </a>
 
             </div>
@@ -113,8 +141,9 @@
             <div class="row">
                 <div class="action">
                     <div class="col-sm-12">
-                        <h1 class="title">Blog</h1>
-                        <p>Timeline</p>
+                        <h1 class="title"  th:text="${user_nickname+'——分组管理'}">用户昵称</h1>
+                        <h2  th:text="${'('+user_name+')'}" id="user_name">用户名</h2>
+                        <p th:text="${user_sign}">sign</p>
                     </div>
                 </div>
             </div>
@@ -127,153 +156,36 @@
     <div class="container">
         <div class="row">
             <div class="timeline-blog overflow padding-top">
-                <div class="timeline-date text-center">
-                    <a href="#" class="btn btn-common uppercase">November 2013</a>
+                <div class="timeline-date text-left">
+                    <a href="#" class="btn btn-common uppercase" onclick="add_group_div()"><i class="fa fa-plus"></i> 添 加 分 组 </a>
                 </div>
-                <div class="timeline-divider overflow padding-bottom">
-                    <div class="col-sm-6 padding-right arrow-right wow fadeInLeft" data-wow-duration="1000ms"
-                         data-wow-delay="300ms">
+                <form class="timeline-divider overflow padding-bottom" id="friendGroups">
+
+                    <div class="padding-left padding-bottom arrow-left wow fadeInRight" data-wow-duration="1000ms" data-wow-delay="300ms">
                         <div class="single-blog timeline">
-                            <div class="single-blog-wrapper">
-                                <div class="post-thumb">
-                                    <img src="../static/images/blog/timeline/1.jpg" class="img-responsive" alt="">
-                                    <div class="post-overlay">
-                                        <span class="uppercase"><a href="#">14 <br><small>Feb</small></a></span>
-                                    </div>
-                                </div>
-                            </div>
                             <div class="post-content overflow">
-                                <h2 class="post-title bold"><a href="blogdetails.html">Advanced business cards
-                                    design</a></h2>
-                                <h3 class="post-author"><a href="#">Posted by micron News</a></h3>
-                                <p>Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie
-                                    consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et
-                                    iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore
-                                    te feugait nulla facilisi. Nam liber [...]</p>
-                                <a href="#" class="read-more">View More</a>
+                                <h2 class="post-title bold">Advanced business cards</h2>
                                 <div class="post-bottom overflow">
-                                    <span class="post-date pull-left">February 11, 2014</span>
-                                    <span class="comments-number pull-right"><a href="#">3 comments</a></span>
+                                    <button class="btn btn-link pull-right" onclick="delete_group(this)">删除</button>
+                                    <button class="btn btn-link pull-right" onclick="update_group_div(this)">修改</button>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-6 padding-left padding-top arrow-left wow fadeInRight" data-wow-duration="1000ms"
-                         data-wow-delay="300ms">
+
+                    <div class="padding-left padding-bottom arrow-left wow fadeInRight"  data-wow-duration="1000ms" data-wow-delay="300ms">
                         <div class="single-blog timeline">
-                            <div class="single-blog-wrapper">
-                                <div class="post-thumb">
-                                    <img src="../static/images/blog/timeline/2.jpg" class="img-responsive" alt="">
-                                    <div class="post-overlay">
-                                        <span class="uppercase"><a href="#">14 <br><small>Feb</small></a></span>
-                                    </div>
-                                </div>
-                            </div>
                             <div class="post-content overflow">
-                                <h2 class="post-title bold"><a href="blogdetails.html#">Advanced business cards
-                                    design</a></h2>
-                                <h3 class="post-author"><a href="#">Posted by micron News</a></h3>
-                                <p>Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie
-                                    consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et
-                                    iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore
-                                    te feugait nulla facilisi. Nam liber [...]</p>
-                                <a href="#" class="read-more">View More</a>
+                                <input class="form-control" value="Advanced business cards">
                                 <div class="post-bottom overflow">
-                                    <span class="post-date pull-left">February 11, 2014</span>
-                                    <span class="comments-number pull-right"><a href="#">3 comments</a></span>
+                                    <button class="btn btn-link pull-right" onclick="update_group_cancel(this)" >取消</button>
+                                    <button class="btn btn-link pull-right" onclick="update_group(this)" >确定</button>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-6 padding-right arrow-right wow fadeInLeft" data-wow-duration="1000ms"
-                         data-wow-delay="300ms">
-                        <div class="single-blog timeline">
-                            <div class="single-blog-wrapper">
-                                <div class="post-thumb">
-                                    <iframe src="https://player.vimeo.com/video/95995577"></iframe>
-                                </div>
-                            </div>
-                            <div class="post-content overflow">
-                                <h2 class="post-title bold"><a href="blogdetails.html">Advanced business cards
-                                    design</a></h2>
-                                <h3 class="post-author"><a href="#">Posted by micron News</a></h3>
-                                <p>Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie
-                                    consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et
-                                    iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore
-                                    te feugait nulla facilisi. Nam liber [...]</p>
-                                <a href="#" class="read-more">View More</a>
-                                <div class="post-bottom overflow">
-                                    <span class="post-date pull-left">February 11, 2014</span>
-                                    <span class="comments-number pull-right"><a href="#">3 comments</a></span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="timeline-blog overflow">
-                <div class="timeline-date text-center">
-                    <a href="" class="btn btn-common uppercase">Setember 2013</a>
-                </div>
-                <div class="timeline-divider overflow padding-bottom">
-                    <div class="col-sm-6 padding-right arrow-right wow fadeInLeft" data-wow-duration="1000ms"
-                         data-wow-delay="300ms">
-                        <div class="single-blog timeline">
-                            <div class="single-blog-wrapper">
-                                <div class="post-thumb">
-                                    <img src="../static/images/blog/timeline/3.jpg" class="img-responsive" alt="">
-                                    <div class="post-overlay">
-                                        <span class="uppercase"><a href="#">14 <br><small>Feb</small></a></span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="post-content overflow">
-                                <h2 class="post-title bold"><a href="blogdetails.html">Advanced business cards
-                                    design</a></h2>
-                                <h3 class="post-author"><a href="#">Posted by micron News</a></h3>
-                                <p>Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie
-                                    consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et
-                                    iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore
-                                    te feugait nulla facilisi. Nam liber [...]</p>
-                                <a href="#" class="read-more">View More</a>
-                                <div class="post-bottom overflow">
-                                    <span class="post-date pull-left">February 11, 2014</span>
-                                    <span class="comments-number pull-right"><a href="#">3 comments</a></span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-6 padding-left padding-top arrow-left wow fadeInRight" data-wow-duration="1000ms"
-                         data-wow-delay="300ms">
-                        <div class="single-blog timeline">
-                            <div class="single-blog-wrapper">
-                                <div class="post-thumb">
-                                    <img src="../static/images/blog/timeline/4.jpg" class="img-responsive" alt="">
-                                    <div class="post-overlay">
-                                        <span class="uppercase"><a href="#">14 <br><small>Feb</small></a></span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="post-content overflow">
-                                <h2 class="post-title bold"><a href="blogdetails.html">Advanced business cards
-                                    design</a></h2>
-                                <h3 class="post-author"><a href="#">Posted by micron News</a></h3>
-                                <p>Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie
-                                    consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et
-                                    iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore
-                                    te feugait nulla facilisi. Nam liber [...]</p>
-                                <a href="#" class="read-more">View More</a>
-                                <div class="post-bottom overflow">
-                                    <span class="post-date pull-left">February 11, 2014</span>
-                                    <span class="comments-number pull-right"><a href="#">3 comments</a></span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="timeline-date text-center">
-                    <a href="#" class="btn btn-common">See More</a>
-                </div>
+
+                </form>
             </div>
         </div>
     </div>
@@ -284,14 +196,14 @@
     <div class="container">
         <div class="row">
             <div class="col-sm-12 text-center bottom-separator">
-                <img src="../static/images/home/under.png" class="img-responsive inline" alt="">
+                <img src="/images/home/under.png" class="img-responsive inline" alt="">
             </div>
             <div class="col-md-4 col-sm-6">
                 <div class="testimonial bottom">
                     <h2>Testimonial</h2>
                     <div class="media">
                         <div class="pull-left">
-                            <a href="#"><img src="../static/images/home/profile1.png" alt=""></a>
+                            <a href="#"><img src="/images/home/profile1.png" alt=""></a>
                         </div>
                         <div class="media-body">
                             <blockquote>Nisi commodo bresaola, leberkas venison eiusmod bacon occaecat labore tail.
@@ -301,7 +213,7 @@
                     </div>
                     <div class="media">
                         <div class="pull-left">
-                            <a href="#"><img src="../static/images/home/profile2.png" alt=""></a>
+                            <a href="#"><img src="/images/home/profile2.png" alt=""></a>
                         </div>
                         <div class="media-body">
                             <blockquote>Capicola nisi flank sed minim sunt aliqua rump pancetta leberkas venison
@@ -363,10 +275,10 @@
 <!--/#footer-->
 
 
-<script type="text/javascript" src="../static/js/jquery.js"></script>
-<script type="text/javascript" src="../static/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="../static/js/lightbox.min.js"></script>
-<script type="text/javascript" src="../static/js/wow.min.js"></script>
-<script type="text/javascript" src="../static/js/main.js"></script>
+<script type="text/javascript" src="/js/jquery.js"></script>
+<script type="text/javascript" src="/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/js/lightbox.min.js"></script>
+<script type="text/javascript" src="/js/wow.min.js"></script>
+<script type="text/javascript" src="/js/main.js"></script>
 </body>
 </html>

@@ -1,6 +1,7 @@
 package bit.group.ourchat.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import org.springframework.amqp.rabbit.listener.exception.FatalListenerStartupException;
 
 import javax.persistence.*;
@@ -8,6 +9,7 @@ import java.util.List;
 
 @Entity
 @IdClass(user_friend.class)
+@Table(name = "friend")
 public class friend {
     @Id
     private Integer id;
@@ -16,8 +18,8 @@ public class friend {
     private String remark; //备注
     private String friendGroup; //friend分组
 
-    //@JoinColumn(name="user_id", nullable = false)
-    @ManyToOne()
+    @JoinColumn(name="user_id")
+    @ManyToOne(fetch = FetchType.LAZY)
     private user user;
 
     public Integer getId() {
@@ -56,6 +58,7 @@ public class friend {
         return user;
     }
 
+    @JsonBackReference
     public void setUser(bit.group.ourchat.entity.user user) {
         this.user = user;
     }
@@ -65,6 +68,11 @@ public class friend {
         this.userfriendId = userfriendId;
         this.remark = remark;
         this.friendGroup = group;
+    }
+
+    public friend(Integer id, Integer friendId){
+        this.id = id;
+        this.userfriendId = friendId;
     }
 
     public friend()

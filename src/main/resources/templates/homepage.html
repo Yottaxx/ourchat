@@ -30,6 +30,8 @@
         function search_user(){
             var search_name = $('#search_name').val();
             var current_name =$('#current_name').text();
+            console.log(search_name);
+            console.log(current_name);
             $.ajax({
                 async:false,
                 url: "/homepage_search",

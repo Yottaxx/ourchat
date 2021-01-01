@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -22,27 +23,55 @@ public class LoginController {
 
     @Autowired
     private userService userService;
-
-    @RequestMapping("/home")
-    public String protfliofour(HttpServletRequest request,HttpServletResponse response,Model model) throws IOException {
+    @RequestMapping("/blog")
+    public String blog(HttpServletRequest request,HttpServletResponse response,Model model) throws IOException {
+        return "blog";
+    }
+    @RequestMapping("/blogtwo")
+    public String blogtwo(HttpServletRequest request,Model model) throws IOException {
         HttpSession session=request.getSession();
         user user1 = (user) session.getAttribute("user");
-        System.out.println("--------hello-----");
-        System.out.println(user1.getName());
-        System.out.println(userService.findByName(user1.getName()).getNickname());
         model.addAttribute("user_name",user1.getName());
         String user_nickname = userService.findByName(user1.getName()).getNickname();
         String user_sign = userService.findByName(user1.getName()).getSign();
+        String user_profile_photo = userService.findByName(user1.getName()).getProfile_photo();
         model.addAttribute("user_nickname",user_nickname);
         model.addAttribute("user_sign",user_sign);
-        PrintWriter out = response.getWriter();
-        out.println("<script>alert('登录成功！')</script>");
-
-        return "portfoliofour";
+        model.addAttribute("user_profile_phto",user_profile_photo);
+        return "blogtwo";
+    }
+    @RequestMapping("/goods-details")
+    public String goods_details(HttpServletRequest request,HttpServletResponse response,Model model) throws IOException {
+        return "goods-details";
+    }
+    @RequestMapping("/index")
+    public String index(HttpServletRequest request,HttpServletResponse response,Model model) throws IOException {
+        return "index";
     }
 
+
+    @RequestMapping("/pricing")
+    public String pricing(HttpServletRequest request,HttpServletResponse response,Model model) throws IOException {
+        return "pricing";
+    }
+
+    @RequestMapping("/service")
+    public String service(HttpServletRequest request,HttpServletResponse response,Model model) throws IOException {
+        return "service";
+    }
+    @RequestMapping("/shortcodes")
+    public String shortcodes(HttpServletRequest request,HttpServletResponse response,Model model) throws IOException {
+        return "shortcodes";
+    }
+
+
+
+
+
+
+
     @PostMapping(value = {"/Login","/login"})
-    public String newUser(HttpServletRequest request, HttpServletResponse response, Model model) throws IOException {
+    public String newUser(HttpServletRequest request, HttpServletResponse response) throws IOException {
         HttpSession session=request.getSession();
         user user1 = new user();
         user1.setName((String) request.getParameter("name"));

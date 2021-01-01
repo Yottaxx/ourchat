@@ -34,7 +34,8 @@ public class RegisterController {
         user1.setPassword((String) request.getParameter("password"));
         user1.setAddress((String) request.getParameter("address"));
         user1.setEmail((String) request.getParameter("email"));
-
+        user1.setProfile_photo(request.getParameter("profile_photo"));
+        System.out.println(request.getParameter("profile_photo"));
         if(userService.Save(user1)) {
             HttpSession session=request.getSession();
             user user2=userService.findByName(user1.getName());

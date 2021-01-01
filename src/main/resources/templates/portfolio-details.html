@@ -1,16 +1,12 @@
-<<<<<<< HEAD
 
-=======
->>>>>>> ad5ddffab0f25a2405bdfcab5902afeea4d01260
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>Portfolio Details | Triangle</title>
-<<<<<<< HEAD
+    <title>OurChat | Friend-Detail</title>
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/font-awesome.min.css" rel="stylesheet">
     <link href="css/lightbox.css" rel="stylesheet"> 
@@ -27,6 +23,136 @@
     <link rel="apple-touch-icon-precomposed" sizes="114x114" href="images/ico/apple-touch-icon-114-precomposed.png">
     <link rel="apple-touch-icon-precomposed" sizes="72x72" href="images/ico/apple-touch-icon-72-precomposed.png">
     <link rel="apple-touch-icon-precomposed" href="images/ico/apple-touch-icon-57-precomposed.png">
+    <script th:inline="javascript">
+        function update_div(obj){
+            console.log("update_div")
+            var div =  $(obj).parent().parent();
+            var tag =  div.find('h4').attr('id')
+            if(tag=="remark")
+                var tagname="备注："
+            if(tag=="group")
+                var tagname="分组："
+            var content = div.find('span').text();
+            var newdiv = '<h4 class="post-title bold" id="'+tag+'">'+tagname+'</h4>' +
+                '         <input class="form-control" id="new_'+tag+'" value="'+content+'">' +
+                '         <div class="post-bottom overflow">\n' +
+                '               <button class="btn btn-link pull-right" onclick="update_friend_cancel(this)" >取消</button>\n' +
+                '                <button class="btn btn-link pull-right" onclick="update_friend(this)" >确定</button>\n' +
+                '         </div>'
+            $(obj).parent().parent().html(newdiv)
+        }
+        function update_friend_cancel(obj){
+            console.log("update_friend_cancel")
+            var div =  $(obj).parent().parent();
+            var tag =  div.find('h4').attr('id')
+            var current_name = $("#user_name").text()
+            var friend_name = $("#user_friend_name").text()
+            var newdiv=''
+            $.ajax({
+                async: false,
+                url: "/getFriendRemarkAndGroup",
+                type: "post",
+                //获取某个文本框的值
+                //data: "id=" + id + "&name=" + $("#name").val(),
+                dataType: "json",
+                data: {
+                    "current_name": current_name,
+                    "friend_name": friend_name
+                },
+                success: function (returnValue) {
+                    console.log("success")
+                    if(tag=="remark"){
+                        newdiv ='<h4 class="post-title" id="remark">备注：' +
+                            ' <span class="post-title bold" id="friend_remark" th:text="${user_friend_remark}">'+returnValue.remark+'</span>' +
+                            '</h4>' +
+                            '<div class="post-bottom overflow">' +
+                            '     <button class="btn btn-link pull-right" onclick="update_div(this)">修改</button>\n' +
+                            ' </div>'
+                    }
+                    if(tag=="group"){
+                        newdiv ='<h4 class="post-title" id="group">分组：\n' +
+                            ' <span class="post-title bold" id="friend_group" th:text="${user_friend_group}">'+returnValue.group+'</span>\n' +
+                            ' </h4>\n' +
+                            ' <div class="post-bottom overflow">\n' +
+                            '       <button class="btn btn-link pull-right" onclick="update_div(this)">修改</button>\n' +
+                            ' </div>'
+                    }
+                    $(obj).parent().parent().html(newdiv)
+                },
+                error: function (returnValue) {
+                    console.log("fail")
+                }
+            })
+        }
+        function update_friend(obj){
+            console.log("update_friend")
+            var div =  $(obj).parent().parent();
+            var tag =  div.find('h4').attr('id')
+            var current_name = $("#user_name").text()
+            var friend_name = $("#user_friend_name").text()
+            var newdiv=''
+            if(tag =="remark"){
+                var new_remark = $("#new_remark").val()
+                $.ajax({
+                    async: false,
+                    url: "/setFriendRemark",
+                    type: "post",
+                    //获取某个文本框的值
+                    //data: "id=" + id + "&name=" + $("#name").val(),
+                    dataType: "json",
+                    data: {
+                        "current_name": current_name,
+                        "friend_name": friend_name,
+                        "remark": new_remark
+                    },
+                    success: function (returnValue) {
+                        console.log("success")
+                        newdiv ='<h4 class="post-title" id="remark">备注：' +
+                            ' <span class="post-title bold" id="friend_remark" th:text="${user_friend_remark}">'+returnValue.remark+'</span>' +
+                            '</h4>' +
+                            '<div class="post-bottom overflow">' +
+                            '     <button class="btn btn-link pull-right" onclick="update_div(this)">修改</button>\n' +
+                            ' </div>'
+                        $(obj).parent().parent().html(newdiv)
+                    },
+                    error: function (returnValue) {
+                        console.log("fail")
+                    }
+                })
+            }
+            if(tag =="group"){
+                var new_group = $("#new_group").val()
+                $.ajax({
+                    async: false,
+                    url: "/setFriendGroup",
+                    type: "post",
+                    //获取某个文本框的值
+                    //data: "id=" + id + "&name=" + $("#name").val(),
+                    dataType: "json",
+                    data: {
+                        "current_name": current_name,
+                        "friend_name": friend_name,
+                        "group": new_group
+                    },
+                    success: function (returnValue) {
+                        console.log("success")
+                        newdiv ='<h4 class="post-title" id="group">分组：\n' +
+                            ' <span class="post-title bold" id="friend_group" th:text="${user_friend_group}">'+returnValue.group+'</span>\n' +
+                            ' </h4>\n' +
+                            ' <div class="post-bottom overflow">\n' +
+                            '       <button class="btn btn-link pull-right" onclick="update_div(this)">修改</button>\n' +
+                            ' </div>'
+                        $(obj).parent().parent().html(newdiv)
+                    },
+                    error: function (returnValue) {
+                        console.log("fail")
+                    }
+                })
+            }
+
+        }
+
+    </script>
 </head><!--/head-->
 
 <body>
@@ -63,7 +189,7 @@
                 </div>
                 <div class="collapse navbar-collapse">
                     <ul class="nav navbar-nav navbar-right">
-                        <li><a href="index.html">Home</a></li>
+                        <li><a href="/home">Home</a></li>
                         <li class="dropdown"><a href="#">Pages <i class="fa fa-angle-down"></i></a>
                             <ul role="menu" class="sub-menu">
                                 <li><a href="aboutus.html">About</a></li>
@@ -119,8 +245,9 @@
                 <div class="row">
                     <div class="action">
                         <div class="col-sm-12">
-                            <h1 class="title">Portfolio</h1>
-                            <p>Be Creative</p>
+                            <h1 class="title"  th:text="${user_nickname+'——好友信息'}">用户昵称</h1>
+                            <h2  th:text="${'('+user_name+')'}" id="user_name">用户名</h2>
+                            <p th:text="${user_sign}">sign</p>
                         </div>
                     </div>
                 </div>
@@ -133,284 +260,108 @@
         <div class="container">
             <div class="row">
                 <div class="col-sm-6">
-                    <img src="images/portfolio-details/1.jpg" class="img-responsive" alt="">
+                    <div class="padding-bottom arrow-left wow fadeInRight" data-wow-duration="1000ms" data-wow-delay="300ms">
+                        <div class="single-blog timeline" >
+                            <div class="post-content overflow"  style="height: 500px;width: 500px" height="500" width="500">
+                                <img th:src="${user_friend_profile_photo}" class="img-responsive" alt="头像" height="500" width="500">
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="col-sm-6">
                     <div class="project-name overflow">
-                        <h2 class="bold">Sailing Vivamus </h2>
-                        <ul class="nav navbar-nav navbar-default">
-                            <li><a href="#"><i class="fa fa-clock-o"></i>February11,2014</a></li>
-                            <li><a href="#"><i class="fa fa-tag"></i>Branding</a></li>
-                        </ul>
-                    </div>
-                    <div class="project-info overflow">
-                        <h3>Project Info</h3>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed tempus nibh sed elimttis adipiscing. Fusce in hendrerit purus. Suspendisse potenti. Proin quis eros odio, dapibus dictum mauris. Donec nisi libero, adipiscing id pretium eget, consectetur sit amet leo. Nam at eros quis mi egestas fringilla non nec purus.</p>
-                        <ul class="elements">
-                            <li><i class="fa fa-angle-right"></i> Lorem ipsum dolor sit amet, consectetur adipiscing elit.</li>
-                            <li><i class="fa fa-angle-right"></i> Donec tincidunt felis quis ipsum porttitor, non rutrum lorem rhoncus.</li>
-                            <li><i class="fa fa-angle-right"></i> Nam in quam consectetur nulla placerat dapibus ut ut nunc.</li>
-                        </ul>
-                    </div>
-                    <div class="skills overflow">
-                        <h3>Skills:</h3>
-                        <ul class="nav navbar-nav navbar-default">
-                            <li><a href="#"><i class="fa fa-check-square"></i>Design</a></li>
-                            <li><a href="#"><i class="fa fa-check-square"></i>HTML/CSS</a></li>
-                            <li><a href="#"><i class="fa fa-check-square"></i>Javascript</a></li>
-                            <li><a href="#"><i class="fa fa-check-square"></i>Backend</a></li>
-                        </ul>
-                    </div>
-                    <div class="client overflow">
-                        <h3>Client:</h3>
-                        <ul class="nav navbar-nav navbar-default">
-                            <li><a href="#"><i class="fa fa-bolt"></i>Okler Themes</a></li>
-                        </ul>
-                    </div>
-                    <div class="live-preview">
-                        <a href="#" class="btn btn-common uppercase">Live preview</a>
-=======
-    <link href="../static/css/bootstrap.min.css" rel="stylesheet">
-    <link href="../static/css/font-awesome.min.css" rel="stylesheet">
-    <link href="../static/css/lightbox.css" rel="stylesheet">
-    <link href="../static/css/animate.min.css" rel="stylesheet">
-    <link href="../static/css/main.css" rel="stylesheet">
-    <link href="../static/css/responsive.css" rel="stylesheet">
+                        <h2 class="bold" th:text="${user_friend_nickname}">好友昵称 </h2>
+                        <div class="padding-bottom arrow-left wow fadeInRight" data-wow-duration="1000ms" data-wow-delay="300ms" style="margin-left: 45px;padding: 20px 20px 30px 20px">
 
-    <!--[if lt IE 9]>
-    <script src="../static/js/html5shiv.js"></script>
-    <script src="../static/js/respond.min.js"></script>
-    <![endif]-->
-    <link rel="shortcut icon" href="../static/images/ico/favicon.ico">
-    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../static/images/ico/apple-touch-icon-144-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../static/images/ico/apple-touch-icon-114-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../static/images/ico/apple-touch-icon-72-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" href="../static/images/ico/apple-touch-icon-57-precomposed.png">
-</head><!--/head-->
-
-<body>
-<header id="header">
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-12 overflow">
-                <div class="social-icons pull-right">
-                    <ul class="nav nav-pills">
-                        <li><a href=""><i class="fa fa-facebook"></i></a></li>
-                        <li><a href=""><i class="fa fa-twitter"></i></a></li>
-                        <li><a href=""><i class="fa fa-google-plus"></i></a></li>
-                        <li><a href=""><i class="fa fa-dribbble"></i></a></li>
-                        <li><a href=""><i class="fa fa-linkedin"></i></a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="navbar navbar-inverse" role="banner">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-
-                <a class="navbar-brand" href="index.html">
-                    <h1><img src="../static/images/logo.png" alt="logo"></h1>
-                </a>
-
-            </div>
-            <div class="collapse navbar-collapse">
-                <ul class="nav navbar-nav navbar-right">
-                    <li><a href="index.html">Home</a></li>
-                    <li class="dropdown"><a href="#">Pages <i class="fa fa-angle-down"></i></a>
-                        <ul role="menu" class="sub-menu">
-                            <li><a href="aboutus.html">About</a></li>
-                            <li><a href="aboutus2.html">About 2</a></li>
-                            <li><a href="service.html">Services</a></li>
-                            <li><a href="pricing.html">Pricing</a></li>
-                            <li><a href="contact.html">Contact us</a></li>
-                            <li><a href="contact2.html">Contact us 2</a></li>
-                            <li><a href="404.html">404 error</a></li>
-                            <li><a href="coming-soon.html">Coming Soon</a></li>
-                        </ul>
-                    </li>
-                    <li class="dropdown"><a href="blog.html">Blog <i class="fa fa-angle-down"></i></a>
-                        <ul role="menu" class="sub-menu">
-                            <li><a href="blog.html">Blog Default</a></li>
-                            <li><a href="blogtwo.html">Timeline Blog</a></li>
-                            <li><a href="blogone.html">2 Columns + Right Sidebar</a></li>
-                            <li><a href="blogthree.html">1 Column + Left Sidebar</a></li>
-                            <li><a href="blogfour.html">Blog Masonary</a></li>
-                            <li><a href="blogdetails.html">Blog Details</a></li>
-                        </ul>
-                    </li>
-                    <li class="dropdown active"><a href="portfolio.html">Portfolio <i class="fa fa-angle-down"></i></a>
-                        <ul role="menu" class="sub-menu">
-                            <li><a href="portfolio.html">Portfolio Default</a></li>
-                            <li><a href="portfoliofour.html">Isotope 3 Columns + Right Sidebar</a></li>
-                            <li><a href="portfolioone.html">3 Columns + Right Sidebar</a></li>
-                            <li><a href="portfoliotwo.html">3 Columns + Left Sidebar</a></li>
-                            <li><a href="portfoliothree.html">2 Columns</a></li>
-                            <li><a class="active" href="portfolio-details.html">Portfolio Details</a></li>
-                        </ul>
-                    </li>
-                    <li><a href="shortcodes.html ">Shortcodes</a></li>
-                </ul>
-            </div>
-            <div class="search">
-                <form role="form">
-                    <i class="fa fa-search"></i>
-                    <div class="field-toggle">
-                        <input type="text" class="search-form" autocomplete="off" placeholder="Search">
+                            <h4><p class="config"><i class="fa fa-user"></i>    用户名：<span id="user_friend_name" th:text="${user_friend_name}"></span></p></h4>
+                            <h4><p class="config"><i class="fa fa-chevron-right"></i>   个性签名：<span id="user_friend_sign" th:text="${user_friend_sign}"></span></p></h4>
+                            <h4><p class="config"><i class="fa fa-envelope-o"></i>   邮箱：<span id="user_friend_email" th:text="${user_friend_email}"></span></p></h4>
+                            <h4><p class="config"><i class="fa fa-map-marker"></i>   地址：<span id="user_friend_address" th:text="${user_friend_address}"></span></p></h4>
+                        </div>
                     </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</header>
-<!--/#header-->
+                    <div>
 
 
-<section id="page-breadcrumb">
-    <div class="vertical-center sun">
-        <div class="container">
-            <div class="row">
-                <div class="action">
-                    <div class="col-sm-12">
-                        <h1 class="title">Portfolio</h1>
-                        <p>Be Creative</p>
->>>>>>> ad5ddffab0f25a2405bdfcab5902afeea4d01260
-                    </div>
-                </div>
-            </div>
-        </div>
-<<<<<<< HEAD
-    </section>
-     <!--/#portfolio-information-->
+                        <div class="padding-bottom arrow-left wow fadeInRight" data-wow-duration="1000ms" data-wow-delay="300ms">
+                            <div class="single-blog timeline">
+                                <div class="post-content overflow">
+                                    <h4 class="post-title" id="remark">备注：
+                                        <span class="post-title bold" id="friend_remark" th:text="${user_friend_remark}">好友备注</span>
+                                    </h4>
+                                    <div class="post-bottom overflow">
+                                        <button class="btn btn-link pull-right" onclick="update_div(this)">修改</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
-    <section id="related-work" class="padding-top padding-bottom">
-        <div class="container">
-            <div class="row">
-                <h1 class="title text-center">Related Work</h1>
-                <div class="col-sm-3">
-                    <div class="portfolio-wrapper">
-                        <div class="portfolio-single">
-                            <div class="portfolio-thumb">
-                                <img src="images/portfolio/1.jpg" class="img-responsive" alt="">
-                            </div>
-                            <div class="portfolio-view">
-                                <ul class="nav nav-pills">
-                                    <li><a href="images/portfolio/1.jpg" data-lightbox="example-set"><i class="fa fa-eye"></i></a></li>
-                                </ul>
+
+                        <div class="padding-bottom arrow-left wow fadeInRight" data-wow-duration="1000ms" data-wow-delay="300ms">
+
+                            <div class="single-blog timeline">
+                                <div class="post-content overflow">
+                                    <h4 class="post-title" id="group">分组：
+                                        <span class="post-title bold" id="friend_group" th:text="${user_friend_group}">好友分组</span>
+                                    </h4>
+                                    <div class="post-bottom overflow">
+                                        <button class="btn btn-link pull-right" onclick="update_div(this)">修改</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div class="portfolio-info ">
-                            <h2>Sailing Vivamus</h2>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-3">
-                    <div class="portfolio-wrapper">
-                        <div class="portfolio-single">
-                            <div class="portfolio-thumb">
-                                <img src="images/portfolio/2.jpg" class="img-responsive" alt="">
-                            </div>
-                            <div class="portfolio-view">
-                                <ul class="nav nav-pills">
-                                    <li><a href="images/portfolio/2.jpg" data-lightbox="example-set"><i class="fa fa-eye"></i></a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="portfolio-info ">
-                            <h2>Sailing Vivamus</h2>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-3">
-                    <div class="portfolio-wrapper">
-                        <div class="portfolio-single">
-                            <div class="portfolio-thumb">
-                                <img src="images/portfolio/3.jpg" class="img-responsive" alt="">
-                            </div>
-                            <div class="portfolio-view">
-                                <ul class="nav nav-pills">
-                                    <li><a href="images/portfolio/3.jpg" data-lightbox="example-set"><i class="fa fa-eye"></i></a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="portfolio-info ">
-                            <h2>Sailing Vivamus</h2>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-3">
-                    <div class="portfolio-wrapper">
-                        <div class="portfolio-single">
-                            <div class="portfolio-thumb">
-                                <img src="images/portfolio/4.jpg" class="img-responsive" alt="">
-                            </div>
-                            <div class="portfolio-view">
-                                <ul class="nav nav-pills">
-                                    <li><a href="images/portfolio/4.jpg" data-lightbox="example-set"><i class="fa fa-eye"></i></a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="portfolio-info ">
-                            <h2>Sailing Vivamus</h2>
-                        </div>
+
                     </div>
                 </div>
             </div>
         </div>
     </section>
-    <!--/#related-work-->
-
-
     <footer id="footer">
         <div class="container">
             <div class="row">
                 <div class="col-sm-12 text-center bottom-separator">
-                    <img src="images/home/under.png" class="img-responsive inline" alt="">
+                    <img src="/images/home/under.png" class="img-responsive inline" alt="">
                 </div>
                 <div class="col-md-4 col-sm-6">
-                    <div class="testimonial bottom">
-                        <h2>Testimonial</h2>
-                        <div class="media">
-                            <div class="pull-left">
-                                <a href="#"><img src="images/home/profile1.png" alt=""></a>
-                            </div>
-                            <div class="media-body">
-                                <blockquote>Nisi commodo bresaola, leberkas venison eiusmod bacon occaecat labore tail.</blockquote>
-                                <h3><a href="#">- Jhon Kalis</a></h3>
-                            </div>
-                         </div>
-                        <div class="media">
-                            <div class="pull-left">
-                                <a href="#"><img src="images/home/profile2.png" alt=""></a>
-                            </div>
-                            <div class="media-body">
-                                <blockquote>Capicola nisi flank sed minim sunt aliqua rump pancetta leberkas venison eiusmod.</blockquote>
-                                <h3><a href="">- Abraham Josef</a></h3>
-                            </div>
-                        </div>   
-                    </div> 
+                    <!--                <div class="testimonial bottom">-->
+                    <!--                    <h2>Testimonial</h2>-->
+                    <!--                    <div class="media">-->
+                    <!--                        <div class="pull-left">-->
+                    <!--                            <a href="#"><img src="/images/home/profile1.png" alt=""></a>-->
+                    <!--                        </div>-->
+                    <!--                        <div class="media-body">-->
+                    <!--                            <blockquote>Nisi commodo bresaola, leberkas venison eiusmod bacon occaecat labore tail.-->
+                    <!--                            </blockquote>-->
+                    <!--                            <h3><a href="#">- Jhon Kalis</a></h3>-->
+                    <!--                        </div>-->
+                    <!--                    </div>-->
+                    <!--                    <div class="media">-->
+                    <!--                        <div class="pull-left">-->
+                    <!--                            <a href="#"><img src="/images/home/profile2.png" alt=""></a>-->
+                    <!--                        </div>-->
+                    <!--                        <div class="media-body">-->
+                    <!--                            <blockquote>Capicola nisi flank sed minim sunt aliqua rump pancetta leberkas venison-->
+                    <!--                                eiusmod.-->
+                    <!--                            </blockquote>-->
+                    <!--                            <h3><a href="">- Abraham Josef</a></h3>-->
+                    <!--                        </div>-->
+                    <!--                    </div>-->
+                    <!--                </div>-->
                 </div>
                 <div class="col-md-3 col-sm-6">
                     <div class="contact-info bottom">
-                        <h2>Contacts</h2>
+                        <h2>联系方式</h2>
                         <address>
-                        E-mail: <a href="mailto:someone@example.com">email@email.com</a> <br> 
-                        Phone: +1 (123) 456 7890 <br> 
-                        Fax: +1 (123) 456 7891 <br> 
+                            E-mail: <a href="mailto:someone@example.com">email@bit.edu.cn</a> <br>
+                            Phone: + (086) 1388 456 7890 <br>
+                            <!--                        Fax: +1 (123) 456 7891 <br>-->
                         </address>
 
-                        <h2>Address</h2>
+                        <h2>地址</h2>
                         <address>
-                        Unit C2, St.Vincent's Trading Est., <br> 
-                        Feeder Road, <br> 
-                        Bristol, BS2 0UY <br> 
-                        United Kingdom <br> 
+                            北京市海淀区 <br>
+                            中关村
+                            南大街5号
+                            北京理工大学<br>
                         </address>
                     </div>
                 </div>
@@ -422,11 +373,13 @@
                                 <input type="text" name="name" class="form-control" required="required" placeholder="Name">
                             </div>
                             <div class="form-group">
-                                <input type="email" name="email" class="form-control" required="required" placeholder="Email Id">
+                                <input type="email" name="email" class="form-control" required="required"
+                                       placeholder="Email Id">
                             </div>
                             <div class="form-group">
-                                <textarea name="message" id="message" required="required" class="form-control" rows="8" placeholder="Your text here"></textarea>
-                            </div>                        
+                            <textarea name="message" id="message" required="required" class="form-control" rows="8"
+                                      placeholder="Your text here"></textarea>
+                            </div>
                             <div class="form-group">
                                 <input type="submit" name="submit" class="btn btn-submit" value="Submit">
                             </div>
@@ -435,7 +388,7 @@
                 </div>
                 <div class="col-sm-12">
                     <div class="copyright-text text-center">
-                        <p>&copy; Your Company 2014. All Rights Reserved.</p>
+                        <p>&copy; B I T 2020. All Rights Reserved.</p>
                         <p>Designed by <a target="_blank" href="http://www.themeum.com">Themeum</a></p>
                     </div>
                 </div>
@@ -449,236 +402,9 @@
     <script type="text/javascript" src="js/bootstrap.min.js"></script>
     <script type="text/javascript" src="js/lightbox.min.js"></script>
     <script type="text/javascript" src="js/wow.min.js"></script>
-    <script type="text/javascript" src="js/main.js"></script>  
-=======
-    </div>
-</section>
-<!--/#action-->
-
-<section id="portfolio-information" class="padding-top">
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-6">
-                <img src="../static/images/portfolio-details/1.jpg" class="img-responsive" alt="">
-            </div>
-            <div class="col-sm-6">
-                <div class="project-name overflow">
-                    <h2 class="bold">Sailing Vivamus </h2>
-                    <ul class="nav navbar-nav navbar-default">
-                        <li><a href="#"><i class="fa fa-clock-o"></i>February11,2014</a></li>
-                        <li><a href="#"><i class="fa fa-tag"></i>Branding</a></li>
-                    </ul>
-                </div>
-                <div class="project-info overflow">
-                    <h3>Project Info</h3>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed tempus nibh sed elimttis adipiscing.
-                        Fusce in hendrerit purus. Suspendisse potenti. Proin quis eros odio, dapibus dictum mauris.
-                        Donec nisi libero, adipiscing id pretium eget, consectetur sit amet leo. Nam at eros quis mi
-                        egestas fringilla non nec purus.</p>
-                    <ul class="elements">
-                        <li><i class="fa fa-angle-right"></i> Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                        </li>
-                        <li><i class="fa fa-angle-right"></i> Donec tincidunt felis quis ipsum porttitor, non rutrum
-                            lorem rhoncus.
-                        </li>
-                        <li><i class="fa fa-angle-right"></i> Nam in quam consectetur nulla placerat dapibus ut ut nunc.
-                        </li>
-                    </ul>
-                </div>
-                <div class="skills overflow">
-                    <h3>Skills:</h3>
-                    <ul class="nav navbar-nav navbar-default">
-                        <li><a href="#"><i class="fa fa-check-square"></i>Design</a></li>
-                        <li><a href="#"><i class="fa fa-check-square"></i>HTML/CSS</a></li>
-                        <li><a href="#"><i class="fa fa-check-square"></i>Javascript</a></li>
-                        <li><a href="#"><i class="fa fa-check-square"></i>Backend</a></li>
-                    </ul>
-                </div>
-                <div class="client overflow">
-                    <h3>Client:</h3>
-                    <ul class="nav navbar-nav navbar-default">
-                        <li><a href="#"><i class="fa fa-bolt"></i>Okler Themes</a></li>
-                    </ul>
-                </div>
-                <div class="live-preview">
-                    <a href="#" class="btn btn-common uppercase">Live preview</a>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-<!--/#portfolio-information-->
-
-<section id="related-work" class="padding-top padding-bottom">
-    <div class="container">
-        <div class="row">
-            <h1 class="title text-center">Related Work</h1>
-            <div class="col-sm-3">
-                <div class="portfolio-wrapper">
-                    <div class="portfolio-single">
-                        <div class="portfolio-thumb">
-                            <img src="../static/images/portfolio/1.jpg" class="img-responsive" alt="">
-                        </div>
-                        <div class="portfolio-view">
-                            <ul class="nav nav-pills">
-                                <li><a href="../static/images/portfolio/1.jpg" data-lightbox="example-set"><i
-                                        class="fa fa-eye"></i></a></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="portfolio-info ">
-                        <h2>Sailing Vivamus</h2>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-3">
-                <div class="portfolio-wrapper">
-                    <div class="portfolio-single">
-                        <div class="portfolio-thumb">
-                            <img src="../static/images/portfolio/2.jpg" class="img-responsive" alt="">
-                        </div>
-                        <div class="portfolio-view">
-                            <ul class="nav nav-pills">
-                                <li><a href="../static/images/portfolio/2.jpg" data-lightbox="example-set"><i
-                                        class="fa fa-eye"></i></a></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="portfolio-info ">
-                        <h2>Sailing Vivamus</h2>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-3">
-                <div class="portfolio-wrapper">
-                    <div class="portfolio-single">
-                        <div class="portfolio-thumb">
-                            <img src="../static/images/portfolio/3.jpg" class="img-responsive" alt="">
-                        </div>
-                        <div class="portfolio-view">
-                            <ul class="nav nav-pills">
-                                <li><a href="../static/images/portfolio/3.jpg" data-lightbox="example-set"><i
-                                        class="fa fa-eye"></i></a></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="portfolio-info ">
-                        <h2>Sailing Vivamus</h2>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-3">
-                <div class="portfolio-wrapper">
-                    <div class="portfolio-single">
-                        <div class="portfolio-thumb">
-                            <img src="../static/images/portfolio/4.jpg" class="img-responsive" alt="">
-                        </div>
-                        <div class="portfolio-view">
-                            <ul class="nav nav-pills">
-                                <li><a href="../static/images/portfolio/4.jpg" data-lightbox="example-set"><i
-                                        class="fa fa-eye"></i></a></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="portfolio-info ">
-                        <h2>Sailing Vivamus</h2>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-<!--/#related-work-->
+    <script type="text/javascript" src="js/main.js"></script>
 
 
-<footer id="footer">
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-12 text-center bottom-separator">
-                <img src="../static/images/home/under.png" class="img-responsive inline" alt="">
-            </div>
-            <div class="col-md-4 col-sm-6">
-                <div class="testimonial bottom">
-                    <h2>Testimonial</h2>
-                    <div class="media">
-                        <div class="pull-left">
-                            <a href="#"><img src="../static/images/home/profile1.png" alt=""></a>
-                        </div>
-                        <div class="media-body">
-                            <blockquote>Nisi commodo bresaola, leberkas venison eiusmod bacon occaecat labore tail.
-                            </blockquote>
-                            <h3><a href="#">- Jhon Kalis</a></h3>
-                        </div>
-                    </div>
-                    <div class="media">
-                        <div class="pull-left">
-                            <a href="#"><img src="../static/images/home/profile2.png" alt=""></a>
-                        </div>
-                        <div class="media-body">
-                            <blockquote>Capicola nisi flank sed minim sunt aliqua rump pancetta leberkas venison
-                                eiusmod.
-                            </blockquote>
-                            <h3><a href="">- Abraham Josef</a></h3>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3 col-sm-6">
-                <div class="contact-info bottom">
-                    <h2>Contacts</h2>
-                    <address>
-                        E-mail: <a href="mailto:someone@example.com">email@email.com</a> <br>
-                        Phone: +1 (123) 456 7890 <br>
-                        Fax: +1 (123) 456 7891 <br>
-                    </address>
+    </body>
 
-                    <h2>Address</h2>
-                    <address>
-                        Unit C2, St.Vincent's Trading Est., <br>
-                        Feeder Road, <br>
-                        Bristol, BS2 0UY <br>
-                        United Kingdom <br>
-                    </address>
-                </div>
-            </div>
-            <div class="col-md-4 col-sm-12">
-                <div class="contact-form bottom">
-                    <h2>Send a message</h2>
-                    <form id="main-contact-form" name="contact-form" method="post" action="sendemail.php">
-                        <div class="form-group">
-                            <input type="text" name="name" class="form-control" required="required" placeholder="Name">
-                        </div>
-                        <div class="form-group">
-                            <input type="email" name="email" class="form-control" required="required"
-                                   placeholder="Email Id">
-                        </div>
-                        <div class="form-group">
-                            <textarea name="message" id="message" required="required" class="form-control" rows="8"
-                                      placeholder="Your text here"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <input type="submit" name="submit" class="btn btn-submit" value="Submit">
-                        </div>
-                    </form>
-                </div>
-            </div>
-            <div class="col-sm-12">
-                <div class="copyright-text text-center">
-                    <p>&copy; Your Company 2014. All Rights Reserved.</p>
-                    <p>Designed by <a target="_blank" href="http://www.themeum.com">Themeum</a></p>
-                </div>
-            </div>
-        </div>
-    </div>
-</footer>
-<!--/#footer-->
-
-
-<script type="text/javascript" src="../static/js/jquery.js"></script>
-<script type="text/javascript" src="../static/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="../static/js/lightbox.min.js"></script>
-<script type="text/javascript" src="../static/js/wow.min.js"></script>
-<script type="text/javascript" src="../static/js/main.js"></script>
->>>>>>> ad5ddffab0f25a2405bdfcab5902afeea4d01260
-</body>
 </html>

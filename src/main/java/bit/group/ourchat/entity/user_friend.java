@@ -12,8 +12,10 @@ public class user_friend implements Serializable {
         this.id = id;
         this.userfriendId = userfriendId;
     }
+
     public user_friend(){
 
     }
+
     // equals() and hashCode()
 }
