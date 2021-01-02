@@ -41,15 +41,15 @@
             var email = $('#user_email').text()
             var addres = $('#user_address').text()
             var photo = $('#user_profile_photo').attr('src')
-            var newdiv = '<h2><p class="config"style="margin-bottom: 40px">    用户名：<span id="user_name" th:text="${user_name}">'+current_name+'</span></p></h2>' +
-                '         <h4>    昵称：<input class="form-control" style="margin-top: 10px"  id="new_nickname" value="'+nickname+'"></p></h4>' +
-                '         <h4>    个性签名：<input class="form-control" style="margin-top: 10px" id="new_sign" value="'+sign+'"></p></h4>' +
-                '         <h4>    邮箱：<input class="form-control" style="margin-top: 10px" id="new_email" value="'+email+'"></p></h4>' +
-                '         <h4>    地址：<input class="form-control" style="margin-top: 10px" id="new_address" value="'+addres+'"></p></h4>' +
-                '         <h4>    头像：<input class="form-control" style="margin-top: 10px" id="new_profile_photo"  onchange="readPhotoFromURL()"  placeholder="请输入图片网址"  value="'+photo+'"></p></h4>' +
+            var newdiv = '<h2><p class="config"style="margin-bottom: 40px">    Name：<span id="user_name" th:text="${user_name}">'+current_name+'</span></p></h2>' +
+                '         <h4>    Nickname：<input class="form-control" style="margin-top: 10px"  id="new_nickname" value="'+nickname+'"></p></h4>' +
+                '         <h4>    Sign：<input class="form-control" style="margin-top: 10px" id="new_sign" value="'+sign+'"></p></h4>' +
+                '         <h4>    Email：<input class="form-control" style="margin-top: 10px" id="new_email" value="'+email+'"></p></h4>' +
+                '         <h4>    Address：<input class="form-control" style="margin-top: 10px" id="new_address" value="'+addres+'"></p></h4>' +
+                '         <h4>    Photo：<input class="form-control" style="margin-top: 10px" id="new_profile_photo"  onchange="readPhotoFromURL()"  placeholder="Please input the photo web address"  value="'+photo+'"></p></h4>' +
                 '         <div class="post-bottom overflow">\n' +
-                '               <button class="btn btn-link pull-right" onclick="update_cancel(this)" >取消</button>\n' +
-                '                <button class="btn btn-link pull-right" onclick="update(this)" >确定</button>\n' +
+                '               <button class="btn btn-link pull-right" onclick="update_cancel(this)" >Cancel</button>\n' +
+                '                <button class="btn btn-link pull-right" onclick="update(this)" >Confirm</button>\n' +
                 '         </div>'
             $(obj).parent().parent().html(newdiv)
         }
@@ -70,13 +70,13 @@
                 },
                 success: function (returnValue) {
                     console.log("success")
-                    newdiv='<h2><p class="config"style="margin-bottom: 40px">    用户名：<span id="user_name" th:text="${user_name}">'+current_name+'</span></p></h2>'+
-                            ' <PRE><h4><p class="config"><i class="fa fa-user"></i>&#9    昵称：<span id="user_nickname" th:text="${user_nickname}">'+returnValue.nickname+'</span></p></h4></PRE>'+
-                            ' <PRE><h4><p class="config"><i class="fa fa-chevron-right"></i>&#9   个性签名：<span id="user_sign" th:text="${user_sign}">'+returnValue.sign+'</span></p></h4></PRE>\n'+
-                            ' <PRE><h4><p class="config"><i class="fa fa-envelope-o"></i>&#9   邮箱：<span id="user_email" th:text="${user_email}">'+returnValue.email+'</span></p></h4></PRE>'+
-                            ' <PRE><h4><p class="config"><i class="fa fa-map-marker"></i>&#9   地址：<span id="user_address" th:text="${user_address}">'+returnValue.address+'</span></p></h4></PRE>'+
+                    newdiv='<h2><p class="config"style="margin-bottom: 40px">    Name：<span id="user_name" th:text="${user_name}">'+current_name+'</span></p></h2>'+
+                            ' <PRE><h4><p class="config"><i class="fa fa-user"></i>&#9    Nickname：<span id="user_nickname" th:text="${user_nickname}">'+returnValue.nickname+'</span></p></h4></PRE>'+
+                            ' <PRE><h4><p class="config"><i class="fa fa-chevron-right"></i>&#9   Sign：<span id="user_sign" th:text="${user_sign}">'+returnValue.sign+'</span></p></h4></PRE>\n'+
+                            ' <PRE><h4><p class="config"><i class="fa fa-envelope-o"></i>&#9   Email：<span id="user_email" th:text="${user_email}">'+returnValue.email+'</span></p></h4></PRE>'+
+                            ' <PRE><h4><p class="config"><i class="fa fa-map-marker"></i>&#9   Address：<span id="user_address" th:text="${user_address}">'+returnValue.address+'</span></p></h4></PRE>'+
                             '   <div class="post-bottom overflow">\n' +
-                            '       <button class="btn btn-link pull-right" onclick="update_div(this)"><i class="fa fa-pencil-square-o"></i>修改</button>\n' +
+                            '       <button class="btn btn-link pull-right" onclick="update_div(this)"><i class="fa fa-pencil-square-o"></i>Edit</button>\n' +
                             '   </div>'
                     $(obj).parent().parent().html(newdiv)
                 },
@@ -113,13 +113,13 @@
                 },
                 success: function (returnValue) {
                     console.log("success")
-                    newdiv='<h2><p class="config"style="margin-bottom: 40px">    用户名：<span id="user_name" th:text="${user_name}">'+current_name+'</span></p></h2>'+
-                        ' <PRE><h4><p class="config"><i class="fa fa-user"></i>&#9    昵称：<span id="user_nickname" th:text="${user_nickname}">'+returnValue.nickname+'</span></p></h4></PRE>'+
-                        ' <PRE><h4><p class="config"><i class="fa fa-chevron-right"></i>&#9   个性签名：<span id="user_sign" th:text="${user_sign}">'+returnValue.sign+'</span></p></h4></PRE>\n'+
-                        ' <PRE><h4><p class="config"><i class="fa fa-envelope-o"></i>&#9   邮箱：<span id="user_email" th:text="${user_email}">'+returnValue.email+'</span></p></h4></PRE>'+
-                        ' <PRE><h4><p class="config"><i class="fa fa-map-marker"></i>&#9   地址：<span id="user_address" th:text="${user_address}">'+returnValue.address+'</span></p></h4></PRE>'+
+                    newdiv='<h2><p class="config"style="margin-bottom: 40px">    Name：<span id="user_name" th:text="${user_name}">'+current_name+'</span></p></h2>'+
+                        ' <PRE><h4><p class="config"><i class="fa fa-user"></i>&#9    Nickname：<span id="user_nickname" th:text="${user_nickname}">'+returnValue.nickname+'</span></p></h4></PRE>'+
+                        ' <PRE><h4><p class="config"><i class="fa fa-chevron-right"></i>&#9   Sign：<span id="user_sign" th:text="${user_sign}">'+returnValue.sign+'</span></p></h4></PRE>\n'+
+                        ' <PRE><h4><p class="config"><i class="fa fa-envelope-o"></i>&#9   Email：<span id="user_email" th:text="${user_email}">'+returnValue.email+'</span></p></h4></PRE>'+
+                        ' <PRE><h4><p class="config"><i class="fa fa-map-marker"></i>&#9   Address：<span id="user_address" th:text="${user_address}">'+returnValue.address+'</span></p></h4></PRE>'+
                         '   <div class="post-bottom overflow">\n' +
-                        '       <button class="btn btn-link pull-right" onclick="update_div(this)"><i class="fa fa-pencil-square-o"></i>修改</button>\n' +
+                        '       <button class="btn btn-link pull-right" onclick="update_div(this)"><i class="fa fa-pencil-square-o"></i>Edit</button>\n' +
                         '   </div>'
                     $(obj).parent().parent().html(newdiv)
                     $('#user_profile_photo').attr("src",returnValue.profile_photo)
@@ -179,28 +179,7 @@
                                 <li><a href="404.html">404 error</a></li>
                                 <li><a href="coming-soon.html">Coming Soon</a></li>
                             </ul>
-                        </li>                    
-                        <li class="dropdown"><a href="blog.html">Blog <i class="fa fa-angle-down"></i></a>
-                            <ul role="menu" class="sub-menu">
-                                <li><a href="blog.html">Blog Default</a></li>
-                                <li><a href="blogtwo.html">Timeline Blog</a></li>
-                                <li><a href="blogone.html">2 Columns + Right Sidebar</a></li>
-                                <li><a href="blogthree.html">1 Column + Left Sidebar</a></li>
-                                <li><a href="blogfour.html">Blog Masonary</a></li>
-                                <li><a href="blogdetails.html">Blog Details</a></li>
-                            </ul>
                         </li>
-                        <li class="dropdown active"><a href="portfolio.html">Portfolio <i class="fa fa-angle-down"></i></a>
-                            <ul role="menu" class="sub-menu">
-                                <li><a href="portfolio.html">Portfolio Default</a></li>
-                                <li><a href="portfoliofour.html">Isotope 3 Columns + Right Sidebar</a></li>
-                                <li><a href="portfolioone.html">3 Columns + Right Sidebar</a></li>
-                                <li><a href="portfoliotwo.html">3 Columns + Left Sidebar</a></li>
-                                <li><a href="portfoliothree.html">2 Columns</a></li>
-                                <li><a class="active" href="portfolio-details.html">Portfolio Details</a></li>
-                            </ul>
-                        </li>                         
-                        <li><a href="shortcodes.html ">Shortcodes</a></li>                    
                     </ul>
                 </div>
                 <div class="search">
@@ -222,7 +201,7 @@
                 <div class="row">
                     <div class="action">
                         <div class="col-sm-12">
-                            <h1 class="title" >个人信息</h1>
+                            <h1 class="title" >Details</h1>
                         </div>
                     </div>
                 </div>
@@ -238,7 +217,7 @@
                     <div class="padding-bottom arrow-left wow fadeInRight" data-wow-duration="1000ms" data-wow-delay="300ms">
                         <div class="single-blog timeline" >
                             <div class="post-content overflow" id="result" style="height: 500px;width: 500px" height="500" width="500">
-                                <img id="user_profile_photo" th:src="${user_profile_photo}" class="img-responsive" alt="头像" height="500" width="500">
+                                <img id="user_profile_photo" th:src="${user_profile_photo}" class="img-responsive" alt="Photo" height="500" width="500">
                             </div>
                         </div>
                     </div>
@@ -247,14 +226,14 @@
                     <div class="padding-bottom arrow-left wow fadeInRight" data-wow-duration="1000ms" data-wow-delay="300ms">
                         <div class="single-blog timeline" id="user_info">
                             <div class="post-content overflow">
-                                <h2><p class="config"style="margin-bottom: 40px">    用户名：<span id="user_name" th:text="${user_name}"></span></p></h2>
-                                <PRE><h4><p class="config"><i class="fa fa-user"></i>&#9    昵称：<span id="user_nickname" th:text="${user_nickname}"></span></p></h4></PRE>
-                                <PRE><h4><p class="config"><i class="fa fa-chevron-right"></i>&#9   个性签名：<span id="user_sign" th:text="${user_sign}"></span></p></h4></PRE>
-                                <PRE><h4><p class="config"><i class="fa fa-envelope-o"></i>&#9   邮箱：<span id="user_email" th:text="${user_email}"></span></p></h4></PRE>
-                                <PRE><h4><p class="config"><i class="fa fa-map-marker"></i>&#9   地址：<span id="user_address" th:text="${user_address}"></span></p></h4></PRE>
+                                <h2><p class="config"style="margin-bottom: 40px">    Name：<span id="user_name" th:text="${user_name}"></span></p></h2>
+                                <PRE><h4><p class="config"><i class="fa fa-user"></i>&#9    Nickname：<span id="user_nickname" th:text="${user_nickname}"></span></p></h4></PRE>
+                                <PRE><h4><p class="config"><i class="fa fa-chevron-right"></i>&#9   Sign：<span id="user_sign" th:text="${user_sign}"></span></p></h4></PRE>
+                                <PRE><h4><p class="config"><i class="fa fa-envelope-o"></i>&#9   Email：<span id="user_email" th:text="${user_email}"></span></p></h4></PRE>
+                                <PRE><h4><p class="config"><i class="fa fa-map-marker"></i>&#9   Address：<span id="user_address" th:text="${user_address}"></span></p></h4></PRE>
 
                                 <div class="post-bottom overflow">
-                                    <button class="btn btn-link pull-right" onclick="update_div(this)"><i class="fa fa-pencil-square-o"></i>修改</button>
+                                    <button class="btn btn-link pull-right" onclick="update_div(this)"><i class="fa fa-pencil-square-o"></i>Edit</button>
                                 </div>
                             </div>
                         </div>
@@ -297,19 +276,19 @@
                 </div>
                 <div class="col-md-3 col-sm-6">
                     <div class="contact-info bottom">
-                        <h2>联系方式</h2>
+                        <h2>Contact</h2>
                         <address>
                             E-mail: <a href="mailto:someone@example.com">email@bit.edu.cn</a> <br>
                             Phone: + (086) 1388 456 7890 <br>
                             <!--                        Fax: +1 (123) 456 7891 <br>-->
                         </address>
 
-                        <h2>地址</h2>
+                        <h2>Address</h2>
                         <address>
-                            北京市海淀区 <br>
-                            中关村
-                            南大街5号
-                            北京理工大学<br>
+                            Beijing Institute of Technology <br>
+                            No.5 South Street
+                            Zhong guan cun
+                            Haidian District, Beijing<br>
                         </address>
                     </div>
                 </div>

@@ -241,11 +241,14 @@ public class friendController {
             String requestName = userService.findById(fri_req.getRequestId()).getName();
             String requestNickname = userService.findById(fri_req.getRequestId()).getNickname();
             String requestPhoto = userService.findById(fri_req.getRequestId()).getProfile_photo();
+            java.sql.Date sData = fri_req.getDate();
+
             System.out.println(requestId+","+requestName+","+requestNickname);
             data.put("Id",requestId);
             data.put("Name",requestName);
             data.put("Nickname",requestNickname);
             data.put("Photo",requestPhoto);
+            data.put("time",sData);
             data.put("request","request");
             result.add(data);
         }

@@ -187,35 +187,35 @@
                     <span class="icon-bar"></span>
                 </button>
 
-                <a class="navbar-brand" href="index.html">
+                <a class="navbar-brand" href="login">
                     <h1><img src="/images/logo.png" alt="logo"></h1>
                 </a>
 
             </div>
             <div class="collapse navbar-collapse">
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="index.html">主页</a></li>
-                    <li class="dropdown"><a href="#">页面 <i class="fa fa-angle-down"></i></a>
-                        <ul role="menu" class="sub-menu">
-                            <li><a href="aboutus.html">关于我们</a></li>
-                        </ul>
-                    </li>
-                    <li class="dropdown active"><a href="#">唠叨铺儿 <i class="fa fa-angle-down"></i></a>
-                        <ul role="menu" class="sub-menu">
-                            <li><a href="blogthree.html">唠叨唠叨</a></li>
-                        </ul>
-                    </li>
-                    <li class="dropdown"><a href="#">跳蚤地儿 <i class="fa fa-angle-down"></i></a>
-                        <ul role="menu" class="sub-menu">
-                            <li><a href="portfolio.html">二手市场</a></li>
-                        </ul>
-                    </li>
-                    <li><a href="#">设置</a>
-                        <ul role="menu" class="sub-menu">
-                            <li><a href="/re_register">重置</a>
-                            </li>
-                        </ul>
-                    </li>
+<!--                    <li><a href="index.html">主页</a></li>-->
+<!--                    <li class="dropdown"><a href="#">页面 <i class="fa fa-angle-down"></i></a>-->
+<!--                        <ul role="menu" class="sub-menu">-->
+<!--                            <li><a href="aboutus.html">关于我们</a></li>-->
+<!--                        </ul>-->
+<!--                    </li>-->
+<!--                    <li class="dropdown active"><a href="#">唠叨铺儿 <i class="fa fa-angle-down"></i></a>-->
+<!--                        <ul role="menu" class="sub-menu">-->
+<!--                            <li><a href="blogthree.html">唠叨唠叨</a></li>-->
+<!--                        </ul>-->
+<!--                    </li>-->
+<!--                    <li class="dropdown"><a href="#">跳蚤地儿 <i class="fa fa-angle-down"></i></a>-->
+<!--                        <ul role="menu" class="sub-menu">-->
+<!--                            <li><a href="portfolio.html">二手市场</a></li>-->
+<!--                        </ul>-->
+<!--                    </li>-->
+<!--                    <li><a href="#">设置</a>-->
+<!--                        <ul role="menu" class="sub-menu">-->
+<!--                            <li><a href="/re_register">重置</a>-->
+<!--                            </li>-->
+<!--                        </ul>-->
+<!--                    </li>-->
                 </ul>
             </div>
             <div class="search">
@@ -281,8 +281,8 @@
             <!--</div>-->
             <div class="col-md-4 col-sm-12 ">
             <div  class="portfolio-thumb col-md-5 fadeInLeft" >
-                <h2>交友广场</h2>
-                <a >你想要的这里都有</a>
+                <h2></h2>
+                <a ></a>
             </div>
             <!--<div id="result" class="portfolio-thumb col-md-5 fadeInRight">-->
             <!--</div>-->
@@ -292,170 +292,164 @@
                 <div class="contact-form bottom">
                     <div class="col-md-12">
                     <div  class="portfolio-thumb fadeInLeft col-md-5"  >
-                        <h2>注册</h2>
-                        <a value="读取图像"  onclick="readAsDataURL()">显示头像</a>
+                        <h2>Register</h2>
+                        <a value="Read the photo"  onclick="readAsDataURL()"></a>
                     </div>
 
                     </div>
                     <form action="/register" method="post" enctype="multipart/form-data" style="padding-top: 130px;">
-                        <a>用户名:</a><input name="name" class="form-control" required="required"/><br/>
-                        <a>密码:</a><input type="password" name="password" class="form-control" required="required"/><br/>
-                        <a>昵称:</a><input name="nickname" class="form-control" required="required"/><br/>
-                        <a>邮箱:</a><input type="email" name="email" class="form-control" required="required"/><br/>
-                        <a>地区:</a>
+                        <a>Name:</a><input name="name" class="form-control" required="required"/><br/>
+                        <a>Password:</a><input type="password" name="password" class="form-control" required="required"/><br/>
+                        <a>Nickname:</a><input name="nickname" class="form-control" required="required"/><br/>
+                        <a>Email:</a><input type="email" name="email" class="form-control" required="required"/><br/>
+                        <a>Address:</a>
 <!--                        <input name="address" class="form-control" required="required"/><br/>-->
                         <select class="select picker form-control " name="address" required="required">
-                            <option>阿尔及利亚</option>
-                            <option>阿富汗</option>
-                            <option>阿根廷</option>
-                            <option>阿联酋</option>
-                            <option>阿曼</option>
-                            <option>阿塞拜疆</option>
-                            <option>埃及</option>
-                            <option>埃塞俄比亚</option>
-                            <option>爱尔兰</option>
-                            <option>安哥拉</option>
-                            <option>奥地利</option>
-                            <option>澳大利亚</option>
-                            <option>巴布亚新几内亚</option>
-                            <option>巴基斯坦</option>
-                            <option>巴林</option>
-                            <option>巴西</option>
-                            <option>白俄罗斯</option>
-                            <option>保加利亚</option>
-                            <option>贝宁</option>
-                            <option>比利时</option>
-                            <option>冰岛</option>
-                            <option>波黑</option>
-                            <option>波兰</option>
-                            <option>博茨瓦纳</option>
-                            <option>朝鲜</option>
-                            <option>赤道几内亚</option>
-                            <option>大溪地</option>
-                            <option>丹麦</option>
-                            <option>德国</option>
-                            <option>多哥</option>
-                            <option>俄罗斯</option>
-                            <option>厄瓜多尔</option>
-                            <option>厄立特里亚</option>
-                            <option>法国</option>
-                            <option>菲律宾</option>
-                            <option>斐济</option>
-                            <option>芬兰</option>
-                            <option>佛得角</option>
-                            <option>刚果(布)</option>
-                            <option>刚果(金)</option>
-                            <option>高棉</option>
-                            <option>古巴</option>
-                            <option>圭亚那</option>
-                            <option>哈萨克斯坦</option>
-                            <option>韩国</option>
-                            <option>荷兰</option>
-                            <option>吉尔吉斯斯坦</option>
-                            <option>几内亚</option>
-                            <option>加拿大</option>
-                            <option>加纳</option>
-                            <option>柬埔寨</option>
-                            <option>捷克</option>
-                            <option>津巴布韦</option>
-                            <option>喀麦隆</option>
-                            <option>卡塔尔</option>
-                            <option>科威特</option>
-                            <option>肯尼亚</option>
-                            <option>老挝</option>
-                            <option>黎巴嫩</option>
-                            <option>立陶宛</option>
-                            <option>利比亚</option>
-                            <option>罗马尼亚</option>
-                            <option>马达加斯加</option>
-                            <option>马来西亚</option>
-                            <option>马里</option>
-                            <option>马其顿</option>
-                            <option>毛里求斯</option>
-                            <option>毛里塔尼亚</option>
-                            <option>美国</option>
-                            <option>蒙古</option>
-                            <option>孟加拉国</option>
-                            <option>秘鲁</option>
-                            <option>缅甸</option>
-                            <option>摩洛哥</option>
-                            <option>摩洛哥公国</option>
-                            <option>莫桑比克</option>
-                            <option>墨西哥</option>
-                            <option>纳米比亚</option>
-                            <option>南非</option>
-                            <option>尼泊尔</option>
-                            <option>尼日利亚</option>
-                            <option>葡萄牙</option>
-                            <option>日本</option>
-                            <option>瑞典</option>
-                            <option>瑞士</option>
-                            <option>沙特阿拉伯</option>
-                            <option>斯里兰卡</option>
-                            <option>斯洛伐克</option>
-                            <option>苏丹</option>
-                            <option>塔吉克斯坦</option>
-                            <option>泰国</option>
-                            <option>坦桑尼亚</option>
-                            <option>突尼斯</option>
-                            <option>土耳其</option>
-                            <option>土库曼斯坦</option>
-                            <option>委内瑞拉</option>
-                            <option>文莱</option>
-                            <option>乌干达</option>
-                            <option>乌克兰</option>
-                            <option>乌拉圭</option>
-                            <option>乌兹别克斯坦</option>
-                            <option>西班牙</option>
-                            <option>希腊</option>
-                            <option>新加坡</option>
-                            <option>新西兰</option>
-                            <option>匈牙利</option>
-                            <option>叙利亚</option>
-                            <option>牙买加</option>
-                            <option>亚美尼亚</option>
-                            <option>也门</option>
-                            <option>伊拉克</option>
-                            <option>伊朗</option>
-                            <option>以色列</option>
-                            <option>意大利</option>
-                            <option>印度</option>
-                            <option>印尼</option>
-                            <option>英国</option>
-                            <option>约旦</option>
-                            <option>越南</option>
-                            <option>赞比亚</option>
-                            <option>中国</option>
-                            <option>中国澳门</option>
-                            <option>中国台湾</option>
-                            <option>中国香港</option>
-                            <option>其他</option>
+                            <option>Algeria</option>
+                            <option>Afghanistan</option>
+                            <option>Argentina</option>
+                            <option>UAE</option>
+                            <option>Oman</option>
+                            <option>Azerbaijan</option>
+                            <option>Egypt</option>
+                            <option>Ethiopia</option>
+                            <option>Ireland</option>
+                            <option>Angola</option>
+                            <option>Austria</option>
+                            <option>Australia</option>
+                            <option>Papua New Guinea</option>
+                            <option>Pakistan</option>
+                            <option>Bahrain</option>
+                            <option>Brazil</option>
+                            <option>Belarus</option>
+                            <option>Bulgaria</option>
+                            <option>Benin</option>
+                            <option>Belgium</option>
+                            <option>Iceland</option>
+                            <option>Bosnia and Herzegovina</option>
+                            <option>Poland</option>
+                            <option>Botswana</option>
+                            <option>North Korea</option>
+                            <option>Equatorial Guinea</option>
+                            <option>Tahiti</option>
+                            <option>Denmark</option>
+                            <option>Germany</option>
+                            <option>Togo</option>
+                            <option>Russia</option>
+                            <option>Ecuador</option>
+                            <option>Eritrea</option>
+                            <option>France</option>
+                            <option>Philippines</option>
+                            <option>Fiji</option>
+                            <option>Finland</option>
+                            <option>Cape Verde</option>
+                            <option>Congo</option>
+                            <option>Congo</option>
+                            <option>Khmer</option>
+                            <option>Cuba</option>
+                            <option>Guyana</option>
+                            <option>Kazakhstan</option>
+                            <option>Korea</option>
+                            <option>Netherlands</option>
+                            <option>Kyrgyzstan</option>
+                            <option>Guinea</option>
+                            <option>Canada</option>
+                            <option>Ghana</option>
+                            <option>Cambodia</option>
+                            <option>Czech Republic</option>
+                            <option>Zimbabwe</option>
+                            <option>Cameroon</option>
+                            <option>Qatar</option>
+                            <option>Kuwait</option>
+                            <option>Kenya</option>
+                            <option>Laos</option>
+                            <option>Lebanon</option>
+                            <option>Lithuania</option>
+                            <option>Libya</option>
+                            <option>Romania</option>
+                            <option>Madagascar</option>
+                            <option>Malaysia</option>
+                            <option>Mali</option>
+                            <option>Macedonia</option>
+                            <option>Mauritius</option>
+                            <option>Mauritania</option>
+                            <option>United States</option>
+                            <option>Mongolia</option>
+                            <option>Bangladesh</option>
+                            <option>Peru</option>
+                            <option>Myanmar</option>
+                            <option>Morocco</option>
+                            <option>Principality of Morocco</option>
+                            <option>Mozambique</option>
+                            <option>Mexico</option>
+                            <option>Namibia</option>
+                            <option>South Africa</option>
+                            <option>Nepal</option>
+                            <option>Nigeria</option>
+                            <option>Portugal</option>
+                            <option>Japan</option>
+                            <option>Sweden</option>
+                            <option>Switzerland</option>
+                            <option>Saudi Arabia</option>
+                            <option>Sri Lanka</option>
+                            <option>Slovakia</option>
+                            <option>Sudan</option>
+                            <option>Tajikistan</option>
+                            <option>Thailand</option>
+                            <option>Tanzania</option>
+                            <option>Tunisia</option>
+                            <option>Turkey</option>
+                            <option>Turkmenistan</option>
+                            <option>Venezuela</option>
+                            <option>Brunei</option>
+                            <option>Uganda</option>
+                            <option>Ukraine</option>
+                            <option>Uruguay</option>
+                            <option>Uzbekistan</option>
+                            <option>Spain</option>
+                            <option>Greece</option>
+                            <option>Singapore</option>
+                            <option>New Zealand</option>
+                            <option>Hungary</option>
+                            <option>Syria</option>
+                            <option>Jamaica</option>
+                            <option>Armenia</option>
+                            <option>Yemen</option>
+                            <option>Iraq</option>
+                            <option>Iran</option>
+                            <option>Israel</option>
+                            <option>Italy</option>
+                            <option>India</option>
+                            <option>Indonesia</option>
+                            <option>United Kingdom</option>
+                            <option>Jordan</option>
+                            <option>Vietnam</option>
+                            <option>Zambia</option>
+                            <option>China</option>
+                            <option>Macau, China</option>
+                            <option>Taiwan, China</option>
+                            <option>Hong Kong, China</option>
+                            <option>Other</option>
                         </select><br/>
                         <!--<input type="file" name="logo" class="form-control"/><br/>-->
-                        <a>上传头像</a>
-                        <input type="text" id="headshot" required="required" name="profile_photo" placeholder="请填入头像图片地址"
+                        <a>Upload photo</a>
+                        <input type="text" id="headshot" required="required" name="profile_photo" placeholder="Please input photo's web address"
                                class="form-control" onchange="readPhotoFromURL()"><br/>
                         <div id="result" class="portfolio-thumb col-md-5 fadeInRight" style="padding-bottom: 20px">
                             <br/>
                         </div>
-                        <input type="submit" value="注册" class="form-control"/>
+                        <input type="submit" value="Register" class="form-control"/>
                     </form>
 
 
 
                 </div>
             </div>
-            <div class="col-md-4 col-sm-12 ">
-                <div  class="portfolio-thumb col-md-5 fadeInRight" >
-                    <h2>跳蚤市场</h2>
-                    <a>最好的在等你</a>
-                </div>
-            </div>
             <div class="col-sm-12">
-            <div class="copyright-text text-center">
-            <p>&copy; Yotta Company 2019. All Rights Reserved.</p>
-            <p>Designed by <a target="_blank" href="https://www.yotta.club">Yotta</a></p>
-            </div>
+                <div class="copyright-text text-center">
+                    <p>&copy; B I T 2020. All Rights Reserved.</p>
+                    <p>Designed by <a target="_blank" href="http://www.themeum.com">Themeum</a></p>
+                </div>
             </div>
         </div>
     </div>

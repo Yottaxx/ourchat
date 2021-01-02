@@ -61,26 +61,26 @@
                         sign="——";
                     div ='<div>'
                         +'<ul class="list-unstyled w-flex col-md-offset-1">'
-                        +'<h3>用户名：<span id="friend_name">'+returnValue.user.name+'</span></h3>'
+                        +'<h3>Name：<span id="friend_name">'+returnValue.user.name+'</span></h3>'
                         +'<li><br></li>'
-                        +'<h3>昵称：<span>'+nickname+'</span></h3>'
+                        +'<h3>Nickname：<span>'+nickname+'</span></h3>'
                         +'<li><br></li>'
-                        +'<h3>个性签名：<span>'+sign+'</span></h3>'
+                        +'<h3>Sign：<span>'+sign+'</span></h3>'
                         +'<li><br></li>'
-                        +'<h3>地区：<span>'+returnValue.user.address+'</span></h3>'
+                        +'<h3>Address：<span>'+returnValue.user.address+'</span></h3>'
                         +'<li><br></li>'
                         +'</ul>'
                         +'<div class="modal-footer">'
                     if(returnValue.isFriend)
-                        div = div + '<div>对方已经是您的好友</div>' +
+                        div = div + '<div>This user is already your friend!</div>' +
                             '</div></div>'
                     else
-                        div = div +'<button type="button" class="btn btn-default" data-dismiss="modal" onclick="send_FriendReq()">添加好友</button>'
+                        div = div +'<button type="button" class="btn btn-default" data-dismiss="modal" onclick="send_FriendReq()">Send friend request</button>'
                             +'</div></div>'
                     $('#search_user_info').html(div)
                 },
                 error: function (returnValue) {
-                    $('#search_user_info').html(div = '<div>对不起！该用户不存在</div>')
+                    $('#search_user_info').html(div = '<div>Sorry! This user does not exist!</div>')
                 }
             })
         }
@@ -136,20 +136,20 @@
         function showReqMsg(data) {
             var total_div=''
             if(data.length==0){
-                var div = '<div>无</div>'
+                var div = '<div>null</div>'
                 total_div = div
             }
             for(var i=0;i<data.length;i++){
                 if(data[i].request=="request"){
                     var div = '<div class="media" >\n' +
                         '           <div class="pull-left">\n' +
-                        '                  <a href="#"><img src="'+data[i].Photo+'" alt="头像" height="50" width="50"></a>\n' +
+                        '                  <a href="#"><img src="'+data[i].Photo+'" alt="photo" height="50" width="50"></a>\n' +
                         '           </div>\n' +
                         '           <div class="media-body">\n' +
-                        '               <li>'+data[i].Nickname+'（用户名:<span>'+data[i].Name+'</span>)<br/>申请您为好友，是否同意？</li>\n' +
-                        '               <p>posted on 07 March 2014</p>\n' +
-                        '               <button type="button" class="btn btn-link btn-xs" style="float:right" data-toggle="modal" data-target="#Model_add_friend_info" onclick="RequestReject(this)" >拒绝</button>' +
-                        '               <button type="button" class="btn btn-link btn-xs" style="float:right" data-toggle="modal" data-target="#Model_add_friend_info" onclick="RequestAgree(this)" >同意</button>' +
+                        '               <li>'+data[i].Nickname+'（user name :<span>'+data[i].Name+'</span>)<br/>requested you as a friend, do you agree?</li>\n' +
+                        '               <p>posted on '+data[i].time+'</p>\n' +
+                        '               <button type="button" class="btn btn-link btn-xs" style="float:right" data-toggle="modal" data-target="#Model_add_friend_info" onclick="RequestReject(this)" >Reject</button>' +
+                        '               <button type="button" class="btn btn-link btn-xs" style="float:right" data-toggle="modal" data-target="#Model_add_friend_info" onclick="RequestAgree(this)" >Agree</button>' +
                         '              </div>\n' +
                         '       </div>'
                     total_div +=div
@@ -181,19 +181,19 @@
                     div ='<div style="margin:20px;"> '
                         +'<form action="/addFriend" method="post">'
                         +'<ul class="list-unstyled w-flex ">'
-                        +'用户名：<input class="form-control" name="add_friend_name" readonly value ="'+name+'"></input>'
+                        +'name：<input class="form-control" name="add_friend_name" readonly value ="'+name+'"></input>'
                         +'<li><br></li>'
-                        +'昵称：<input class="form-control" name="add_friend_nickname" readonly value ="'+nickname+'"></input>'
+                        +'nickname：<input class="form-control" name="add_friend_nickname" readonly value ="'+nickname+'"></input>'
                         +'<li><br></li>'
-                        +'地区：<input class="form-control" name="add_friend_address" readonly value = "'+returnValue.user.address+'"></input>'
+                        +'address：<input class="form-control" name="add_friend_address" readonly value = "'+returnValue.user.address+'"></input>'
                         +'<li><br></li>'
                         // +'地区：<input class="form-control" name="add_friend_address" readonly value = "'+returnValue.user.address+'"></input>'
                         // +'<li><br></li>'
-                        +'备注：<input class="form-control" name="remark" placeholder="设 置 备 注" ></input>'
+                        +'remark：<input class="form-control" name="remark" placeholder=" set remark " ></input>'
                         +'<li><br></li>'+
-                        '分组：<select class="select picker form-control " name="friend_group" id="friend_groups">\n'
+                        'group：<select class="select picker form-control " name="friend_group" id="friend_groups">\n'
                     if(returnValue.groups.length == 0){
-                        div +='<option value="'+null+'">默认分组</option>'
+                        div +='<option value="'+null+'">default group</option>'
                     }
                     for(var i=0;i<returnValue.groups.length;i++){
                         div +='<option value="'+returnValue.groups[i]+'">'+returnValue.groups[i]+'</option>'
@@ -202,13 +202,13 @@
                         +'<li><br></li>'
                         +'</ul>'
                         +'<div class="modal-footer ">'
-                        +'<button type="submit" class="btn btn-primary form-control" >确定</button>'
+                        +'<button type="submit" class="btn btn-primary form-control" >Confirm</button>'
                         +'</div></form> </div>'
                     console.log(returnValue.groups)
                     $('#add_friend_info').html(div)
                 },
                 error: function (returnValue) {
-                    alert("好友添加失败");
+                    alert("Add friend fail");
                 }
             })
         }
@@ -239,16 +239,16 @@
                         +'<ul class="list-unstyled w-flex ">'
                         +' <input type="hidden" class="form-control" name="current_user_name" value="'+current_user_name+'"/>'
                         +' <input type="hidden" class="form-control" name="request_user_name" value="'+request_user_name+'"/>'
-                            +'<h3>确认拒绝该好友请求？</h3>'
+                            +'<h3>Confirm rejection of the friend request？</h3>'
                         +'</ul>'
                         +'<div class="modal-footer ">'
-                        +'<button type="submit" class="btn btn-primary" >确定</button>'
-                        +'<button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">取消</button>'
+                        +'<button type="submit" class="btn btn-primary" >Confirm</button>'
+                        +'<button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancel</button>'
                         +'</div></form> </div>'
                     $('#add_friend_info').html(div)
                 },
                 error: function (returnValue) {
-                    alert("拒绝好友申请失败");
+                    alert("Failed to reject friend request");
                 }
             })
         }
@@ -276,7 +276,7 @@
                         var div = '<div class="col-xs-4 col-sm-4 col-md-4 ">' +
                             ' <div class="portfolio-wrapper">' +
                             '<div class="portfolio-single">' +
-                            '<div class="portfolio-thumb"> 暂无好友，快去添加好友吧~ </div>' +
+                            '<div class="portfolio-thumb"> No friends yet, go add friends~ </div>' +
                             '</div></div></div>'
                         total_div = div
                     }
@@ -301,7 +301,7 @@
                                 '   <div class="portfolio-wrapper">\n' +
                                 '       <div class="portfolio-single" style="height: 261px;width: 261px">\n' +
                                 '           <div class="portfolio-thumb" style="height: 261px;width: 261px" >\n' +
-                                '               <img src="'+returnValue[i].user.profile_photo+'" class="img-responsive" height = "261" width="261" alt="头像不可查看">\n' +
+                                '               <img src="'+returnValue[i].user.profile_photo+'" class="img-responsive" height = "261" width="261" alt="Photo">\n' +
                                 '           </div>\n' +
                                 '           <div class="portfolio-view">\n' +
                                 '               <ul class="nav nav-pills">\n' +
@@ -327,7 +327,7 @@
                     var div = '<div class="col-xs-4 col-sm-4 col-md-4 ">' +
                         ' <div class="portfolio-wrapper">' +
                         '<div class="portfolio-single">' +
-                        '<div class="portfolio-thumb"> 好友信息加载失败！ </div>' +
+                        '<div class="portfolio-thumb"> Failed to load friend information !</div>' +
                         '</div></div></div>'
                     $('#all_friends_info').html(div)
                     console.log("fail")
@@ -370,7 +370,7 @@
                             '   <div class="portfolio-wrapper">\n' +
                             '       <div class="portfolio-single" style="height: 261px;width: 261px">\n' +
                             '           <div class="portfolio-thumb" style="height: 261px;width: 261px">\n' +
-                            '               <img src="'+returnValue[i].user.profile_photo+'" class="img-responsive" height = "261" width="261" alt="头像不可查看">\n' +
+                            '               <img src="'+returnValue[i].user.profile_photo+'" class="img-responsive" height = "261" width="261" alt="Photo">\n' +
                             '           </div>\n' +
                             '           <div class="portfolio-view">\n' +
                             '               <ul class="nav nav-pills">\n' +
@@ -394,7 +394,7 @@
                     var div = '<div class="col-xs-4 col-sm-4 col-md-4 ">' +
                         ' <div class="portfolio-wrapper">' +
                         '<div class="portfolio-single">' +
-                        '<div class="portfolio-thumb"> 好友信息加载失败！ </div>' +
+                        '<div class="portfolio-thumb"> Failed to load friend information ! </div>' +
                         '</div></div></div>'
                     $('#all_friends_info').html(div)
                     console.log("fail")
@@ -428,7 +428,7 @@
                             var div = '<div class="col-xs-4 col-sm-4 col-md-4 ">' +
                                 ' <div class="portfolio-wrapper">' +
                                 '<div class="portfolio-single">' +
-                                '<div class="portfolio-thumb"> 暂无好友，快去添加好友吧~ </div>' +
+                                '<div class="portfolio-thumb"> No friends yet, go add friends~ </div>' +
                                 '</div></div></div>'
                             total_div = div
                         }
@@ -452,7 +452,7 @@
                                 '   <div class="portfolio-wrapper">\n' +
                                 '       <div class="portfolio-single" style="height: 261px;width: 261px">\n' +
                                 '           <div class="portfolio-thumb" style="height: 261px;width: 261px">\n' +
-                                '               <img src="'+returnValue[i].user.profile_photo+'" class="img-responsive" height = "261" width="261" alt="头像不可查看">\n' +
+                                '               <img src="'+returnValue[i].user.profile_photo+'" class="img-responsive" height = "261" width="261" alt="Photo">\n' +
                                 '           </div>\n' +
                                 '           <div class="portfolio-view">\n' +
                                 '               <ul class="nav nav-pills">\n' +
@@ -476,7 +476,7 @@
                         var div = '<div class="col-xs-4 col-sm-4 col-md-4  ">' +
                             ' <div class="portfolio-wrapper">' +
                             '<div class="portfolio-single">' +
-                            '<div class="portfolio-thumb"> 好友信息加载失败！ </div>' +
+                            '<div class="portfolio-thumb"> Failed to load friend information ! </div>' +
                             '</div></div></div>'
                         $('#all_friends_info').html(div)
                         console.log("fail")
@@ -522,7 +522,7 @@
                                 '   <div class="portfolio-wrapper">\n' +
                                 '       <div class="portfolio-single" style="height: 261px;width: 261px">\n' +
                                 '           <div class="portfolio-thumb" style="height: 261px;width: 261px">\n' +
-                                '               <img src="'+returnValue[i].user.profile_photo+'" class="img-responsive" height = "261" width="261" alt="头像不可查看">\n' +
+                                '               <img src="'+returnValue[i].user.profile_photo+'" class="img-responsive" height = "261" width="261" alt="Photo">\n' +
                                 '           </div>\n' +
                                 '           <div class="portfolio-view">\n' +
                                 '               <ul class="nav nav-pills">\n' +
@@ -546,7 +546,7 @@
                         var div = '<div class="col-xs-4 col-sm-4 col-md-4 ">' +
                             ' <div class="portfolio-wrapper">' +
                             '<div class="portfolio-single">' +
-                            '<div class="portfolio-thumb"> 好友信息加载失败！ </div>' +
+                            '<div class="portfolio-thumb"> Failed to load friend information ! </div>' +
                             '</div></div></div>'
                         $('#all_friends_info').html(div)
                         console.log("fail")
@@ -697,11 +697,11 @@
                         &times;
                     </button>
                     <h4 class="modal-title" id = "myModalLabel">
-                        用户信息
+                        User Details
                     </h4>
                 </div>
                 <div class="modal-body" id = "search_user_info">
-                    默认：无
+                    default : none
                 </div>
             </div>
         </div>
@@ -716,11 +716,11 @@
                         &times;
                     </button>
                     <h4 class="modal-title">
-                        添加好友
+                        Add Friend
                     </h4>
                 </div>
                 <div class="modal-body" id = "add_friend_info">
-                    默认：无
+                    default : none
                 </div>
             </div>
         </div>
@@ -753,27 +753,6 @@
                             <li><a href="coming-soon.html">Coming Soon</a></li>
                         </ul>
                     </li>
-                    <li class="dropdown"><a href="blog.html">Blog <i class="fa fa-angle-down"></i></a>
-                        <ul role="menu" class="sub-menu">
-                            <li><a href="blog.html">Blog Default</a></li>
-                            <li><a href="blogtwo.html">Timeline Blog</a></li>
-                            <li><a href="blogone.html">2 Columns + Right Sidebar</a></li>
-                            <li><a href="blogthree.html">1 Column + Left Sidebar</a></li>
-                            <li><a href="blogfour.html">Blog Masonary</a></li>
-                            <li><a href="blogdetails.html">Blog Details</a></li>
-                        </ul>
-                    </li>
-                    <li class="dropdown active"><a href="portfolio.html">Portfolio <i class="fa fa-angle-down"></i></a>
-                        <ul role="menu" class="sub-menu">
-                            <li><a href="portfolio.html">Portfolio Default</a></li>
-                            <li><a class="active" href="portfoliofour.html">Isotope 3 Columns + Right Sidebar</a></li>
-                            <li><a href="portfolioone.html">3 Columns + Right Sidebar</a></li>
-                            <li><a href="portfoliotwo.html">3 Columns + Left Sidebar</a></li>
-                            <li><a href="portfoliothree.html">2 Columns</a></li>
-                            <li><a href="portfolio-details.html">Portfolio Details</a></li>
-                        </ul>
-                    </li>
-                    <li> <a href="shortcodes.html ">Shortcodes</a></li>
                 </ul>
             </div>
             <div class="search">
@@ -781,8 +760,8 @@
                     <i class="fa fa-search"></i>
                     <div class="field-toggle">
                         <form action="/homepage_search" method="post" id="form-search-user">
-                            <input type="text" class="search-form" id="search_name" autocomplete="off" placeholder="输入用户名">
-                            <span class="btn btn-default" data-toggle="modal" data-target="#Model_search_user_info" type="button" onclick="search_user()">查找新朋友</span>
+                            <input type="text" class="search-form" id="search_name" autocomplete="off" placeholder="Enter user name">
+                            <span class="btn btn-default" data-toggle="modal" data-target="#Model_search_user_info" type="button" onclick="search_user()">search</span>
                         </form>
                     </div>
                 </form>
@@ -801,7 +780,7 @@
                         <div class="col-sm-2">
                             <div class="portfolio-single">
                                 <div class="portfolio-thumb">
-                                    <img th:src="${user_profile_photo}" class="img-responsive"  alt="头像" height="100" width="100">
+                                    <img th:src="${user_profile_photo}" class="img-responsive"  alt="Photo" height="100" width="100">
 
                                 </div>
                                 <div class="portfolio-view">
@@ -813,9 +792,9 @@
                             </div>
                         </div>
                         <div class="col-sm-10">
-                            <h1 class="title" style="margin-top: 30px"  th:text="${user_nickname}">用户昵称</h1>
-                            <h2  th:text="${'('+user_name+')'}" id="user_name">用户名</h2>
-                            <p th:text="${user_sign}">signnn</p>
+                            <h1 class="title" style="margin-top: 30px"  th:text="${user_nickname}">nickname</h1>
+                            <h2  th:text="${'('+user_name+')'}" id="user_name">name</h2>
+                            <p th:text="${user_sign}">sign</p>
                         </div>
                     </div>
                 </div>
@@ -833,7 +812,7 @@
                     <ul class="portfolio-filter text-center">
                     </ul><!--/#portfolio-filter-->
                     <div class="s col-lg-12 col-sm-12 col-md-12" id="all_friends_info">
-                        暂无好友，快去添加好友吧~
+                        No friends yet, go add friends~
                     </div>
                     <div class="portfolio-pagination" >
                         <ul class="pagination" id="friend_page">
@@ -844,13 +823,13 @@
             <div class="col-lg-3 col-md-3 col-sm-4 padding-top">
                 <div class="sidebar portfolio-sidebar">
                     <div class="sidebar-item categories">
-                        <h3>好友分组<a class="config pull-right" href="/blogtwo"><i class="fa fa-cog" id="friends-groups-cog" ></i></a></h3>
+                        <h3>Friends<a class="config pull-right" href="/blogtwo"><i class="fa fa-cog" id="friends-groups-cog" ></i></a></h3>
                         <ul class="nav navbar-stacked" id="friends_groups">
-                            <li class="active"><a href="#"  data-filter="*" >所有好友<span class="pull-right">(0)</span></a></li>
+                            <li class="active"><a href="#"  data-filter="*" >All<span class="pull-right">(0)</span></a></li>
                         </ul>
                     </div>
                     <div class="sidebar-item  recent">
-                        <h3>好友通知</h3>
+                        <h3>Request</h3>
                         <div id = "request_info">
                             <div class="media" >
                                 无
@@ -859,7 +838,7 @@
 
                     </div>
                     <div class="sidebar-item popular">
-                        <h3>最近会话</h3>
+                        <h3>Recently</h3>
                         <ul class="gallery" id="special_friend">
                             <li><a href="#"><img src="/images/portfolio/popular1.jpg" alt=""></a></li>
                             <li><a href="#"><img src="/images/portfolio/popular2.jpg" alt=""></a></li>
@@ -911,19 +890,19 @@
             </div>
             <div class="col-md-3 col-sm-6">
                 <div class="contact-info bottom">
-                    <h2>联系方式</h2>
+                    <h2>Contact</h2>
                     <address>
                         E-mail: <a href="mailto:someone@example.com">email@bit.edu.cn</a> <br>
                         Phone: + (086) 1388 456 7890 <br>
 <!--                        Fax: +1 (123) 456 7891 <br>-->
                     </address>
 
-                    <h2>地址</h2>
+                    <h2>Address</h2>
                     <address>
-                        北京市海淀区 <br>
-                        中关村
-                        南大街5号
-                        北京理工大学<br>
+                        Beijing Institute of Technology <br>
+                        No.5 South Street
+                        Zhong guan cun
+                        Haidian District, Beijing<br>
                     </address>
                 </div>
             </div>

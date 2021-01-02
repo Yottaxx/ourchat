@@ -9,6 +9,8 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
+import java.sql.Date;
+
 @Entity
 @IdClass(user_friend_request.class)
 @Table(name = "friend_request")
@@ -20,6 +22,7 @@ public class friend_request {
     private Integer requestId;
 
 
+    private Date date;
     @JoinColumn(name="user_id")
     @ManyToOne(fetch = FetchType.LAZY)
     private user user;
@@ -33,15 +36,20 @@ public class friend_request {
     }
     public void  setRequestId(Integer requestId){this.requestId = requestId;}
 
+    public Date getDate(){return date;}
+
+    public void setDate(){this.date =date;}
+
     public bit.group.ourchat.entity.user getUser() {return user;}
 
     @JsonBackReference
     public void setUser(bit.group.ourchat.entity.user user){this.user = user;}
 
 
-    public friend_request(Integer id,Integer requestId ){
+    public friend_request(Integer id,Integer requestId,Date date ){
         this.id = id;
         this.requestId = requestId;
+        this.date = date;
     }
     public friend_request(){
 

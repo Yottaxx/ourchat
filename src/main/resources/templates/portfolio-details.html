@@ -29,15 +29,15 @@
             var div =  $(obj).parent().parent();
             var tag =  div.find('h4').attr('id')
             if(tag=="remark")
-                var tagname="备注："
+                var tagname="remark："
             if(tag=="group")
-                var tagname="分组："
+                var tagname="group："
             var content = div.find('span').text();
             var newdiv = '<h4 class="post-title bold" id="'+tag+'">'+tagname+'</h4>' +
                 '         <input class="form-control" id="new_'+tag+'" value="'+content+'">' +
                 '         <div class="post-bottom overflow">\n' +
-                '               <button class="btn btn-link pull-right" onclick="update_friend_cancel(this)" >取消</button>\n' +
-                '                <button class="btn btn-link pull-right" onclick="update_friend(this)" >确定</button>\n' +
+                '               <button class="btn btn-link pull-right" onclick="update_friend_cancel(this)" >Cancel</button>\n' +
+                '                <button class="btn btn-link pull-right" onclick="update_friend(this)" >Confirm</button>\n' +
                 '         </div>'
             $(obj).parent().parent().html(newdiv)
         }
@@ -62,7 +62,7 @@
                 success: function (returnValue) {
                     console.log("success")
                     if(tag=="remark"){
-                        newdiv ='<h4 class="post-title" id="remark">备注：' +
+                        newdiv ='<h4 class="post-title" id="remark">remark：' +
                             ' <span class="post-title bold" id="friend_remark" th:text="${user_friend_remark}">'+returnValue.remark+'</span>' +
                             '</h4>' +
                             '<div class="post-bottom overflow">' +
@@ -107,7 +107,7 @@
                     },
                     success: function (returnValue) {
                         console.log("success")
-                        newdiv ='<h4 class="post-title" id="remark">备注：' +
+                        newdiv ='<h4 class="post-title" id="remark">remark：' +
                             ' <span class="post-title bold" id="friend_remark" th:text="${user_friend_remark}">'+returnValue.remark+'</span>' +
                             '</h4>' +
                             '<div class="post-bottom overflow">' +
@@ -201,28 +201,7 @@
                                 <li><a href="404.html">404 error</a></li>
                                 <li><a href="coming-soon.html">Coming Soon</a></li>
                             </ul>
-                        </li>                    
-                        <li class="dropdown"><a href="blog.html">Blog <i class="fa fa-angle-down"></i></a>
-                            <ul role="menu" class="sub-menu">
-                                <li><a href="blog.html">Blog Default</a></li>
-                                <li><a href="blogtwo.html">Timeline Blog</a></li>
-                                <li><a href="blogone.html">2 Columns + Right Sidebar</a></li>
-                                <li><a href="blogthree.html">1 Column + Left Sidebar</a></li>
-                                <li><a href="blogfour.html">Blog Masonary</a></li>
-                                <li><a href="blogdetails.html">Blog Details</a></li>
-                            </ul>
                         </li>
-                        <li class="dropdown active"><a href="portfolio.html">Portfolio <i class="fa fa-angle-down"></i></a>
-                            <ul role="menu" class="sub-menu">
-                                <li><a href="portfolio.html">Portfolio Default</a></li>
-                                <li><a href="portfoliofour.html">Isotope 3 Columns + Right Sidebar</a></li>
-                                <li><a href="portfolioone.html">3 Columns + Right Sidebar</a></li>
-                                <li><a href="portfoliotwo.html">3 Columns + Left Sidebar</a></li>
-                                <li><a href="portfoliothree.html">2 Columns</a></li>
-                                <li><a class="active" href="portfolio-details.html">Portfolio Details</a></li>
-                            </ul>
-                        </li>                         
-                        <li><a href="shortcodes.html ">Shortcodes</a></li>                    
                     </ul>
                 </div>
                 <div class="search">
@@ -245,8 +224,8 @@
                 <div class="row">
                     <div class="action">
                         <div class="col-sm-12">
-                            <h1 class="title"  th:text="${user_nickname+'——好友信息'}">用户昵称</h1>
-                            <h2  th:text="${'('+user_name+')'}" id="user_name">用户名</h2>
+                            <h1 class="title"  th:text="${user_nickname+'——Friend infomation'}">Nickname</h1>
+                            <h2  th:text="${'('+user_name+')'}" id="user_name">Name</h2>
                             <p th:text="${user_sign}">sign</p>
                         </div>
                     </div>
@@ -263,20 +242,20 @@
                     <div class="padding-bottom arrow-left wow fadeInRight" data-wow-duration="1000ms" data-wow-delay="300ms">
                         <div class="single-blog timeline" >
                             <div class="post-content overflow"  style="height: 500px;width: 500px" height="500" width="500">
-                                <img th:src="${user_friend_profile_photo}" class="img-responsive" alt="头像" height="500" width="500">
+                                <img th:src="${user_friend_profile_photo}" class="img-responsive" alt="Photo" height="500" width="500">
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="col-sm-6">
                     <div class="project-name overflow">
-                        <h2 class="bold" th:text="${user_friend_nickname}">好友昵称 </h2>
+                        <h2 class="bold" th:text="${user_friend_nickname}">Nickname </h2>
                         <div class="padding-bottom arrow-left wow fadeInRight" data-wow-duration="1000ms" data-wow-delay="300ms" style="margin-left: 45px;padding: 20px 20px 30px 20px">
 
-                            <h4><p class="config"><i class="fa fa-user"></i>    用户名：<span id="user_friend_name" th:text="${user_friend_name}"></span></p></h4>
-                            <h4><p class="config"><i class="fa fa-chevron-right"></i>   个性签名：<span id="user_friend_sign" th:text="${user_friend_sign}"></span></p></h4>
-                            <h4><p class="config"><i class="fa fa-envelope-o"></i>   邮箱：<span id="user_friend_email" th:text="${user_friend_email}"></span></p></h4>
-                            <h4><p class="config"><i class="fa fa-map-marker"></i>   地址：<span id="user_friend_address" th:text="${user_friend_address}"></span></p></h4>
+                            <h4><p class="config"><i class="fa fa-user"></i>    Name：<span id="user_friend_name" th:text="${user_friend_name}"></span></p></h4>
+                            <h4><p class="config"><i class="fa fa-chevron-right"></i>   Sign：<span id="user_friend_sign" th:text="${user_friend_sign}"></span></p></h4>
+                            <h4><p class="config"><i class="fa fa-envelope-o"></i>   Email：<span id="user_friend_email" th:text="${user_friend_email}"></span></p></h4>
+                            <h4><p class="config"><i class="fa fa-map-marker"></i>   Address：<span id="user_friend_address" th:text="${user_friend_address}"></span></p></h4>
                         </div>
                     </div>
                     <div>
@@ -285,11 +264,11 @@
                         <div class="padding-bottom arrow-left wow fadeInRight" data-wow-duration="1000ms" data-wow-delay="300ms">
                             <div class="single-blog timeline">
                                 <div class="post-content overflow">
-                                    <h4 class="post-title" id="remark">备注：
-                                        <span class="post-title bold" id="friend_remark" th:text="${user_friend_remark}">好友备注</span>
+                                    <h4 class="post-title" id="remark">remark：
+                                        <span class="post-title bold" id="friend_remark" th:text="${user_friend_remark}">Friend remark</span>
                                     </h4>
                                     <div class="post-bottom overflow">
-                                        <button class="btn btn-link pull-right" onclick="update_div(this)">修改</button>
+                                        <button class="btn btn-link pull-right" onclick="update_div(this)">Edit</button>
                                     </div>
                                 </div>
                             </div>
@@ -300,11 +279,11 @@
 
                             <div class="single-blog timeline">
                                 <div class="post-content overflow">
-                                    <h4 class="post-title" id="group">分组：
-                                        <span class="post-title bold" id="friend_group" th:text="${user_friend_group}">好友分组</span>
+                                    <h4 class="post-title" id="group">Group：
+                                        <span class="post-title bold" id="friend_group" th:text="${user_friend_group}">Friend group</span>
                                     </h4>
                                     <div class="post-bottom overflow">
-                                        <button class="btn btn-link pull-right" onclick="update_div(this)">修改</button>
+                                        <button class="btn btn-link pull-right" onclick="update_div(this)">Edit</button>
                                     </div>
                                 </div>
                             </div>
@@ -349,19 +328,19 @@
                 </div>
                 <div class="col-md-3 col-sm-6">
                     <div class="contact-info bottom">
-                        <h2>联系方式</h2>
+                        <h2>Contact</h2>
                         <address>
                             E-mail: <a href="mailto:someone@example.com">email@bit.edu.cn</a> <br>
                             Phone: + (086) 1388 456 7890 <br>
                             <!--                        Fax: +1 (123) 456 7891 <br>-->
                         </address>
 
-                        <h2>地址</h2>
+                        <h2>Address</h2>
                         <address>
-                            北京市海淀区 <br>
-                            中关村
-                            南大街5号
-                            北京理工大学<br>
+                            Beijing Institute of Technology <br>
+                            No.5 South Street
+                            Zhong guan cun
+                            Haidian District, Beijing<br>
                         </address>
                     </div>
                 </div>

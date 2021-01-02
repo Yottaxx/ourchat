@@ -12,7 +12,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.TreeSet;
 
@@ -40,7 +44,17 @@ public class friendService {
         }
         friend_request friReq1 = friendRequestRepository.findByUserIdAndRequestId(requestId, userId);
         if (friReq1 == null) {
-            friend_request newFriReq = new friend_request(requestId, userId);
+            Date date = new Date();
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String dataTime = df.format(date);
+            java.sql.Date sDate = null;
+            try{
+                date = df.parse(dataTime);
+                sDate = new java.sql.Date(date.getTime());
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            friend_request newFriReq = new friend_request(requestId, userId,sDate);
             user u = userRepository.findById(requestId);
             newFriReq.setUser(u);
             u.addFriend_request(newFriReq);
