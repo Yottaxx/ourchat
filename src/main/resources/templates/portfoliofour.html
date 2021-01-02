@@ -19,7 +19,7 @@
     <script type="text/javascript" src="/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="/js/bootstrap-select.min.js"></script>
     <script type="text/javascript" src="/js/i18n/defaults-zh_CN.min.js"></script>
-    <script type="text/javascript" src="/js/jquery.isotope.min.js"></script>
+<!--    <script type="text/javascript" src="/js/jquery.isotope.min.js"></script>-->
     <script type="text/javascript" src="/js/lightbox.min.js"></script>
     <script type="text/javascript" src="/js/wow.min.js"></script>
     <script type="text/javascript" src="/js/main.js"></script>
@@ -35,7 +35,7 @@
     <link rel="apple-touch-icon-precomposed" href="/images/ico/apple-touch-icon-57-precomposed.png">
 
     <script th:inline="javascript">
-        var page_size = 6
+        var page_size = 9
         function search_user(){
             var search_name = $('#search_name').val();
             var current_name =$('#user_name').text();
@@ -187,11 +187,13 @@
                         +'<li><br></li>'
                         +'地区：<input class="form-control" name="add_friend_address" readonly value = "'+returnValue.user.address+'"></input>'
                         +'<li><br></li>'
+                        // +'地区：<input class="form-control" name="add_friend_address" readonly value = "'+returnValue.user.address+'"></input>'
+                        // +'<li><br></li>'
                         +'备注：<input class="form-control" name="remark" placeholder="设 置 备 注" ></input>'
                         +'<li><br></li>'+
                         '分组：<select class="select picker form-control " name="friend_group" id="friend_groups">\n'
                     if(returnValue.groups.length == 0){
-                        div +='<option value="'+null+'">无</option>'
+                        div +='<option value="'+null+'">默认分组</option>'
                     }
                     for(var i=0;i<returnValue.groups.length;i++){
                         div +='<option value="'+returnValue.groups[i]+'">'+returnValue.groups[i]+'</option>'
@@ -271,7 +273,7 @@
                     console.log("success")
                     console.log(returnValue)
                     if(returnValue.length==1){
-                        var div = '<div class="col-xs-4 col-sm-4 col-md-4 portfolio-item branded logos">' +
+                        var div = '<div class="col-xs-4 col-sm-4 col-md-4 ">' +
                             ' <div class="portfolio-wrapper">' +
                             '<div class="portfolio-single">' +
                             '<div class="portfolio-thumb"> 暂无好友，快去添加好友吧~ </div>' +
@@ -295,11 +297,11 @@
                             if(remark==null){
                                 remark = returnValue[i].user.nickname
                             }
-                            var div =' <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 portfolio-item logos">\n' +
+                            var div =' <div class="col-xs-4 col-sm-4 col-md-4 ">\n' +
                                 '   <div class="portfolio-wrapper">\n' +
-                                '       <div class="portfolio-single">\n' +
-                                '           <div class="portfolio-thumb">\n' +
-                                '               <img src="'+returnValue[i].user.profile_photo+'" class="img-responsive" height = "260" width="260" alt="头像不可查看">\n' +
+                                '       <div class="portfolio-single" style="height: 261px;width: 261px">\n' +
+                                '           <div class="portfolio-thumb" style="height: 261px;width: 261px" >\n' +
+                                '               <img src="'+returnValue[i].user.profile_photo+'" class="img-responsive" height = "261" width="261" alt="头像不可查看">\n' +
                                 '           </div>\n' +
                                 '           <div class="portfolio-view">\n' +
                                 '               <ul class="nav nav-pills">\n' +
@@ -322,7 +324,7 @@
                 },
                 error: function (returnValue) {
                     console.log("fail")
-                    var div = '<div class="col-xs-4 col-sm-4 col-md-4 portfolio-item branded logos">' +
+                    var div = '<div class="col-xs-4 col-sm-4 col-md-4 ">' +
                         ' <div class="portfolio-wrapper">' +
                         '<div class="portfolio-single">' +
                         '<div class="portfolio-thumb"> 好友信息加载失败！ </div>' +
@@ -364,11 +366,11 @@
                         if(remark==null){
                             remark = returnValue[i].user.nickname
                         }
-                        var div =' <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 portfolio-item '+returnValue[i].group+' logos">\n' +
+                        var div =' <div class="col-xs-4 col-sm-4 col-md-4  ">\n' +
                             '   <div class="portfolio-wrapper">\n' +
-                            '       <div class="portfolio-single">\n' +
-                            '           <div class="portfolio-thumb">\n' +
-                            '               <img src="'+returnValue[i].user.profile_photo+'" class="img-responsive" height = "260" width="260" alt="头像不可查看">\n' +
+                            '       <div class="portfolio-single" style="height: 261px;width: 261px">\n' +
+                            '           <div class="portfolio-thumb" style="height: 261px;width: 261px">\n' +
+                            '               <img src="'+returnValue[i].user.profile_photo+'" class="img-responsive" height = "261" width="261" alt="头像不可查看">\n' +
                             '           </div>\n' +
                             '           <div class="portfolio-view">\n' +
                             '               <ul class="nav nav-pills">\n' +
@@ -389,7 +391,7 @@
                 },
                 error: function (returnValue) {
                     console.log("fail")
-                    var div = '<div class="col-xs-6 col-sm-6 col-md-4 portfolio-item branded logos">' +
+                    var div = '<div class="col-xs-4 col-sm-4 col-md-4 ">' +
                         ' <div class="portfolio-wrapper">' +
                         '<div class="portfolio-single">' +
                         '<div class="portfolio-thumb"> 好友信息加载失败！ </div>' +
@@ -399,6 +401,7 @@
                 }
             })
         }
+
         function showPageFriendGroup(obj){
             console.log("show page friend group");
             var current_name = $('#user_name').text();
@@ -422,7 +425,7 @@
                         console.log("success")
                         console.log(returnValue)
                         if(returnValue.length==0){
-                            var div = '<div class="col-xs-4 col-sm-4 col-md-4 portfolio-item branded logos">' +
+                            var div = '<div class="col-xs-4 col-sm-4 col-md-4 ">' +
                                 ' <div class="portfolio-wrapper">' +
                                 '<div class="portfolio-single">' +
                                 '<div class="portfolio-thumb"> 暂无好友，快去添加好友吧~ </div>' +
@@ -445,11 +448,11 @@
                             if(remark==null){
                                 remark = returnValue[i].user.nickname
                             }
-                            var div =' <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 portfolio-item '+returnValue[i].group+' logos">\n' +
+                            var div =' <div class="col-xs-4 col-sm-4 col-md-4  ">\n' +
                                 '   <div class="portfolio-wrapper">\n' +
-                                '       <div class="portfolio-single">\n' +
-                                '           <div class="portfolio-thumb">\n' +
-                                '               <img src="'+returnValue[i].user.profile_photo+'" class="img-responsive" height = "260" width="260" alt="头像不可查看">\n' +
+                                '       <div class="portfolio-single" style="height: 261px;width: 261px">\n' +
+                                '           <div class="portfolio-thumb" style="height: 261px;width: 261px">\n' +
+                                '               <img src="'+returnValue[i].user.profile_photo+'" class="img-responsive" height = "261" width="261" alt="头像不可查看">\n' +
                                 '           </div>\n' +
                                 '           <div class="portfolio-view">\n' +
                                 '               <ul class="nav nav-pills">\n' +
@@ -470,7 +473,7 @@
                     },
                     error: function (returnValue) {
                         console.log("fail")
-                        var div = '<div class="col-xs-4 col-sm-4 col-md-4 portfolio-item branded logos">' +
+                        var div = '<div class="col-xs-4 col-sm-4 col-md-4  ">' +
                             ' <div class="portfolio-wrapper">' +
                             '<div class="portfolio-single">' +
                             '<div class="portfolio-thumb"> 好友信息加载失败！ </div>' +
@@ -515,11 +518,11 @@
                             if(remark==null){
                                 remark = returnValue[i].user.nickname
                             }
-                            var div =' <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 portfolio-item ilogos">\n' +
+                            var div =' <div class="col-xs-4 col-sm-4 col-md-4 ">\n' +
                                 '   <div class="portfolio-wrapper">\n' +
-                                '       <div class="portfolio-single">\n' +
-                                '           <div class="portfolio-thumb">\n' +
-                                '               <img src="'+returnValue[i].user.profile_photo+'" class="img-responsive" height = "260" width="260" alt="头像不可查看">\n' +
+                                '       <div class="portfolio-single" style="height: 261px;width: 261px">\n' +
+                                '           <div class="portfolio-thumb" style="height: 261px;width: 261px">\n' +
+                                '               <img src="'+returnValue[i].user.profile_photo+'" class="img-responsive" height = "261" width="261" alt="头像不可查看">\n' +
                                 '           </div>\n' +
                                 '           <div class="portfolio-view">\n' +
                                 '               <ul class="nav nav-pills">\n' +
@@ -540,7 +543,7 @@
                     },
                     error: function (returnValue) {
                         console.log("fail")
-                        var div = '<div class="col-xs-4 col-sm-4 col-md-4 portfolio-item branded logos">' +
+                        var div = '<div class="col-xs-4 col-sm-4 col-md-4 ">' +
                             ' <div class="portfolio-wrapper">' +
                             '<div class="portfolio-single">' +
                             '<div class="portfolio-thumb"> 好友信息加载失败！ </div>' +
@@ -585,13 +588,13 @@
                         if(remark==null){
                             remark = returnValue[i].user.nickname
                         }
-                        var div =' <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 portfolio-item ilogos">\n' +
+                        var div =' <div class="col-xs-4 col-sm-4 col-md-4  ">\n' +
                             '   <div class="portfolio-wrapper">\n' +
-                            '       <div class="portfolio-single">\n' +
-                            '           <div class="portfolio-thumb">\n' +
-                            '               <img src="'+returnValue[i].user.profile_photo+'" class="img-responsive" height = "260" width="260" alt="头像不可查看">\n' +
+                            '       <div class="portfolio-single" style="height: 261px;width: 261px">\n' +
+                            '           <div class="portfolio-thumb" style="height: 261px;width: 261px">\n' +
+                            '               <img src="'+returnValue[i].user.profile_photo+'" class="img-responsive" height = "261" width="261" alt="头像不可查看">\n' +
                             '           </div>\n' +
-                            '           <div class="portfolio-view">\n' +
+                            '           <div class="portfolio-view" >\n' +
                             '               <ul class="nav nav-pills">\n' +
                             '                       <li><a href="'+returnValue[i].user.profile_photo+'" data-lightbox="example-set"><i class="fa fa-eye"></i></a></li>\n' +
                             '                       <li><a href="/portfolio-details?friend_name='+returnValue[i].user.name+'"><i class="fa fa-pencil-square-o"></i></a></li>\n' +
@@ -610,7 +613,7 @@
                 },
                 error: function (returnValue) {
                     console.log("fail")
-                    var div = '<div class="col-xs-4 col-sm-4 col-md-4 portfolio-item branded logos">' +
+                    var div = '<div class="col-xs-4 col-sm-4 col-md-4 ">' +
                         ' <div class="portfolio-wrapper">' +
                         '<div class="portfolio-single">' +
                         '<div class="portfolio-thumb"> 好友信息加载失败！ </div>' +
@@ -829,7 +832,7 @@
                 <div class="row">
                     <ul class="portfolio-filter text-center">
                     </ul><!--/#portfolio-filter-->
-                    <div class="portfolio-items col-lg-12 col-sm-12 col-md-12" id="all_friends_info">
+                    <div class="s col-lg-12 col-sm-12 col-md-12" id="all_friends_info">
                         暂无好友，快去添加好友吧~
                     </div>
                     <div class="portfolio-pagination" >

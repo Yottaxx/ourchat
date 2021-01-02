@@ -33,7 +33,7 @@ public class friendController {
     @Autowired
     private friendService friendService;
 
-    public int page_size =6;
+    public int page_size = 9;
     @RequestMapping("/homepage")
     public String homepage(){
         return "homepage";
@@ -284,8 +284,11 @@ public class friendController {
         String add_fri_name = request.getParameter("add_friend_name");
         String remark = request.getParameter("remark");
         String friend_group = request.getParameter("friend_group");
-        if(remark==""){
+        if(remark=="" || remark.equals("null")){
             remark=null;
+        }
+        if( friend_group.equals("null") || friend_group==""){
+            friend_group=null;
         }
         System.out.println(friend_group);
         int user_id = user1.getId();
@@ -341,6 +344,8 @@ public class friendController {
         result.add(data);
         for(String group:groups){
          count = friendService.countByGroup(current_name,group);
+         if(group==""||group.equals("null"))
+             continue;
          Map g = new HashMap();
          g.put("group",group);
          g.put("count",count);
