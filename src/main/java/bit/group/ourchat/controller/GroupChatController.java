@@ -1,7 +1,7 @@
 package bit.group.ourchat.controller;
 
 import bit.group.ourchat.entity.GroupChat_new;
-import bit.group.ourchat.entity.groupChat;
+//import bit.group.ourchat.entity.groupChat;
 import bit.group.ourchat.repository.GroupChatRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,5 +34,11 @@ public class GroupChatController {
     @GetMapping(path = "/group/{group_id}")
     public List<GroupChat_new> getAllGroupChatByGroupId(@PathVariable("group_id") Integer group_id){
         return groupChatRepository.findByGroupId(group_id);
+    }
+
+    //通过群聊名查找群聊
+    @GetMapping(path = "/group/name/{group_name}")
+    public List<GroupChat_new> getAllGroupChatByGroupName(@PathVariable("group_name") String group_name){
+        return groupChatRepository.findByGroupName(group_name);
     }
 }

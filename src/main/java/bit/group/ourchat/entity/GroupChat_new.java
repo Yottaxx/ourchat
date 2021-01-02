@@ -1,14 +1,12 @@
 package bit.group.ourchat.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 //@Table(name = "group_chat")
 public class GroupChat_new {
     @Id
+    @GeneratedValue
     private Integer id;
 
     @Column(name = "group_name")

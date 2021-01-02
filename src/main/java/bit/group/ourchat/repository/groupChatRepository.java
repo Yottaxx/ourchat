@@ -20,6 +20,9 @@ public interface GroupChatRepository extends JpaRepository<GroupChat_new, Intege
     @Query(value = "select c from GroupChat_new c where c.id=?1")
     public List<GroupChat_new> findByGroupId(Integer id);
 
+    @Query(value = "select c from GroupChat_new c where c.groupName like %?1%")
+    public List<GroupChat_new> findByGroupName(String group_name);
+
 //    //用户加群，添加记录
 //    @SQLInsert(sql = "insert into group_members_new (group_member_id, group_chat_id, user_id) values (?1, ?2, ?1)")
 //    public void AddUserIntoGroup(Integer User_id, Integer Group_id);

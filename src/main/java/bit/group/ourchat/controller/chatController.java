@@ -6,6 +6,7 @@ import bit.group.ourchat.repository.GroupChatRecordRepository;
 import bit.group.ourchat.repository.GroupMembersRepository;
 import bit.group.ourchat.webSocket.ChatMsg;
 import com.alibaba.fastjson.JSONObject;
+//import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;

@@ -3,11 +3,16 @@ let current_group_id = 0
 let connection_status = false
 let user_id = 2
 
+// let session_user_id = sessionStorage["user"].toString()
+// console.log(session_user_id)
+
 $(document).ready(function(){
 
     if(connection_status == false){
         connection(user_id)
     }
+
+    $(".group_info").hide()
 
     /**
      * 通过用户ID获取群聊组
@@ -55,6 +60,141 @@ $(document).ready(function(){
         } else {
             send_message(message,user_id,current_group_id)
         }
+    });
+
+    //创建群聊
+    $("#create").click(function (){
+        $(".main").fadeIn();
+        $(".mainbox").delay(0).slideDown();
+    })
+    $(".close_create").click(function(){
+        $(".main").fadeOut();
+    });
+    $("#submit_create").click(function(){
+        let group_name = $("#create_group_name").val()
+        let group_notice = $("#create_group_notice").val()
+        if(group_name.length == 0){
+            alert("The Group's Name can't be empty!")
+        } else {
+            $.post(url + "/group_chat/insert",
+                {
+                    adminid:user_id,
+                    group_name:group_name,
+                    notice:group_notice
+                },
+                function(data,status){
+                    // alert("数据: \n" + data + "\n状态: " + status);
+                    if(status == "success"){
+                        let g_id = data
+                        $.post(url + "/group_members/insert",
+                            {
+                                user_id:user_id,
+                                group_id:g_id
+                            },
+                            function(data_2,status_2){
+                                if(status_2 == "success"){
+                                    alert("Creation Success!!")
+                                    $("#create_group_name").text("")
+                                    $("#create_group_notice").text("")
+                                    $(".main").fadeOut();
+                                    window.location.reload()
+                                } else {
+                                    alert("Creation Failed! Please wait and try again later!")
+                                }
+                            });
+                    } else {
+                        alert("Creation Failed! Please wait and try again later!")
+                    }
+            });
+        }
+    });
+
+
+    //加入群聊
+    $("#join").click(function (){
+        $(".main_2").fadeIn();
+        $(".mainbox_2").delay(0).slideDown();
+    })
+    $(".close_create_2").click(function(){
+        $(".g_list_member").empty()
+        $(".main_2").fadeOut();
+    });
+    $("#searchByID").click(function(){
+        $(".g_list_member").empty()
+        let group_id_that = $("#search_group_id").val()
+        if(group_id_that.length == 0){
+            alert("ID can't be empty!")
+        } else {
+            let group_id_this = parseInt(group_id_that)
+            $.get(url + "group_chat/group/"+ group_id_this,function(data,status){
+                if(status == "success"){
+                    if(data.length == 0){
+                        alert("No groups!")
+                        return
+                    }
+                    let str = "<span>Group Name:</span> <span class=\"group_fix\" id=\"g_info_name\">"+data[0].groupName+"</span>\n" +
+                        "<span>Group Admin:</span> <span class=\"group_fix\" id=\"g_info_admin\">"+ data[0].admin_id +"</span>\n" +
+                        "<span>Group ID:</span> <span class=\"group_fix\" id=\"g_info_id\">"+ data[0].id +"</span>\n" +
+                        "<input type=\"submit\" name=\"submit\" value=\"Join\" id=\"join_group\">"
+                    $(".g_list_member").append(str)
+                    $(".group_info").show()
+                    $("#search_group_id").val("")
+                    $("#search_group_name").val("")
+                } else {
+                    alert("Search Failed! Please wait for a moment!")
+                }
+            });
+        }
+    });
+    $("#searchByName").click(function(){
+        $(".g_list_member").empty()
+        let group_name_that = $("#search_group_name").val()
+        if(group_name_that.length == 0){
+            alert("Name can't be empty!")
+        } else {
+            $.get(url + "group_chat/group/name/"+ group_name_that, function(data,status){
+                if(status == "success"){
+                    let str = ""
+                    if(data.length == 0){
+                        alert("No groups!")
+                        return
+                    }
+                    for(let i = 0; i< data.length; i++){
+                        str = "<div><span>Group Name:</span> <span class=\"group_fix\" id=\"g_info_name\">"+data[i].groupName+"</span>\n" +
+                            "<span>Group Admin:</span> <span class=\"group_fix\" id=\"g_info_admin\">"+ data[i].admin_id +"</span>\n" +
+                            "<span>Group ID:</span> <span class=\"group_fix\" id=\"g_info_id\">"+ data[i].id +"</span>\n" +
+                            "<input type=\"submit\" name=\"submit\" value=\"Join\" id=\"join_group\"></div>"
+                        $(".g_list_member").append(str)
+                    }
+                    $(".group_info").show()
+                    $("#search_group_name").val("")
+                    $("#search_group_id").val("")
+                } else {
+                    alert("Search Failed! Please wait for a moment!")
+                }
+            });
+        }
+    });
+
+
+    //加入群聊
+    $(".g_list_member").on('click',"#join_group",function(){
+        let str = $(this).siblings("#g_info_id").text()
+        let this_group_id = parseInt(str)
+        $.post(url + "/group_members/insert",
+            {
+                user_id:user_id,
+                group_id:this_group_id
+            },
+            function(data_2,status_2){
+                if(status_2 == "success"){
+                    alert("Join Success!!")
+                    $(".main").fadeOut();
+                    window.location.reload()
+                } else {
+                    alert("Creation Failed! Please wait and try again later!")
+                }
+            });
     });
 
 

@@ -1,8 +1,7 @@
 package bit.group.ourchat.controller;
 
 
-import bit.group.ourchat.entity.exampleEntity;
-import bit.group.ourchat.service.exampleService;
+import bit.group.ourchat.webSocket.ChatMsg;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,21 +10,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 @Controller
 public class exampleController {
-    @Autowired
-    private exampleService exampleService;
-
-    @RequestMapping(value = "/newmoment/week")
-    public String NewMomentsWeek(Model model, HttpSession session)
-    {
-        Integer num=-7;
-        exampleEntity exampleEntity= (exampleEntity) session.getAttribute("customer");
-        session.setAttribute("time",num);
-        return "redirect:/chat";
-    }
 
     @PostMapping(value = "/chat")
     public String Char_Main(Model model,HttpSession httpSession) {
@@ -34,10 +23,11 @@ public class exampleController {
         return "/blogthree";
     }
 
-    @GetMapping(value = "/Moment/return/{id}")
-    public String MomentOperation(@PathVariable("id") int id)
+
+
+    @RequestMapping(value = "/blogdetails")
+    public String newUser()
     {
-        exampleEntity exampleEntity=exampleService.findById(id);
-        return "index";
+        return "blogdetails";
     }
 }
