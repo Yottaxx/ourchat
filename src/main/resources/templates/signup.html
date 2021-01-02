@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Home | Triangle</title>
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/font-awesome.min.css" rel="stylesheet">
+    <link href="/css/animate.min.css" rel="stylesheet">
+    <link href="/css/lightbox.css" rel="stylesheet">
+    <link href="/css/main.css" rel="stylesheet">
+    <link href="/css/responsive.css" rel="stylesheet">
+    <link href="/css/bootstrap-select.min.css" rel="stylesheet">
+
+    <!--[if lt IE 9]>
+
+
+    <script type="text/javascript" src="/js/bootstrap-select.min.js"></script>
+    <script type="text/javascript" src="/js/i18n/defaults-zh_CN.min.js"></script>
+    <script src="/js/html5shiv.js"></script>
+    <script src="/js/respond.min.js"></script>
+    <![endif]-->
+    <link rel="shortcut icon" href="/images/ico/favicon.ico">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/images/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="/images/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="/images/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="/images/ico/apple-touch-icon-57-precomposed.png">
+</head><!--/head-->
+<script>
+    function readPhotoFromURL(){
+        var result=document.getElementById("result");
+        console.log("read photo from url")
+        console.log(result)
+        var img = $("#headshot").val();
+        console.log(img)
+        result.innerHTML = '<img src="' + img
+            +'" alt="can not read the photo" class="img-responsive"/>';
+    }
+</script>
+
+<body>
+<div id="bubble">
+    <script>
+
+        class BGBubble {
+            constructor(opts) {
+                this.defaultOpts = {
+                    id: '',                           //容器ID
+                    num: 15,                        // 个数
+                    start_probability: 0.1,          // 如果数量小于num，有这些几率添加一个新的
+                    radius_min: 1,                   // 初始半径最小值
+                    radius_max: 2,                   // 初始半径最大值
+                    radius_add_min: .3,               // 半径增加最小值
+                    radius_add_max: .5,               // 半径增加最大值
+                    opacity_min: 0.2,                 // 初始透明度最小值
+                    opacity_max: 0.3,                // 初始透明度最大值
+                    opacity_prev_min: .003,            // 透明度递减值最小值
+                    opacity_prev_max: .005,            // 透明度递减值最大值
+                    light_min: 40,                 // 颜色亮度最小值
+                    light_max: 70,                 // 颜色亮度最大值
+                    is_same_color: false          //泡泡颜色是否相同
+                }
+                if (Object.prototype.toString.call(opts) == "[object Object]") {
+                    this.userOpts = {...this.defaultOpts, ...opts}
+                } else {
+                    this.userOpts = {...this.defaultOpts, id: opts}
+                }
+                this.color = this.random(0, 360)
+                this.bubbleNum = []
+                this.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame ||
+                    window.webkitRequestAnimationFrame || window.msRequestAnimationFrame
+                this.cancelAnimationFrame = window.cancelAnimationFrame || window.mozCancelAnimationFrame
+            }
+
+            random(a, b) {
+                return Math.random() * (b - a) + a    //取a-b之间的随机值
+            }
+
+            initBubble(color, isSameColor) {
+                const width = window.innerWidth
+                const height = window.innerHeight
+                const userOpts = this.userOpts
+                const light = this.random(userOpts.light_min, userOpts.light_max)
+                this.bubble = {
+                    x: this.random(0, width),
+                    y: this.random(0, height),
+                    radius: this.random(userOpts.radius_min, userOpts.radius_max),
+                    radiusChange: this.random(userOpts.radius_add_min, userOpts.radius_add_max),
+                    opacity: this.random(userOpts.opacity_min, userOpts.opacity_max),
+                    opacityChange: this.random(userOpts.opacity_prev_min, userOpts.opacity_prev_max),
+                    light,
+                    color: `hsl(${isSameColor ? color : this.random(0, 360)},100%,${light}%)`,
+                }
+            }
+
+            bubbling(ctx, color, isSameColor) {
+                !this.bubble && this.initBubble(color, isSameColor)
+                const bubble = this.bubble
+                ctx.fillStyle = bubble.color;
+                ctx.globalAlpha = bubble.opacity;
+                ctx.beginPath();
+                ctx.arc(bubble.x, bubble.y, bubble.radius, 0, 2 * Math.PI, true);
+                ctx.closePath();
+                ctx.fill();
+                ctx.globalAlpha = 1;
+                bubble.opacity -= bubble.opacityChange;
+                bubble.radius += bubble.radiusChange;
+                if (bubble.opacity <= 0) {
+                    this.initBubble(color, isSameColor)
+                    return
+                }
+            }
+
+            createCanvas() {
+                this.canvas = document.createElement('canvas')
+                this.ctx = this.canvas.getContext('2d')
+                this.canvas.style.display = 'block'        //防止全屏的canvas出现滚动条
+                this.canvas.width = window.innerWidth
+                this.canvas.height = window.innerHeight
+                this.canvas.style.position = 'fixed'
+                this.canvas.style.top = '0'
+                this.canvas.style.left = '0'
+                this.canvas.style.zIndex = '-1'
+                var con_color='#FFFFFF';
+                document.getElementById(this.userOpts.id).appendChild(this.canvas)
+                window.onresize = () => {
+                    this.canvas.width = window.innerWidth
+                    this.canvas.height = window.innerHeight
+                }
+            }
+
+            start() {
+                const width = window.innerWidth
+                const height = window.innerHeight
+                this.color += 0.1
+                // this.ctx.fillStyle = `hsl(${this.color},100%,97%)`
+                this.ctx.fillStyle = 'rgba(255,255,255,0.3)';
+                this.ctx.fillRect(0, 0, width, height);
+                if (this.bubbleNum.length < this.userOpts.num && Math.random() < this.userOpts.start_probability) {
+                    this.bubbleNum.push(new BGBubble())
+                }
+                this.bubbleNum.forEach(bubble => bubble.bubbling(this.ctx, this.color, this.userOpts.is_same_color))
+                const requestAnimationFrame = this.requestAnimationFrame
+                this.myReq = requestAnimationFrame(() => this.start())   //新的动画API可根据浏览设置最佳动画间隔时间
+            }
+
+            destory() {
+                const cancelAnimationFrame = this.cancelAnimationFrame
+                cancelAnimationFrame(this.myReq)
+                window.onresize = null
+            }
+
+        }
+
+        var bubbleDemo = new BGBubble('bubble')
+        bubbleDemo.createCanvas()
+        bubbleDemo.start()
+
+    </script>
+</div>
+
+<header id="header">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12 overflow">
+                <div class="social-icons pull-right">
+                    <ul class="nav nav-pills">
+                        <li><a href=""><i class="fa fa-facebook"></i></a></li>
+                        <li><a href=""><i class="fa fa-twitter"></i></a></li>
+                        <li><a href=""><i class="fa fa-google-plus"></i></a></li>
+                        <li><a href=""><i class="fa fa-dribbble"></i></a></li>
+                        <li><a href=""><i class="fa fa-linkedin"></i></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="navbar navbar-inverse" role="banner">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+
+                <a class="navbar-brand" href="login">
+                    <h1><img src="/images/logo.png" alt="logo"></h1>
+                </a>
+
+            </div>
+            <div class="collapse navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+<!--                    <li><a href="index.html">主页</a></li>-->
+<!--                    <li class="dropdown"><a href="#">页面 <i class="fa fa-angle-down"></i></a>-->
+<!--                        <ul role="menu" class="sub-menu">-->
+<!--                            <li><a href="aboutus.html">关于我们</a></li>-->
+<!--                        </ul>-->
+<!--                    </li>-->
+<!--                    <li class="dropdown active"><a href="#">唠叨铺儿 <i class="fa fa-angle-down"></i></a>-->
+<!--                        <ul role="menu" class="sub-menu">-->
+<!--                            <li><a href="blogthree.html">唠叨唠叨</a></li>-->
+<!--                        </ul>-->
+<!--                    </li>-->
+<!--                    <li class="dropdown"><a href="#">跳蚤地儿 <i class="fa fa-angle-down"></i></a>-->
+<!--                        <ul role="menu" class="sub-menu">-->
+<!--                            <li><a href="portfolio.html">二手市场</a></li>-->
+<!--                        </ul>-->
+<!--                    </li>-->
+<!--                    <li><a href="#">设置</a>-->
+<!--                        <ul role="menu" class="sub-menu">-->
+<!--                            <li><a href="/re_register">重置</a>-->
+<!--                            </li>-->
+<!--                        </ul>-->
+<!--                    </li>-->
+                </ul>
+            </div>
+            <div class="search">
+                <form role="form">
+                    <i class="fa fa-search"></i>
+                    <div class="field-toggle">
+                        <input type="text" class="search-form" autocomplete="off" placeholder="Search">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</header>
+<footer id="footer">
+    <div class="container">
+        <div class="row">
+            <!--<div class="col-sm-12 text-center bottom-separator">-->
+                <img src="/images/home/under.png" class="img-responsive inline" alt="">
+            <!--</div>-->
+            <!--<div class="col-md-4 col-sm-6">-->
+                <!--<div class="testimonial bottom">-->
+                    <!--<h2>Testimonial</h2>-->
+                    <!--<div class="media">-->
+                        <!--<div class="pull-left">-->
+                            <!--<a href="#"><img src="/images/home/profile1.png" alt=""></a>-->
+                        <!--</div>-->
+                        <!--<div class="media-body">-->
+                            <!--<blockquote>Nisi commodo bresaola, leberkas venison eiusmod bacon occaecat labore tail.-->
+                            <!--</blockquote>-->
+                            <!--<h3><a href="#">- Jhon Kalis</a></h3>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                    <!--<div class="media">-->
+                        <!--<div class="pull-left">-->
+                            <!--<a href="#"><img src="/images/home/profile2.png" alt=""></a>-->
+                        <!--</div>-->
+                        <!--<div class="media-body">-->
+                            <!--<blockquote>Capicola nisi flank sed minim sunt aliqua rump pancetta leberkas venison-->
+                                <!--eiusmod.-->
+                            <!--</blockquote>-->
+                            <!--<h3><a href="">- Abraham Josef</a></h3>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
+            <!--<div class="col-md-3 col-sm-6">-->
+                <!--<div class="contact-info bottom">-->
+                    <!--<h2>Contacts</h2>-->
+                    <!--<address>-->
+                        <!--E-mail: <a href="mailto:someone@example.com">email@email.com</a> <br>-->
+                        <!--Phone: +1 (123) 456 7890 <br>-->
+                        <!--Fax: +1 (123) 456 7891 <br>-->
+                    <!--</address>-->
+
+                    <!--<h2>Address</h2>-->
+                    <!--<address>-->
+                        <!--Unit C2, St.Vincent's Trading Est., <br>-->
+                        <!--Feeder Road, <br>-->
+                        <!--Bristol, BS2 0UY <br>-->
+                        <!--United Kingdom <br>-->
+                    <!--</address>-->
+                <!--</div>-->
+            <!--</div>-->
+            <div class="col-md-4 col-sm-12 ">
+            <div  class="portfolio-thumb col-md-5 fadeInLeft" >
+                <h2></h2>
+                <a ></a>
+            </div>
+            <!--<div id="result" class="portfolio-thumb col-md-5 fadeInRight">-->
+            <!--</div>-->
+            </div>
+            <br/>
+            <div class="col-md-4 col-sm-12">
+                <div class="contact-form bottom">
+                    <div class="col-md-12">
+                    <div  class="portfolio-thumb fadeInLeft col-md-5"  >
+                        <h2>Register</h2>
+                        <a value="Read the photo"  onclick="readAsDataURL()"></a>
+                    </div>
+
+                    </div>
+                    <form action="/register" method="post" enctype="multipart/form-data" style="padding-top: 130px;">
+                        <a>Name:</a><input name="name" class="form-control" required="required"/><br/>
+                        <a>Password:</a><input type="password" name="password" class="form-control" required="required"/><br/>
+                        <a>Nickname:</a><input name="nickname" class="form-control" required="required"/><br/>
+                        <a>Email:</a><input type="email" name="email" class="form-control" required="required"/><br/>
+                        <a>Address:</a>
+<!--                        <input name="address" class="form-control" required="required"/><br/>-->
+                        <select class="select picker form-control " name="address" required="required">
+                            <option>Algeria</option>
+                            <option>Afghanistan</option>
+                            <option>Argentina</option>
+                            <option>UAE</option>
+                            <option>Oman</option>
+                            <option>Azerbaijan</option>
+                            <option>Egypt</option>
+                            <option>Ethiopia</option>
+                            <option>Ireland</option>
+                            <option>Angola</option>
+                            <option>Austria</option>
+                            <option>Australia</option>
+                            <option>Papua New Guinea</option>
+                            <option>Pakistan</option>
+                            <option>Bahrain</option>
+                            <option>Brazil</option>
+                            <option>Belarus</option>
+                            <option>Bulgaria</option>
+                            <option>Benin</option>
+                            <option>Belgium</option>
+                            <option>Iceland</option>
+                            <option>Bosnia and Herzegovina</option>
+                            <option>Poland</option>
+                            <option>Botswana</option>
+                            <option>North Korea</option>
+                            <option>Equatorial Guinea</option>
+                            <option>Tahiti</option>
+                            <option>Denmark</option>
+                            <option>Germany</option>
+                            <option>Togo</option>
+                            <option>Russia</option>
+                            <option>Ecuador</option>
+                            <option>Eritrea</option>
+                            <option>France</option>
+                            <option>Philippines</option>
+                            <option>Fiji</option>
+                            <option>Finland</option>
+                            <option>Cape Verde</option>
+                            <option>Congo</option>
+                            <option>Congo</option>
+                            <option>Khmer</option>
+                            <option>Cuba</option>
+                            <option>Guyana</option>
+                            <option>Kazakhstan</option>
+                            <option>Korea</option>
+                            <option>Netherlands</option>
+                            <option>Kyrgyzstan</option>
+                            <option>Guinea</option>
+                            <option>Canada</option>
+                            <option>Ghana</option>
+                            <option>Cambodia</option>
+                            <option>Czech Republic</option>
+                            <option>Zimbabwe</option>
+                            <option>Cameroon</option>
+                            <option>Qatar</option>
+                            <option>Kuwait</option>
+                            <option>Kenya</option>
+                            <option>Laos</option>
+                            <option>Lebanon</option>
+                            <option>Lithuania</option>
+                            <option>Libya</option>
+                            <option>Romania</option>
+                            <option>Madagascar</option>
+                            <option>Malaysia</option>
+                            <option>Mali</option>
+                            <option>Macedonia</option>
+                            <option>Mauritius</option>
+                            <option>Mauritania</option>
+                            <option>United States</option>
+                            <option>Mongolia</option>
+                            <option>Bangladesh</option>
+                            <option>Peru</option>
+                            <option>Myanmar</option>
+                            <option>Morocco</option>
+                            <option>Principality of Morocco</option>
+                            <option>Mozambique</option>
+                            <option>Mexico</option>
+                            <option>Namibia</option>
+                            <option>South Africa</option>
+                            <option>Nepal</option>
+                            <option>Nigeria</option>
+                            <option>Portugal</option>
+                            <option>Japan</option>
+                            <option>Sweden</option>
+                            <option>Switzerland</option>
+                            <option>Saudi Arabia</option>
+                            <option>Sri Lanka</option>
+                            <option>Slovakia</option>
+                            <option>Sudan</option>
+                            <option>Tajikistan</option>
+                            <option>Thailand</option>
+                            <option>Tanzania</option>
+                            <option>Tunisia</option>
+                            <option>Turkey</option>
+                            <option>Turkmenistan</option>
+                            <option>Venezuela</option>
+                            <option>Brunei</option>
+                            <option>Uganda</option>
+                            <option>Ukraine</option>
+                            <option>Uruguay</option>
+                            <option>Uzbekistan</option>
+                            <option>Spain</option>
+                            <option>Greece</option>
+                            <option>Singapore</option>
+                            <option>New Zealand</option>
+                            <option>Hungary</option>
+                            <option>Syria</option>
+                            <option>Jamaica</option>
+                            <option>Armenia</option>
+                            <option>Yemen</option>
+                            <option>Iraq</option>
+                            <option>Iran</option>
+                            <option>Israel</option>
+                            <option>Italy</option>
+                            <option>India</option>
+                            <option>Indonesia</option>
+                            <option>United Kingdom</option>
+                            <option>Jordan</option>
+                            <option>Vietnam</option>
+                            <option>Zambia</option>
+                            <option>China</option>
+                            <option>Macau, China</option>
+                            <option>Taiwan, China</option>
+                            <option>Hong Kong, China</option>
+                            <option>Other</option>
+                        </select><br/>
+                        <!--<input type="file" name="logo" class="form-control"/><br/>-->
+                        <a>Upload photo</a>
+                        <input type="text" id="headshot" required="required" name="profile_photo" placeholder="Please input photo's web address"
+                               class="form-control" onchange="readPhotoFromURL()"><br/>
+                        <div id="result" class="portfolio-thumb col-md-5 fadeInRight" style="padding-bottom: 20px">
+                            <br/>
+                        </div>
+                        <input type="submit" value="Register" class="form-control"/>
+                    </form>
+
+
+
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <div class="copyright-text text-center">
+                    <p>&copy; B I T 2020. All Rights Reserved.</p>
+                    <p>Designed by <a target="_blank" href="http://www.themeum.com">Themeum</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+<!--/#footer-->
+
+<script type="text/javascript" src="/js/jquery.js"></script>
+<script type="text/javascript" src="/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/js/lightbox.min.js"></script>
+<script type="text/javascript" src="/js/wow.min.js"></script>
+<script type="text/javascript" src="/js/main.js"></script>
+</body>
+</html>

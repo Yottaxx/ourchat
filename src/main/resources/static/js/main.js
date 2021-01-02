@@ -30,26 +30,27 @@ jQuery(function ($) {
             $('.masonery_area').masonry();//Masonry
         }
 
-        var $portfolio_selectors = $('.portfolio-filter >li>a');
+        var $portfolio_selectors = $('.navbar-stacked >li>a');
 
         if ($portfolio_selectors.length) {
 
             var $portfolio = $('.portfolio-items');
-            $portfolio.isotope({
-                itemSelector: '.portfolio-item',
-                layoutMode: 'fitRows'
-            });
+            // $portfolio.isotope({
+            //     itemSelector: '.portfolio-item',
+            //     layoutMode: 'fitRows'
+            // });
 
             $portfolio_selectors.on('click', function () {
-                $portfolio_selectors.removeClass('active');
-                $(this).addClass('active');
-                var selector = $(this).attr('data-filter');
-                $portfolio.isotope({filter: selector});
+                $portfolio_selectors.parent().removeClass('active');
+                $(this).parent().addClass('active');
+                // var selector = $(this).attr('data-filter');
+                // $portfolio.isotope({filter: selector});
                 return false;
             });
         }
 
     });
+
 
 
     $('.timer').each(count);
@@ -64,6 +65,8 @@ jQuery(function ($) {
     $('.fa-search').on('click', function () {
         $('.field-toggle').fadeToggle(200);
     });
+
+
 
     // Contact form
     var form = $('#main-contact-form');

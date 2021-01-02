@@ -116,11 +116,11 @@ h3 {
 }
 
 .padding-bottom {
-    padding-bottom: 65px;
+    padding-bottom: 40px;
 }
 
 .padding-top {
-    padding-top: 90px;
+    padding-top: 30px;
 }
 
 .padding-right {
@@ -128,7 +128,7 @@ h3 {
 }
 
 .padding-left {
-    padding-left: 80px;
+    padding-left: 30px;
 }
 
 .margin-bottom {
@@ -185,6 +185,11 @@ h3 {
     position: absolute;
     right: 10px;
     top: 2px;
+}
+
+.config i{
+    color: #00aeef;
+    cursor: pointer;
 }
 
 .field-toggle {
@@ -1027,7 +1032,7 @@ ul.elements li > i {
     position: absolute;
     top: 0;
     height: 100%;
-    background: rgba(112, 35, 64, 0.9);
+    background: rgba(176, 193, 207, 0.46);
     width: 100%;
     text-align: center;
 }
@@ -1061,11 +1066,12 @@ ul.elements li > i {
 }
 
 .portfolio-view .nav-pills li a:hover {
-    color: #702340;
-    border-color: #702340;
+    color: #4c6db0;
+    border-color: #4c6db0;
     -webkit-transition: all 0.9s ease;
     transition: all 0.9s ease;
 }
+
 
 .portfolio-info {
     overflow: hidden;
@@ -1078,7 +1084,7 @@ ul.elements li > i {
 }
 
 .portfolio-filter {
-    margin: 80px 0;
+    margin: 80px 0 80px;
     padding: 0;
 }
 
@@ -1543,17 +1549,17 @@ Blog Default
     padding-top: 50px;
 }
 
-.timeline-divider:before {
-    position: absolute;
-    top: 0;
-    content: "";
-    border-left-style: solid;
-    border-left-width: 1px;
-    height: 100%;
-    border-left-color: #0099AE;
-    left: 50%;
-    margin-left: -2px;
-}
+/*.timeline-divider:before {*/
+/*    position: absolute;*/
+/*    top: 0;*/
+/*    content: "";*/
+/*    border-left-style: solid;*/
+/*    border-left-width: 1px;*/
+/*    height: 100%;*/
+/*    border-left-color: #0099AE;*/
+/*    left: 50%;*/
+/*    margin-left: -2px;*/
+/*}*/
 
 .timeline-blog .col-sm-6.padding-top {
     padding-top: 70px;
@@ -1561,6 +1567,7 @@ Blog Default
 
 .post-content {
     padding: 20px 0;
+    border-bottom: 1px solid #EEEEEE;
 }
 
 .timeline-date .btn-common {
@@ -1590,13 +1597,12 @@ Blog Default
 }
 
 .arrow-left:before {
-    position: absolute;
-    left: -2px;
-    content: "";
-    top: 86px;
+    /*position: absolute;*/
+    /*content: "";*/
+    /*top: 86px; */
     background: url(../images/blog/right.png);
-    width: 43px;
-    height: 54px;
+    /*width: 43px;*/
+    /*height: 54px;*/
 }
 
 .post-title {
@@ -1643,10 +1649,10 @@ Blog with right sidebar
 
 .single-blog {
     padding-bottom: 30px;
+    margin-left: 45px;
 }
 
 .single-blog .post-bottom {
-    border-bottom: 1px solid #eeeeee;
     padding-top: 10px;
     padding-bottom: 10px;
 }

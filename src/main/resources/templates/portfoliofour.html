@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Ourchat | Home</title>
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/font-awesome.min.css" rel="stylesheet">
+    <link href="/css/lightbox.css" rel="stylesheet">
+    <link href="/css/animate.min.css" rel="stylesheet">
+    <link href="/css/main.css" rel="stylesheet">
+    <link href="/css/responsive.css" rel="stylesheet">
+    <link href="/css/bootstrap-select.min.css" rel="stylesheet">
+
+
+    <script type="text/javascript" src="/js/jquery.js"></script>
+    <script type="text/javascript" src="/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/js/bootstrap-select.min.js"></script>
+    <script type="text/javascript" src="/js/i18n/defaults-zh_CN.min.js"></script>
+<!--    <script type="text/javascript" src="/js/jquery.isotope.min.js"></script>-->
+    <script type="text/javascript" src="/js/lightbox.min.js"></script>
+    <script type="text/javascript" src="/js/wow.min.js"></script>
+    <script type="text/javascript" src="/js/main.js"></script>
+
+    <!--[if lt IE 9]>
+    <script src="/js/html5shiv.js"></script>
+    <script src="/js/respond.min.js"></script>
+    <![endif]-->
+    <link rel="shortcut icon" href="/images/ico/favicon.ico">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/images/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="/images/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="/images/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="/images/ico/apple-touch-icon-57-precomposed.png">
+
+    <script th:inline="javascript">
+        var page_size = 9
+        function search_user(){
+            var search_name = $('#search_name').val();
+            var current_name =$('#user_name').text();
+            $.ajax({
+                async:false,
+                url: "/homepage_search",
+                type: "post",
+                //获取某个文本框的值
+                //data: "id=" + id + "&name=" + $("#name").val(),
+                dataType:"json",
+                data: {
+                    "search_name":search_name,
+                    "current_name":current_name
+                },
+                // 或者(注意：若参数为中文时，以下这种传参不会造成后台接收到的是乱码)
+                success: function (returnValue) {
+                    var div;
+                    var nickname=returnValue.user.nickname;
+                    var sign=returnValue.user.sign;
+                    if(nickname == null)
+                        nickname="——";
+                    if(sign==null)
+                        sign="——";
+                    div ='<div>'
+                        +'<ul class="list-unstyled w-flex col-md-offset-1">'
+                        +'<h3>Name：<span id="friend_name">'+returnValue.user.name+'</span></h3>'
+                        +'<li><br></li>'
+                        +'<h3>Nickname：<span>'+nickname+'</span></h3>'
+                        +'<li><br></li>'
+                        +'<h3>Sign：<span>'+sign+'</span></h3>'
+                        +'<li><br></li>'
+                        +'<h3>Address：<span>'+returnValue.user.address+'</span></h3>'
+                        +'<li><br></li>'
+                        +'</ul>'
+                        +'<div class="modal-footer">'
+                    if(returnValue.isFriend)
+                        div = div + '<div>This user is already your friend!</div>' +
+                            '</div></div>'
+                    else
+                        div = div +'<button type="button" class="btn btn-default" data-dismiss="modal" onclick="send_FriendReq()">Send friend request</button>'
+                            +'</div></div>'
+                    $('#search_user_info').html(div)
+                },
+                error: function (returnValue) {
+                    $('#search_user_info').html(div = '<div>Sorry! This user does not exist!</div>')
+                }
+            })
+        }
+        function send_FriendReq() {
+            var current_name = $('#user_name').text();
+            var friend_name = $('#friend_name').text();
+            $.ajax({
+                async:false,
+                url: "/homepage_sendReq",
+                type: "post",
+                //获取某个文本框的值
+                //data: "id=" + id + "&name=" + $("#name").val(),
+                dataType:"text",
+                data: {
+                    "current_name":current_name,
+                    "friend_name":friend_name
+                },
+                // 或者(注意：若参数为中文时，以下这种传参不会造成后台接收到的是乱码)
+                success: function (returnValue) {
+                    $('#user_info').html(div = '<div></div>')
+                    alert(returnValue)
+                },
+                error: function (returnValue) {
+                    $('#user_info').html(div = '<div></div>')
+                    alert("发送好友申请失败！");
+                }
+            })
+
+        }
+        function request_msg(){
+            console.log("show request msg function run")
+            var current_name = $('#user_name').text();
+            $.ajax({
+                async:false,
+                url: "/homepage_requestMsg",
+                type: "post",
+                //获取某个文本框的值
+                //data: "id=" + id + "&name=" + $("#name").val(),
+                dataType:"json",
+                data: {
+                    "current_name":current_name,
+                },
+                // 或者(注意：若参数为中文时，以下这种传参不会造成后台接收到的是乱码)
+                success: function (returnValue) {
+                    console.log(returnValue)
+                    showReqMsg(returnValue)
+                },
+                error: function (returnValue) {
+                    alert("好友通知加载失败");
+                }
+            })
+        }
+        function showReqMsg(data) {
+            var total_div=''
+            if(data.length==0){
+                var div = '<div>null</div>'
+                total_div = div
+            }
+            for(var i=0;i<data.length;i++){
+                if(data[i].request=="request"){
+                    var div = '<div class="media" >\n' +
+                        '           <div class="pull-left">\n' +
+                        '                  <a href="#"><img src="'+data[i].Photo+'" alt="photo" height="50" width="50"></a>\n' +
+                        '           </div>\n' +
+                        '           <div class="media-body">\n' +
+                        '               <li>'+data[i].Nickname+'（user name :<span>'+data[i].Name+'</span>)<br/>requested you as a friend, do you agree?</li>\n' +
+                        '               <p>posted on '+data[i].time+'</p>\n' +
+                        '               <button type="button" class="btn btn-link btn-xs" style="float:right" data-toggle="modal" data-target="#Model_add_friend_info" onclick="RequestReject(this)" >Reject</button>' +
+                        '               <button type="button" class="btn btn-link btn-xs" style="float:right" data-toggle="modal" data-target="#Model_add_friend_info" onclick="RequestAgree(this)" >Agree</button>' +
+                        '              </div>\n' +
+                        '       </div>'
+                    total_div +=div
+                }
+            }
+            $('#request_info').html(total_div)
+        }
+        function RequestAgree(obj){
+            var request_name = $(obj).parent().find('span').text()
+            var current_name = $('#user_name').text()
+            console.log(request_name)
+            $.ajax({
+                async:false,
+                url: "/Request_Agree",
+                type: "post",
+                //获取某个文本框的值
+                //data: "id=" + id + "&name=" + $("#name").val(),
+                dataType:"json",
+                data: {
+                    "request_name":request_name,
+                    "current_name":current_name,
+                },
+                // 或者(注意：若参数为中文时，以下这种传参不会造成后台接收到的是乱码)
+                success: function (returnValue) {
+                    console.log(returnValue)
+                    var div;
+                    var name = returnValue.user.name;
+                    var nickname = returnValue.user.nickname;
+                    div ='<div style="margin:20px;"> '
+                        +'<form action="/addFriend" method="post">'
+                        +'<ul class="list-unstyled w-flex ">'
+                        +'name：<input class="form-control" name="add_friend_name" readonly value ="'+name+'"></input>'
+                        +'<li><br></li>'
+                        +'nickname：<input class="form-control" name="add_friend_nickname" readonly value ="'+nickname+'"></input>'
+                        +'<li><br></li>'
+                        +'address：<input class="form-control" name="add_friend_address" readonly value = "'+returnValue.user.address+'"></input>'
+                        +'<li><br></li>'
+                        // +'地区：<input class="form-control" name="add_friend_address" readonly value = "'+returnValue.user.address+'"></input>'
+                        // +'<li><br></li>'
+                        +'remark：<input class="form-control" name="remark" placeholder=" set remark " ></input>'
+                        +'<li><br></li>'+
+                        'group：<select class="select picker form-control " name="friend_group" id="friend_groups">\n'
+                    if(returnValue.groups.length == 0){
+                        div +='<option value="'+null+'">default group</option>'
+                    }
+                    for(var i=0;i<returnValue.groups.length;i++){
+                        div +='<option value="'+returnValue.groups[i]+'">'+returnValue.groups[i]+'</option>'
+                    }
+                    div +='</select>'
+                        +'<li><br></li>'
+                        +'</ul>'
+                        +'<div class="modal-footer ">'
+                        +'<button type="submit" class="btn btn-primary form-control" >Confirm</button>'
+                        +'</div></form> </div>'
+                    console.log(returnValue.groups)
+                    $('#add_friend_info').html(div)
+                },
+                error: function (returnValue) {
+                    alert("Add friend fail");
+                }
+            })
+        }
+        function RequestReject(obj) {
+            var request_name = $(obj).parent().find('span').text()
+            var current_name = $('#user_name').text()
+            $.ajax({
+                async:false,
+                url: "/Request_Reject",
+                type: "post",
+                //获取某个文本框的值
+                //data: "id=" + id + "&name=" + $("#name").val(),
+                dataType:"json",
+                data: {
+                    "request_name":request_name,
+                    "current_name":current_name,
+                },
+                // 或者(注意：若参数为中文时，以下这种传参不会造成后台接收到的是乱码)
+                success: function (returnValue) {
+                    console.log(returnValue)
+                    var div;
+                    var current_user_name = returnValue.current_user_name;
+                    var request_user_name = returnValue.request_user_name;
+                    console.log("current_user_name",current_user_name)
+                    console.log("request_user_name",request_user_name)
+                    div ='<div style="margin:20px;"> '
+                        +'<form action="/delFriendRequest" method="post">'
+                        +'<ul class="list-unstyled w-flex ">'
+                        +' <input type="hidden" class="form-control" name="current_user_name" value="'+current_user_name+'"/>'
+                        +' <input type="hidden" class="form-control" name="request_user_name" value="'+request_user_name+'"/>'
+                            +'<h3>Confirm rejection of the friend request？</h3>'
+                        +'</ul>'
+                        +'<div class="modal-footer ">'
+                        +'<button type="submit" class="btn btn-primary" >Confirm</button>'
+                        +'<button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancel</button>'
+                        +'</div></form> </div>'
+                    $('#add_friend_info').html(div)
+                },
+                error: function (returnValue) {
+                    alert("Failed to reject friend request");
+                }
+            })
+        }
+        function showAllFriends(){
+            console.log("show all friend function run")
+            var current_name = $('#user_name').text();
+            console.log("current_user_name",current_name)
+            $.ajax({
+                async:false,
+                url: "/Allfriends",
+                type: "post",
+                //获取某个文本框的值
+                //data: "id=" + id + "&name=" + $("#name").val(),
+                dataType:"json",
+                data: {
+                    "current_name":current_name,
+                    "page_size":page_size
+                },
+                // 或者(注意：若参数为中文时，以下这种传参不会造成后台接收到的是乱码)
+                success: function (returnValue) {
+                    var total_div=''
+                    console.log("success")
+                    console.log(returnValue)
+                    if(returnValue.length==1){
+                        var div = '<div class="col-xs-4 col-sm-4 col-md-4 ">' +
+                            ' <div class="portfolio-wrapper">' +
+                            '<div class="portfolio-single">' +
+                            '<div class="portfolio-thumb"> No friends yet, go add friends~ </div>' +
+                            '</div></div></div>'
+                        total_div = div
+                    }
+                    else{
+                        var page = returnValue[0].page_num
+                        console.log("page_num::::",page)
+                        var page_div = ' <li><a href="#">left</a></li>\n'
+                        page_div +=' <li class="active page_num" ><a onclick="showPageFriends(this)">1</a></li>\n'
+                        for(var i=1;i<page;i++){
+                            var p = i+1
+                            page_div +=' <li><a class="page_num" href="#" onclick="showPageFriends(this)">'+p+'</a></li>\n'
+                        }
+                        page_div +='<li><a  href="#">right</a></li>'
+                        $("#friend_page").html(page_div)
+
+                        for(var i=1;i<=returnValue[0].first_num;i++){
+                            var remark = returnValue[i].remark
+                            if(remark==null){
+                                remark = returnValue[i].user.nickname
+                            }
+                            var div =' <div class="col-xs-4 col-sm-4 col-md-4 ">\n' +
+                                '   <div class="portfolio-wrapper">\n' +
+                                '       <div class="portfolio-single" style="height: 261px;width: 261px">\n' +
+                                '           <div class="portfolio-thumb" style="height: 261px;width: 261px" >\n' +
+                                '               <img src="'+returnValue[i].user.profile_photo+'" class="img-responsive" height = "261" width="261" alt="Photo">\n' +
+                                '           </div>\n' +
+                                '           <div class="portfolio-view">\n' +
+                                '               <ul class="nav nav-pills">\n' +
+                                '                       <li><a href="'+returnValue[i].user.profile_photo+'" data-lightbox="example-set"><i class="fa fa-eye"></i></a></li>\n' +
+                                '                       <li><a href="/portfolio-details?friend_name='+returnValue[i].user.name+'"><i class="fa fa-pencil-square-o"></i></a></li>\n' +
+                                '                       <li><a href=""><i class="fa fa-comments-o"></i></a></li>\n' +
+                                '                       </ul>\n' +
+                                '            </div>\n' +
+                                '        </div>\n' +
+                                '        <div class="portfolio-info ">\n'+
+                                '          <h2>'+remark+'</h2>\n' +
+                                '       </div>\n' +
+                                '    </div>\n' +
+                                '</div>'
+                            total_div +=div
+                        }
+                    }
+
+                    $('#all_friends_info').html(total_div)
+                },
+                error: function (returnValue) {
+                    console.log("fail")
+                    var div = '<div class="col-xs-4 col-sm-4 col-md-4 ">' +
+                        ' <div class="portfolio-wrapper">' +
+                        '<div class="portfolio-single">' +
+                        '<div class="portfolio-thumb"> Failed to load friend information !</div>' +
+                        '</div></div></div>'
+                    $('#all_friends_info').html(div)
+                    console.log("fail")
+                }
+            })
+        }
+        function showPageFriends(obj) {
+            console.log("show Page friend function run")
+            var current_name = $('#user_name').text();
+            var current_page = $(obj).text()-1
+            var $page_selectors = $('.pagination >li>a');
+            if($page_selectors.length) {
+                $page_selectors.parent().removeClass('active');
+            }
+            $(obj).parent().addClass('active');
+            console.log("current_user_name",current_name)
+            $.ajax({
+                async:false,
+                url: "/Pagefriends",
+                type: "post",
+                //获取某个文本框的值
+                //data: "id=" + id + "&name=" + $("#name").val(),
+                dataType:"json",
+                data: {
+                    "current_name":current_name,
+                    "current_page":current_page,
+                    "page_size":page_size
+                },
+                // 或者(注意：若参数为中文时，以下这种传参不会造成后台接收到的是乱码)
+                success: function (returnValue) {
+                    var total_div=''
+                    console.log("success")
+                    console.log(returnValue)
+                    for(var i=0;i<returnValue.length;i++){
+                        var remark = returnValue[i].remark
+                        if(remark==null){
+                            remark = returnValue[i].user.nickname
+                        }
+                        var div =' <div class="col-xs-4 col-sm-4 col-md-4  ">\n' +
+                            '   <div class="portfolio-wrapper">\n' +
+                            '       <div class="portfolio-single" style="height: 261px;width: 261px">\n' +
+                            '           <div class="portfolio-thumb" style="height: 261px;width: 261px">\n' +
+                            '               <img src="'+returnValue[i].user.profile_photo+'" class="img-responsive" height = "261" width="261" alt="Photo">\n' +
+                            '           </div>\n' +
+                            '           <div class="portfolio-view">\n' +
+                            '               <ul class="nav nav-pills">\n' +
+                            '                       <li><a href="'+returnValue[i].user.profile_photo+'" data-lightbox="example-set"><i class="fa fa-eye"></i></a></li>\n' +
+                            '                       <li><a href="/portfolio-details?friend_name='+returnValue[i].user.name+'"><i class="fa fa-pencil-square-o"></i></a></li>\n' +
+                            '                       <li><a href=""><i class="fa fa-comments-o"></i></a></li>\n' +
+                            '                       </ul>\n' +
+                            '            </div>\n' +
+                            '        </div>\n' +
+                            '        <div class="portfolio-info ">\n'+
+                            '          <h2>'+remark+'</h2>\n' +
+                            '       </div>\n' +
+                            '    </div>\n' +
+                            '</div>'
+                        total_div +=div
+                    }
+                    $('#all_friends_info').html(total_div)
+                },
+                error: function (returnValue) {
+                    console.log("fail")
+                    var div = '<div class="col-xs-4 col-sm-4 col-md-4 ">' +
+                        ' <div class="portfolio-wrapper">' +
+                        '<div class="portfolio-single">' +
+                        '<div class="portfolio-thumb"> Failed to load friend information ! </div>' +
+                        '</div></div></div>'
+                    $('#all_friends_info').html(div)
+                    console.log("fail")
+                }
+            })
+        }
+
+        function showPageFriendGroup(obj){
+            console.log("show page friend group");
+            var current_name = $('#user_name').text();
+            console.log("current_user_name",current_name)
+            var group = $(obj).attr('id')
+            if(group==""){
+                $.ajax({
+                    async:false,
+                    url: "/Allfriends",
+                    type: "post",
+                    //获取某个文本框的值
+                    //data: "id=" + id + "&name=" + $("#name").val(),
+                    dataType:"json",
+                    data: {
+                        "current_name":current_name,
+                        "page_size":page_size
+                    },
+                    // 或者(注意：若参数为中文时，以下这种传参不会造成后台接收到的是乱码)
+                    success: function (returnValue) {
+                        var total_div=''
+                        console.log("success")
+                        console.log(returnValue)
+                        if(returnValue.length==0){
+                            var div = '<div class="col-xs-4 col-sm-4 col-md-4 ">' +
+                                ' <div class="portfolio-wrapper">' +
+                                '<div class="portfolio-single">' +
+                                '<div class="portfolio-thumb"> No friends yet, go add friends~ </div>' +
+                                '</div></div></div>'
+                            total_div = div
+                        }
+                        var page = returnValue[0].page_num
+                        console.log("page_num::::",page)
+                        var page_div = ' <li><a href="#">left</a></li>\n'
+                        page_div +=' <li class="active page_num" ><a onclick="showPageFriends(this)">1</a></li>\n'
+                        for(var i=1;i<page;i++){
+                            var p = i+1
+                            page_div +=' <li><a class="page_num" onclick="showPageFriends(this)">'+p+'</a></li>\n'
+                        }
+                        page_div +='<li><a  href="#">right</a></li>'
+                        $("#friend_page").html(page_div)
+
+                        for(var i=1;i<=returnValue[0].first_num;i++){
+                            var remark = returnValue[i].remark
+                            if(remark==null){
+                                remark = returnValue[i].user.nickname
+                            }
+                            var div =' <div class="col-xs-4 col-sm-4 col-md-4  ">\n' +
+                                '   <div class="portfolio-wrapper">\n' +
+                                '       <div class="portfolio-single" style="height: 261px;width: 261px">\n' +
+                                '           <div class="portfolio-thumb" style="height: 261px;width: 261px">\n' +
+                                '               <img src="'+returnValue[i].user.profile_photo+'" class="img-responsive" height = "261" width="261" alt="Photo">\n' +
+                                '           </div>\n' +
+                                '           <div class="portfolio-view">\n' +
+                                '               <ul class="nav nav-pills">\n' +
+                                '                       <li><a href="'+returnValue[i].user.profile_photo+'" data-lightbox="example-set"><i class="fa fa-eye"></i></a></li>\n' +
+                                '                       <li><a href="/portfolio-details?friend_name='+returnValue[i].user.name+'"><i class="fa fa-pencil-square-o"></i></a></li>\n' +
+                                '                       <li><a href=""><i class="fa fa-comments-o"></i></a></li>\n' +
+                                '                       </ul>\n' +
+                                '            </div>\n' +
+                                '        </div>\n' +
+                                '        <div class="portfolio-info ">\n'+
+                                '          <h2>'+remark+'</h2>\n' +
+                                '       </div>\n' +
+                                '    </div>\n' +
+                                '</div>'
+                            total_div +=div
+                        }
+                        $('#all_friends_info').html(total_div)
+                    },
+                    error: function (returnValue) {
+                        console.log("fail")
+                        var div = '<div class="col-xs-4 col-sm-4 col-md-4  ">' +
+                            ' <div class="portfolio-wrapper">' +
+                            '<div class="portfolio-single">' +
+                            '<div class="portfolio-thumb"> Failed to load friend information ! </div>' +
+                            '</div></div></div>'
+                        $('#all_friends_info').html(div)
+                        console.log("fail")
+                    }
+                })
+            }
+            else {
+                $.ajax({
+                    async:false,
+                    url: "/PagefriendGroup",
+                    type: "post",
+                    //获取某个文本框的值
+                    //data: "id=" + id + "&name=" + $("#name").val(),
+                    dataType:"json",
+                    data: {
+                        "current_name":current_name,
+                        "group":group,
+                        "current_page":0,
+                        "page_size":page_size
+                    },
+                    // 或者(注意：若参数为中文时，以下这种传参不会造成后台接收到的是乱码)
+                    success: function (returnValue) {
+                        var total_div=''
+                        console.log("success")
+                        console.log(returnValue)
+                        var page = returnValue[0].page_num
+                        console.log("page_num::::",page)
+                        var page_div = ' <li><a href="#">left</a></li>\n'
+                        page_div +=' <li class="active page_num" ><a  onclick="showPageFriendGroup_pagex(this,'+group+')">1</a></li>\n'
+                        for(var i=1;i<page;i++){
+                            var p = i+1
+                            page_div +=' <li><a class="page_num" onclick="showPageFriendGroup_pagex(this,'+group+')">'+p+'</a></li>\n'
+                        }
+                        page_div +='<li><a  href="#">right</a></li>'
+                        $("#friend_page").html(page_div)
+
+                        for(var i=1;i<=returnValue[0].first_num;i++){
+                            var remark = returnValue[i].remark
+                            if(remark==null){
+                                remark = returnValue[i].user.nickname
+                            }
+                            var div =' <div class="col-xs-4 col-sm-4 col-md-4 ">\n' +
+                                '   <div class="portfolio-wrapper">\n' +
+                                '       <div class="portfolio-single" style="height: 261px;width: 261px">\n' +
+                                '           <div class="portfolio-thumb" style="height: 261px;width: 261px">\n' +
+                                '               <img src="'+returnValue[i].user.profile_photo+'" class="img-responsive" height = "261" width="261" alt="Photo">\n' +
+                                '           </div>\n' +
+                                '           <div class="portfolio-view">\n' +
+                                '               <ul class="nav nav-pills">\n' +
+                                '                       <li><a href="'+returnValue[i].user.profile_photo+'" data-lightbox="example-set"><i class="fa fa-eye"></i></a></li>\n' +
+                                '                       <li><a href="/portfolio-details?friend_name='+returnValue[i].user.name+'"><i class="fa fa-pencil-square-o"></i></a></li>\n' +
+                                '                       <li><a href=""><i class="fa fa-comments-o"></i></a></li>\n' +
+                                '                       </ul>\n' +
+                                '            </div>\n' +
+                                '        </div>\n' +
+                                '        <div class="portfolio-info ">\n'+
+                                '          <h2>'+remark+'</h2>\n' +
+                                '       </div>\n' +
+                                '    </div>\n' +
+                                '</div>'
+                            total_div +=div
+                        }
+                        $('#all_friends_info').html(total_div)
+                    },
+                    error: function (returnValue) {
+                        console.log("fail")
+                        var div = '<div class="col-xs-4 col-sm-4 col-md-4 ">' +
+                            ' <div class="portfolio-wrapper">' +
+                            '<div class="portfolio-single">' +
+                            '<div class="portfolio-thumb"> Failed to load friend information ! </div>' +
+                            '</div></div></div>'
+                        $('#all_friends_info').html(div)
+                        console.log("fail")
+                    }
+                })
+            }
+        }
+        function showPageFriendGroup_pagex(page,group){
+            var current_page_num = $(page).text()-1
+            var $page_selectors = $('.pagination >li>a');
+            if($page_selectors.length) {
+                $page_selectors.parent().removeClass('active');
+            }
+            $(page).parent().addClass('active');
+            console.log(group)
+            var group_name = $(group).attr('id')
+            console.log(group_name)
+            var current_name = $('#user_name').text();
+            $.ajax({
+                async:false,
+                url: "/PagefriendGroup",
+                type: "post",
+                //获取某个文本框的值
+                //data: "id=" + id + "&name=" + $("#name").val(),
+                dataType:"json",
+                data: {
+                    "current_name":current_name,
+                    "group":group_name,
+                    "current_page":current_page_num,
+                    "page_size":page_size
+                },
+                // 或者(注意：若参数为中文时，以下这种传参不会造成后台接收到的是乱码)
+                success: function (returnValue) {
+                    var total_div=''
+                    console.log("success")
+                    console.log(returnValue)
+                    for(var i=1;i<returnValue.length;i++){
+                        var remark = returnValue[i].remark
+                        if(remark==null){
+                            remark = returnValue[i].user.nickname
+                        }
+                        var div =' <div class="col-xs-4 col-sm-4 col-md-4  ">\n' +
+                            '   <div class="portfolio-wrapper">\n' +
+                            '       <div class="portfolio-single" style="height: 261px;width: 261px">\n' +
+                            '           <div class="portfolio-thumb" style="height: 261px;width: 261px">\n' +
+                            '               <img src="'+returnValue[i].user.profile_photo+'" class="img-responsive" height = "261" width="261" alt="头像不可查看">\n' +
+                            '           </div>\n' +
+                            '           <div class="portfolio-view" >\n' +
+                            '               <ul class="nav nav-pills">\n' +
+                            '                       <li><a href="'+returnValue[i].user.profile_photo+'" data-lightbox="example-set"><i class="fa fa-eye"></i></a></li>\n' +
+                            '                       <li><a href="/portfolio-details?friend_name='+returnValue[i].user.name+'"><i class="fa fa-pencil-square-o"></i></a></li>\n' +
+                            '                       <li><a href=""><i class="fa fa-comments-o"></i></a></li>\n' +
+                            '                       </ul>\n' +
+                            '            </div>\n' +
+                            '        </div>\n' +
+                            '        <div class="portfolio-info ">\n'+
+                            '          <h2>'+remark+'</h2>\n' +
+                            '       </div>\n' +
+                            '    </div>\n' +
+                            '</div>'
+                        total_div +=div
+                    }
+                    $('#all_friends_info').html(total_div)
+                },
+                error: function (returnValue) {
+                    console.log("fail")
+                    var div = '<div class="col-xs-4 col-sm-4 col-md-4 ">' +
+                        ' <div class="portfolio-wrapper">' +
+                        '<div class="portfolio-single">' +
+                        '<div class="portfolio-thumb"> 好友信息加载失败！ </div>' +
+                        '</div></div></div>'
+                    $('#all_friends_info').html(div)
+                    console.log("fail")
+                }
+            })
+
+        }
+        function showFriendsGroups(){
+            var current_name = $('#user_name').text();
+            console.log("show friends groups")
+            $.ajax({
+                async: false,
+                url: "/AllfriendsGroups",
+                type: "post",
+                //获取某个文本框的值
+                //data: "id=" + id + "&name=" + $("#name").val(),
+                dataType: "json",
+                data: {
+                    "current_name": current_name,
+                },
+                success: function (returnValue) {
+                    console.log("success")
+                    console.log(returnValue)
+                    var div = '<li class="active"><a href="#"  id=""  onclick="showPageFriendGroup(this)">'
+                        +returnValue[0].group+'<span class="pull-right">('
+                        +returnValue[0].count+')</span></a></li>'
+                    for(var i=1;i<returnValue.length;i++){
+                        div += '<li ><a  href="#" id="'+returnValue[i].group+'" onclick="showPageFriendGroup(this)">'
+                            +returnValue[i].group
+                            +'<span class="pull-right">('
+                            +returnValue[i].count
+                            +')</span></a></li>'
+                    }
+                    $("#friends_groups").html(div)
+                },
+                error: function (returnValue) {
+                    console.log("fail")
+                }
+            })
+        }
+        $().ready(function(){
+            request_msg()
+            showAllFriends()
+            showFriendsGroups()
+        })
+        //config-friend group
+        function friends_groups_config(){
+            console.log("friends-groups-config-onclick");
+        }
+    </script>
+
+</head><!--/head-->
+
+<body>
+<header id="header">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12 overflow">
+                <div class="social-icons pull-right">
+                    <ul class="nav nav-pills">
+                        <li><a href=""><i class="fa fa-facebook"></i></a></li>
+                        <li><a href=""><i class="fa fa-twitter"></i></a></li>
+                        <li><a href=""><i class="fa fa-google-plus"></i></a></li>
+                        <li><a href=""><i class="fa fa-dribbble"></i></a></li>
+                        <li><a href=""><i class="fa fa-linkedin"></i></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--  搜索好友 模态框（Modal） -->
+    <div class="modal fade" id="Model_search_user_info" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+        <div class="modal-dialog">
+            <div class="modal-content" >
+                <div class="modal-header">
+                    <button type="button" class="close"
+                            data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id = "myModalLabel">
+                        User Details
+                    </h4>
+                </div>
+                <div class="modal-body" id = "search_user_info">
+                    default : none
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--  添加好友 模态框（Modal） -->
+    <div class="modal fade" id="Model_add_friend_info" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+        <div class="modal-dialog">
+            <div class="modal-content" >
+                <div class="modal-header">
+                    <button type="button" class="close"
+                            data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title">
+                        Add Friend
+                    </h4>
+                </div>
+                <div class="modal-body" id = "add_friend_info">
+                    default : none
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--  好友设置 模态框（Modal） -->
+    <div class="navbar navbar-inverse" role="banner">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+
+
+            </div>
+            <div class="collapse navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="/home">Home</a></li>
+                    <li class="dropdown"><a href="#">Pages <i class="fa fa-angle-down"></i></a>
+                        <ul role="menu" class="sub-menu">
+                            <li><a href="aboutus.html">About</a></li>
+                            <li><a href="aboutus2.html">About 2</a></li>
+                            <li><a href="service.html">Services</a></li>
+                            <li><a href="pricing.html">Pricing</a></li>
+                            <li><a href="contact.html">Contact us</a></li>
+                            <li><a href="contact2.html">Contact us 2</a></li>
+                            <li><a href="404.html">404 error</a></li>
+                            <li><a href="coming-soon.html">Coming Soon</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <div class="search">
+                <form role="form">
+                    <i class="fa fa-search"></i>
+                    <div class="field-toggle">
+                        <form action="/homepage_search" method="post" id="form-search-user">
+                            <input type="text" class="search-form" id="search_name" autocomplete="off" placeholder="Enter user name">
+                            <span class="btn btn-default" data-toggle="modal" data-target="#Model_search_user_info" type="button" onclick="search_user()">search</span>
+                        </form>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</header>
+<!--/#header-->
+
+<section id="page-breadcrumb">
+    <div class="vertical-center sun">
+        <div class="container">
+            <div class="row">
+                <div class="action">
+                    <div class="col-sm-12">
+                        <div class="col-sm-2">
+                            <div class="portfolio-single">
+                                <div class="portfolio-thumb">
+                                    <img th:src="${user_profile_photo}" class="img-responsive"  alt="Photo" height="100" width="100">
+
+                                </div>
+                                <div class="portfolio-view">
+                                    <ul class="nav nav-pills">
+                                        <li><a th:href="${user_profile_photo}" data-lightbox="example-set"><i class="fa fa-eye"></i></a></li>
+                                        <li><a th:href="${'/user-details?user_name='+user_name}"><i class="fa fa-pencil-square-o"></i></a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-10">
+                            <h1 class="title" style="margin-top: 30px"  th:text="${user_nickname}">nickname</h1>
+                            <h2  th:text="${'('+user_name+')'}" id="user_name">name</h2>
+                            <p th:text="${user_sign}">sign</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!--/#page-breadcrumb-->
+
+<section id="projects">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-9 col-md-9 col-sm-8">
+                <div class="row">
+                    <ul class="portfolio-filter text-center">
+                    </ul><!--/#portfolio-filter-->
+                    <div class="s col-lg-12 col-sm-12 col-md-12" id="all_friends_info">
+                        No friends yet, go add friends~
+                    </div>
+                    <div class="portfolio-pagination" >
+                        <ul class="pagination" id="friend_page">
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-4 padding-top">
+                <div class="sidebar portfolio-sidebar">
+                    <div class="sidebar-item categories">
+                        <h3>Friends<a class="config pull-right" href="/blogtwo"><i class="fa fa-cog" id="friends-groups-cog" ></i></a></h3>
+                        <ul class="nav navbar-stacked" id="friends_groups">
+                            <li class="active"><a href="#"  data-filter="*" >All<span class="pull-right">(0)</span></a></li>
+                        </ul>
+                    </div>
+                    <div class="sidebar-item  recent">
+                        <h3>Request</h3>
+                        <div id = "request_info">
+                            <div class="media" >
+                                无
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="sidebar-item popular">
+                        <h3>Recently</h3>
+                        <ul class="gallery" id="special_friend">
+                            <li><a href="#"><img src="/images/portfolio/popular1.jpg" alt=""></a></li>
+                            <li><a href="#"><img src="/images/portfolio/popular2.jpg" alt=""></a></li>
+                            <li><a href="#"><img src="/images/portfolio/popular3.jpg" alt=""></a></li>
+                            <li><a href="#"><img src="/images/portfolio/popular4.jpg" alt=""></a></li>
+                            <li><a href="#"><img src="/images/portfolio/popular5.jpg" alt=""></a></li>
+                            <li><a href="#"><img src="/images/portfolio/popular1.jpg" alt=""></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!--/#projects-->
+
+
+<footer id="footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12 text-center bottom-separator">
+                <img src="/images/home/under.png" class="img-responsive inline" alt="">
+            </div>
+            <div class="col-md-4 col-sm-6">
+<!--                <div class="testimonial bottom">-->
+<!--                    <h2>Testimonial</h2>-->
+<!--                    <div class="media">-->
+<!--                        <div class="pull-left">-->
+<!--                            <a href="#"><img src="/images/home/profile1.png" alt=""></a>-->
+<!--                        </div>-->
+<!--                        <div class="media-body">-->
+<!--                            <blockquote>Nisi commodo bresaola, leberkas venison eiusmod bacon occaecat labore tail.-->
+<!--                            </blockquote>-->
+<!--                            <h3><a href="#">- Jhon Kalis</a></h3>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <div class="media">-->
+<!--                        <div class="pull-left">-->
+<!--                            <a href="#"><img src="/images/home/profile2.png" alt=""></a>-->
+<!--                        </div>-->
+<!--                        <div class="media-body">-->
+<!--                            <blockquote>Capicola nisi flank sed minim sunt aliqua rump pancetta leberkas venison-->
+<!--                                eiusmod.-->
+<!--                            </blockquote>-->
+<!--                            <h3><a href="">- Abraham Josef</a></h3>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+            </div>
+            <div class="col-md-3 col-sm-6">
+                <div class="contact-info bottom">
+                    <h2>Contact</h2>
+                    <address>
+                        E-mail: <a href="mailto:someone@example.com">email@bit.edu.cn</a> <br>
+                        Phone: + (086) 1388 456 7890 <br>
+<!--                        Fax: +1 (123) 456 7891 <br>-->
+                    </address>
+
+                    <h2>Address</h2>
+                    <address>
+                        Beijing Institute of Technology <br>
+                        No.5 South Street
+                        Zhong guan cun
+                        Haidian District, Beijing<br>
+                    </address>
+                </div>
+            </div>
+            <div class="col-md-4 col-sm-12">
+                <div class="contact-form bottom">
+                    <h2>Send a message</h2>
+                    <form id="main-contact-form" name="contact-form" method="post" action="sendemail.php">
+                        <div class="form-group">
+                            <input type="text" name="name" class="form-control" required="required" placeholder="Name">
+                        </div>
+                        <div class="form-group">
+                            <input type="email" name="email" class="form-control" required="required"
+                                   placeholder="Email Id">
+                        </div>
+                        <div class="form-group">
+                            <textarea name="message" id="message" required="required" class="form-control" rows="8"
+                                      placeholder="Your text here"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" name="submit" class="btn btn-submit" value="Submit">
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <div class="copyright-text text-center">
+                    <p>&copy; B I T 2020. All Rights Reserved.</p>
+                    <p>Designed by <a target="_blank" href="http://www.themeum.com">Themeum</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+<!--/#footer-->
+
+
+</body>
+</html>

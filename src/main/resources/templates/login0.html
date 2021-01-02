@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>OURCHAT-用户中心|登录</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <link rel="stylesheet" type="text/css" href="../static/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../static/css/public.css">
+</head>
+<body>
+<div id="bg"></div>
+<div class="show">
+    <h3 class="title">OURCHAT-用户中心</h3>
+    <div class="login-panel">
+        <h4 class="form-title">登录账号</h4>
+        <hr class="top-line">
+        <form action="/login" method="post">
+            <div class="form-group">
+                <label for="username">用户名</label>
+                <input type="name" name="name" class="form-control" id="username">
+            </div>
+            <div class="form-group">
+                <label for="password">密码</label>
+                <input type="password" name="password" class="form-control" id="password">
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-info" id="submit">登录</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="switch row">
+        <div class="switch-action"  onclick="window.open('/register','_self')">还没有账号？<span>立即注册</span></div>
+    </div>
+</div>
+<script src="../static/js/jquery-3.3.1.min.js"></script>
+</body>
+</html>

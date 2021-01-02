@@ -1,46 +1,59 @@
 package bit.group.ourchat.service;
 
-import bit.group.ourchat.entity.exampleEntity;
-import bit.group.ourchat.entity.friend;
 import bit.group.ourchat.entity.user;
-import bit.group.ourchat.repository.friendRepository;
 import bit.group.ourchat.repository.userRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Service
 public class userService {
     @Autowired
-    //private friendRepository friendRepository;
     private userRepository userRepository;
-    private user user;
+    public boolean Save(user user1)
+    {
+        user u1 = userRepository.findByName(user1.getName());
+        if (u1==null)
+        {
+            user1.setId(userRepository.countBy()+1);
+            BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+            String encode = encoder.encode(user1.getPassword());
+            user1.setPassword(encode);
+            System.out.println(user1.getId()+ "\n" +user1.getName()+ "\n" +user1.getNickname()+ "\n"+user1.getEmail()+
+                    "\n" +user1.getAddress()+ "\n" +user1.getProfile_photo());
+            userRepository.save(user1);
+            return true;
+        }
+        else
+            return false;
+    }
+    public void Update(int id,String new_nickname,String new_sign,String new_email,String new_address,String new_profile_photo)
+    {
+        user u1 = userRepository.findById(id);
+        u1.setProfile_photo(new_profile_photo);
+        u1.setAddress(new_address);
+        u1.setEmail(new_email);
+        u1.setSign(new_sign);
+        u1.setNickname(new_nickname);
+        userRepository.save(u1);
+    }
+    public boolean Login(user user)
+    {
+        if(userRepository.findByName(user.getName()) == null)
+            return false;
+        user u1 = userRepository.findByName(user.getName());
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        return encoder.matches(user.getPassword(),u1.getPassword());
+//        return u1.getPassword().equals(user.getPassword());
+    }
 
-    public user findUserById(int Id){
-        return userRepository.findById(Id);
+    public user findByEmail(String email)
+    {
+        return userRepository.findByEmail(email);
     }
-    public void saveUser(user user){
-        userRepository.save(user);
+    public user findById(int id)
+    {
+        return userRepository.findById(id);
     }
-
-    public user findUserByName(String name){
-        user = userRepository.findByName(name);
-        return user;
-    }
-
-    public List<friend> findFriends(user user){
-        return user.getFriendList();
-    }
-
-    public void addFriend(int userId, int friendId){
-        user frienduser = new user();
-        frienduser = userRepository.findById(friendId);
-        user user = new user();
-        user = userRepository.findById(userId);
-        friend friend_pair = new friend(userId, friendId);
-        friend_pair.setUser(user);
-        user.addFriend(friend_pair);
-        userRepository.save(user);
-    }
+    public user findByName(String name){return userRepository.findByName(name);}
 }
