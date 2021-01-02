@@ -12,8 +12,13 @@
     <link href="/css/lightbox.css" rel="stylesheet">
     <link href="/css/main.css" rel="stylesheet">
     <link href="/css/responsive.css" rel="stylesheet">
+    <link href="/css/bootstrap-select.min.css" rel="stylesheet">
 
     <!--[if lt IE 9]>
+
+
+    <script type="text/javascript" src="/js/bootstrap-select.min.js"></script>
+    <script type="text/javascript" src="/js/i18n/defaults-zh_CN.min.js"></script>
     <script src="/js/html5shiv.js"></script>
     <script src="/js/respond.min.js"></script>
     <![endif]-->
@@ -297,8 +302,134 @@
                         <a>密码:</a><input type="password" name="password" class="form-control" required="required"/><br/>
                         <a>昵称:</a><input name="nickname" class="form-control" required="required"/><br/>
                         <a>邮箱:</a><input type="email" name="email" class="form-control" required="required"/><br/>
-                        <a>地区:</a><input name="address" class="form-control" required="required"/><br/>
-
+                        <a>地区:</a>
+<!--                        <input name="address" class="form-control" required="required"/><br/>-->
+                        <select class="select picker form-control " name="address" required="required">
+                            <option>阿尔及利亚</option>
+                            <option>阿富汗</option>
+                            <option>阿根廷</option>
+                            <option>阿联酋</option>
+                            <option>阿曼</option>
+                            <option>阿塞拜疆</option>
+                            <option>埃及</option>
+                            <option>埃塞俄比亚</option>
+                            <option>爱尔兰</option>
+                            <option>安哥拉</option>
+                            <option>奥地利</option>
+                            <option>澳大利亚</option>
+                            <option>巴布亚新几内亚</option>
+                            <option>巴基斯坦</option>
+                            <option>巴林</option>
+                            <option>巴西</option>
+                            <option>白俄罗斯</option>
+                            <option>保加利亚</option>
+                            <option>贝宁</option>
+                            <option>比利时</option>
+                            <option>冰岛</option>
+                            <option>波黑</option>
+                            <option>波兰</option>
+                            <option>博茨瓦纳</option>
+                            <option>朝鲜</option>
+                            <option>赤道几内亚</option>
+                            <option>大溪地</option>
+                            <option>丹麦</option>
+                            <option>德国</option>
+                            <option>多哥</option>
+                            <option>俄罗斯</option>
+                            <option>厄瓜多尔</option>
+                            <option>厄立特里亚</option>
+                            <option>法国</option>
+                            <option>菲律宾</option>
+                            <option>斐济</option>
+                            <option>芬兰</option>
+                            <option>佛得角</option>
+                            <option>刚果(布)</option>
+                            <option>刚果(金)</option>
+                            <option>高棉</option>
+                            <option>古巴</option>
+                            <option>圭亚那</option>
+                            <option>哈萨克斯坦</option>
+                            <option>韩国</option>
+                            <option>荷兰</option>
+                            <option>吉尔吉斯斯坦</option>
+                            <option>几内亚</option>
+                            <option>加拿大</option>
+                            <option>加纳</option>
+                            <option>柬埔寨</option>
+                            <option>捷克</option>
+                            <option>津巴布韦</option>
+                            <option>喀麦隆</option>
+                            <option>卡塔尔</option>
+                            <option>科威特</option>
+                            <option>肯尼亚</option>
+                            <option>老挝</option>
+                            <option>黎巴嫩</option>
+                            <option>立陶宛</option>
+                            <option>利比亚</option>
+                            <option>罗马尼亚</option>
+                            <option>马达加斯加</option>
+                            <option>马来西亚</option>
+                            <option>马里</option>
+                            <option>马其顿</option>
+                            <option>毛里求斯</option>
+                            <option>毛里塔尼亚</option>
+                            <option>美国</option>
+                            <option>蒙古</option>
+                            <option>孟加拉国</option>
+                            <option>秘鲁</option>
+                            <option>缅甸</option>
+                            <option>摩洛哥</option>
+                            <option>摩洛哥公国</option>
+                            <option>莫桑比克</option>
+                            <option>墨西哥</option>
+                            <option>纳米比亚</option>
+                            <option>南非</option>
+                            <option>尼泊尔</option>
+                            <option>尼日利亚</option>
+                            <option>葡萄牙</option>
+                            <option>日本</option>
+                            <option>瑞典</option>
+                            <option>瑞士</option>
+                            <option>沙特阿拉伯</option>
+                            <option>斯里兰卡</option>
+                            <option>斯洛伐克</option>
+                            <option>苏丹</option>
+                            <option>塔吉克斯坦</option>
+                            <option>泰国</option>
+                            <option>坦桑尼亚</option>
+                            <option>突尼斯</option>
+                            <option>土耳其</option>
+                            <option>土库曼斯坦</option>
+                            <option>委内瑞拉</option>
+                            <option>文莱</option>
+                            <option>乌干达</option>
+                            <option>乌克兰</option>
+                            <option>乌拉圭</option>
+                            <option>乌兹别克斯坦</option>
+                            <option>西班牙</option>
+                            <option>希腊</option>
+                            <option>新加坡</option>
+                            <option>新西兰</option>
+                            <option>匈牙利</option>
+                            <option>叙利亚</option>
+                            <option>牙买加</option>
+                            <option>亚美尼亚</option>
+                            <option>也门</option>
+                            <option>伊拉克</option>
+                            <option>伊朗</option>
+                            <option>以色列</option>
+                            <option>意大利</option>
+                            <option>印度</option>
+                            <option>印尼</option>
+                            <option>英国</option>
+                            <option>约旦</option>
+                            <option>越南</option>
+                            <option>赞比亚</option>
+                            <option>中国</option>
+                            <option>中国澳门</option>
+                            <option>中国台湾</option>
+                            <option>中国香港</option>
+                        </select><br/>
                         <!--<input type="file" name="logo" class="form-control"/><br/>-->
                         <a>上传头像</a>
                         <input type="text" id="headshot" required="required" name="profile_photo" placeholder="请填入头像图片地址"
