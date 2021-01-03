@@ -1,10 +1,11 @@
 package bit.group.ourchat.entity;
 
 
-import javax.persistence.*;
-import java.sql.Timestamp;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import java.util.Date;
-import java.util.List;
 
 @Entity
 public class singleChatRecord {
@@ -12,6 +13,7 @@ public class singleChatRecord {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id; //记录ID
     private Integer singleChatID; //对应需要保存的单聊ID
+    private String mes_from;
     private Date recordDate; //记录日期
     private String recordContent; //记录内容
     private String recordPath; //记录对应的本地path
@@ -59,6 +61,13 @@ public class singleChatRecord {
         this.recordPath = recordPath;
     }
 
+    public String getMes_from() {
+        return mes_from;
+    }
+
+    public void setMes_from(String mes_from) {
+        this.mes_from = mes_from;
+    }
 
     public singleChatRecord(Integer singleChatID, Integer recordID, Date recordDate, String recordContent, String recordPath) {
         this.singleChatID = singleChatID;

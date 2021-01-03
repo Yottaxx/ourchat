@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 
 @Component
-public class BookHandler {
+public class   BookHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(BookHandler.class);
 

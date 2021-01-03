@@ -1,17 +1,19 @@
 package bit.group.ourchat.entity;
 
 
-import javax.persistence.*;
-import java.util.List;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 @Entity
 public class singleChat {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+    private Integer singleChatID;
     private Integer userID1;
     private Integer userID2;
-    private Integer singleChatID;
+//    private Integer singleChatID;
 
 //    @ManyToOne()
 //    private user user1;
@@ -22,20 +24,20 @@ public class singleChat {
 //    private List<singleChatRecord> singleChatRecordList;//地址
 
 
+//    public Integer getSingleChatID() {
+//        return singleChatID;
+//    }
+//
+//    public void setSingleChatID(Integer singleChatID) {
+//        this.singleChatID = singleChatID;
+//    }
+
     public Integer getSingleChatID() {
         return singleChatID;
     }
 
-    public void setSingleChatID(Integer singleChatID) {
-        this.singleChatID = singleChatID;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
+    public void setSingleChatID(Integer id) {
+        this.singleChatID = id;
     }
 
     public Integer getUserID1() {
@@ -79,7 +81,7 @@ public class singleChat {
 //    }
 
     public singleChat(Integer singleChatID, Integer userID1, Integer userID2) {
-        this.id = singleChatID;
+        this.singleChatID = singleChatID;
         this.userID1 = userID1;
         this.userID2 = userID2;
     }
