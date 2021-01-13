@@ -64,6 +64,7 @@ public class S_chatController {
         if(singleChats_1.size() == 0 && singleChats_2.size() == 0){
             //没有聊过天 处理  发起聊天  存储
             singleChat singleChat = new singleChat();
+//            singleChat.setSingleChatID(89);
             singleChat.setUserID2(userid2);
             singleChat.setUserID1(userid1);
             singleChatRepository.save(singleChat);

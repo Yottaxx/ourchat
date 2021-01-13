@@ -2,6 +2,7 @@ package bit.group.ourchat.controller;
 
 import bit.group.ourchat.entity.GroupChatRecord_new;
 import bit.group.ourchat.entity.GroupMembers_new;
+import bit.group.ourchat.entity.user;
 import bit.group.ourchat.repository.GroupChatRecordRepository;
 import bit.group.ourchat.repository.GroupMembersRepository;
 import bit.group.ourchat.webSocket.ChatMsg;
@@ -12,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -42,6 +44,7 @@ public class chatController {
     {
         return "login";
     }
+
 
     @RequestMapping(value="/send")
     @ResponseBody
@@ -75,6 +78,29 @@ public class chatController {
         groupChatRecord_new.setRecord_path("Record Path!");
         groupChatRecord_new.setFrom(Integer.parseInt(from));
         groupChatRecordRepository.save(groupChatRecord_new);
+    }
+
+    @PostMapping(value = "/chat")
+    public String Char_Main(Model model, HttpSession httpSession) {
+
+        int a= (int) httpSession.getAttribute("time");
+        return "/blogthree";
+    }
+
+
+    @RequestMapping(value = "/blogdetails")
+    public String newUser(HttpServletRequest request, Model model)
+    {
+        HttpSession session=request.getSession();
+        user me = (user) session.getAttribute("user");
+        model.addAttribute("user_name",me.getName());
+        model.addAttribute("single_user_address",me.getAddress());
+        model.addAttribute("single_user_id",me.getId());
+        model.addAttribute("single_signature",me.getSign());
+        model.addAttribute("single_nickname",me.getNickname());
+        model.addAttribute("single_photo",me.getProfile_photo());
+        System.out.println(me.getId());
+        return "blogdetails";
     }
 
 }

@@ -1,13 +1,11 @@
 package bit.group.ourchat.controller;
 
 import bit.group.ourchat.entity.GroupChat_new;
+import bit.group.ourchat.entity.GroupMembers_new;
 //import bit.group.ourchat.entity.groupChat;
 import bit.group.ourchat.repository.GroupChatRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -40,5 +38,18 @@ public class GroupChatController {
     @GetMapping(path = "/group/name/{group_name}")
     public List<GroupChat_new> getAllGroupChatByGroupName(@PathVariable("group_name") String group_name){
         return groupChatRepository.findByGroupName(group_name);
+    }
+
+    @PostMapping(path = "/insert")
+    public Integer Insert(@RequestParam("adminid") Integer adminid,
+                                @RequestParam("group_name") String group_name,
+                                @RequestParam("notice") String notice){
+        GroupChat_new groupChat_new = new GroupChat_new();
+        groupChat_new.setAdmin_id(adminid);
+        groupChat_new.setAdminID(adminid);
+        groupChat_new.setGroupName(group_name);
+        groupChat_new.setNotice(notice);
+        groupChatRepository.save(groupChat_new);
+        return groupChat_new.getId();
     }
 }

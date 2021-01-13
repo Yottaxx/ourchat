@@ -14,7 +14,7 @@ public interface GroupChatRepository extends JpaRepository<GroupChat_new, Intege
     public List<GroupChat_new> findAll();
 
     //获取该用户的所有群
-    @Query(value = "select c from GroupChat_new c where c.id in (select m.group_chat_id from GroupMembers_new m where m.group_member_id=?1)")
+    @Query(value = "select c from GroupChat_new c where c.id in (select m.group_chat_id from GroupMembers_new m where m.user_id=?1)")
     public List<GroupChat_new> findByMembersId(Integer id);
 
     @Query(value = "select c from GroupChat_new c where c.id=?1")

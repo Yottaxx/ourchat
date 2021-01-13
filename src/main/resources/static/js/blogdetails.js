@@ -1,12 +1,15 @@
 let url = "api/"
 let current_group_id = 0
 let connection_status = false
-let user_id = 2
+let user_id = 0
 
 // let session_user_id = sessionStorage["user"].toString()
 // console.log(session_user_id)
 
 $(document).ready(function(){
+    // var pages = [[${session.user}]];  // session(后台是user)
+    // console.log(pages)
+    user_id = parseInt($("#user_id").text())
 
     if(connection_status == false){
         connection(user_id)
@@ -21,7 +24,9 @@ $(document).ready(function(){
     $.get(get_url,function(data,status){
         // alert("数据: " + data + "\n状态: " + status);
         // console.log(data)
+        console.log(user_id)
         let len = data.length
+        console.log(data)
         let str = ""
         for(let i = 0; i< len; i++){
             if(i == 0){
@@ -36,7 +41,9 @@ $(document).ready(function(){
                 /**
                  * 通过群聊ID获取群聊消息
                  * **/
-                fad(current_group_id, data[i].adminID)
+                $.get("/user_search/" + data[i].adminID, function(data1,status){
+                    fad(current_group_id, data1.name, data[i].adminID)
+                });
             } else {
                 str = "<li><a href=\"#\">"+ data[i].groupName + "<span class=\"pull-right\">ID:<span class='group_id'>"+ data[i].id +"</span></span></a></li>"
             }
@@ -76,7 +83,7 @@ $(document).ready(function(){
         if(group_name.length == 0){
             alert("The Group's Name can't be empty!")
         } else {
-            $.post(url + "/group_chat/insert",
+            $.post(url + "group_chat/insert",
                 {
                     adminid:user_id,
                     group_name:group_name,
@@ -86,7 +93,7 @@ $(document).ready(function(){
                     // alert("数据: \n" + data + "\n状态: " + status);
                     if(status == "success"){
                         let g_id = data
-                        $.post(url + "/group_members/insert",
+                        $.post(url + "group_members/insert",
                             {
                                 user_id:user_id,
                                 group_id:g_id
@@ -201,32 +208,47 @@ $(document).ready(function(){
     /**
      * 通过群聊ID获取群聊消息
      * **/
-    function fad(group_id, admin) {
+    function fad(group_id, admin, admin_id) {
         let get_groupRecord_url = "api/group_chat_record/allbyId/" + group_id
         $.get(get_groupRecord_url,function(data1,status){
             // alert("数据: " + data + "\n状态: " + status);
             // console.log(data1)
             let len_1 = data1.length
             let str_1 = ""
-            for (let j = 0; j<len_1;j++){
-                str_1 = "<div class=\"post-comment\">\n" +
-                    "       <a class=\"pull-left\" href=\"#\">\n" +
-                    "           <img class=\"media-object\" src=\"/images/blogdetails/2.png\" style='width: 100px; height: 100px;' alt=\"\">\n" +
-                    "       </a>\n" +
-                    "       <div class=\"media-body\">\n" +
-                    "                   <span><i class=\"fa fa-user\"></i>Posted by <a\n" +
-                    "                           href=\"#\">" + data1[j].from + "</a></span>\n" +
-                    "           <p>"+ data1[j].record_content +"</p>\n" +
-                    "           <ul class=\"nav navbar-nav post-nav\">\n" +
-                    "               <li><a href=\"#\"><i class=\"fa fa-clock-o\"></i>"+ data1[j].record_date +"</a></li>\n" +
-                    "               <li><a href=\"#\"><i class=\"fa fa-reply\"></i>Reply</a></li>\n" +
-                    "           </ul>\n" +
-                    "       </div>\n" +
-                    "   </div>"
-                $("#ChatRecord").append(str_1)
+            for (let j = len_1 - 1; j>=0 ;j--){
+                $.get("/user_search/" + data1[j].from, function(data2,status){
+                    str_1 = "<div class=\"post-comment\">\n" +
+                        "       <a class=\"pull-left\" href=\"#\">\n" +
+                        "           <img class=\"media-object\" src=\""+ data2.profile_photo +"\" style='width: 100px; height: 100px;' alt=\"\">\n" +
+                        "       </a>\n" +
+                        "       <div class=\"media-body\">\n" +
+                        "                   <span><i class=\"fa fa-user\"></i>Posted by <a\n" +
+                        "                           href=\"#\">" + data2.name + "</a></span>\n" +
+                        "           <p>"+ data1[j].record_content +"</p>\n" +
+                        "           <ul class=\"nav navbar-nav post-nav\">\n" +
+                        "               <li><a href=\"#\"><i class=\"fa fa-clock-o\"></i>"+ data1[j].record_date +"</a></li>\n" +
+                        "               <li><a href=\"#\"><i class=\"fa fa-reply\"></i>Reply</a></li>\n" +
+                        "           </ul>\n" +
+                        "       </div>\n" +
+                        "   </div>"
+                    $("#ChatRecord").append(str_1)
+                });
             }
         });
         $("#admin_name").text(admin)   //设置管理员
+        $.get("/user_search/" + admin_id, function(data3,status){
+            $("#admin_image").attr("src", data3.profile_photo)
+        });
+
+        $.get("/api/group_members/all/GroupMembers/" + group_id, function(data4,status){
+            for(let m =0;m<data4.length;m++){
+                $.get("/user_search/" + data4[m].user_id, function(data5,status){
+                    let str = "<li><a href=\"#\"><img src=\""+ data5.profile_photo +"\" alt=\"\"></a></li>"
+                    $(".gallery").append(str)
+                });
+            }
+        });
+
         // $("#join_time").text()                //获取管理员创建时间
     }
 
@@ -242,7 +264,9 @@ $(document).ready(function(){
             $("#Notice").text(data[0].notice)
             current_group_id = data[0].id
             $("#ChatRecord").empty()
-            fad(group_id,data[0].adminID)
+            $.get("/user_search/" + data[0].adminID, function(data1,status){
+                fad(group_id, data1.name, data[0].adminID)
+            });
         });
     }
 
@@ -257,7 +281,7 @@ $(document).ready(function(){
             console.log("您的浏览器支持WebSocket");
             //实现化WebSocket对象，指定要连接的服务器地址与端口  建立连接
             //等同于
-            index = new WebSocket("ws://localhost:8083/websocket/" + user_id);
+            index = new WebSocket("ws://localhost:8073/websocket/" + user_id);
             //socket = new WebSocket("${basePath}websocket/${cid}".replace("http","ws"));
             //打开事件
             index.onopen = function() {
@@ -273,24 +297,26 @@ $(document).ready(function(){
                 let date11 = timestampToTime(data.date)
                 if (data.content != null){
                     // 发现消息进入    开始处理前端触发逻辑
-                    let str_add = "<div class=\"post-comment\">\n" +
-                        "       <a class=\"pull-left\" href=\"#\">\n" +
-                        "           <img class=\"media-object\" src=\"/images/blogdetails/2.png\" style='width: 100px; height: 100px;' alt=\"\">\n" +
-                        "       </a>\n" +
-                        "       <div class=\"media-body\">\n" +
-                        "                   <span><i class=\"fa fa-user\"></i>Posted by <a\n" +
-                        "                           href=\"#\">" + data.from + "</a></span>\n" +
-                        "           <p>"+ data.content +"</p>\n" +
-                        "           <ul class=\"nav navbar-nav post-nav\">\n" +
-                        "               <li><a href=\"#\"><i class=\"fa fa-clock-o\"></i>"+ date11 +"</a></li>\n" +
-                        "               <li><a href=\"#\"><i class=\"fa fa-reply\"></i>Reply</a></li>\n" +
-                        "           </ul>\n" +
-                        "       </div>\n" +
-                        "   </div>"
-                    console.log("添加元素！")
-                    $("#ChatRecord").append(str_add)
-                    $("#message_sent").val("")
-                    // $("html,body").animate({scrollTop:$("#ChatRecord").offset().top},1500);
+                    $.get("/user_search/" + data.from, function(data1,status){
+                        let str_add = "<div class=\"post-comment\">\n" +
+                            "       <a class=\"pull-left\" href=\"#\">\n" +
+                            "           <img class=\"media-object\" src=\""+ data1.profile_photo +"\" style='width: 100px; height: 100px;' alt=\"\">\n" +
+                            "       </a>\n" +
+                            "       <div class=\"media-body\">\n" +
+                            "                   <span><i class=\"fa fa-user\"></i>Posted by <a\n" +
+                            "                           href=\"#\">" + data1.name + "</a></span>\n" +
+                            "           <p>"+ data.content +"</p>\n" +
+                            "           <ul class=\"nav navbar-nav post-nav\">\n" +
+                            "               <li><a href=\"#\"><i class=\"fa fa-clock-o\"></i>"+ date11 +"</a></li>\n" +
+                            "               <li><a href=\"#\"><i class=\"fa fa-reply\"></i>Reply</a></li>\n" +
+                            "           </ul>\n" +
+                            "       </div>\n" +
+                            "   </div>"
+                        // console.log("添加元素！")
+                        $("#ChatRecord").append(str_add)
+                        $("#message_sent").val("")
+                        // $("html,body").animate({scrollTop:$("#ChatRecord").offset().top},1500);
+                    });
                 }
             };
             //关闭事件
@@ -332,19 +358,16 @@ $(document).ready(function(){
      * 将时间戳转换成正常时间格式
      * **/
     function timestampToTime(sec) {
-        let hour = Math.floor(sec / 3600);
-        let minute = Math.floor((sec - hour * 3600) / 60);
-        let second = sec - hour * 3600 - minute * 60;
-        if (hour < 10) {
-            hour = "0" + hour;
-        }
-        if (minute < 10) {
-            minute = "0" + minute;
-        }
-        if (second < 10) {
-            second = "0" + second;
-        }
-        return hour + ":" + minute + ":" + second;
+        var da =  new Date(sec)
+        var year = da.getFullYear()+'-';
+        var month = da.getMonth()+1+'-';
+        var date = da.getDate()+' ';
+        var hour = da.getHours()+':'
+        var minute= da.getMinutes()+':'
+        var second = da.getSeconds()
+        return year+month+date+hour+minute+second
     }
+
+
 });
 

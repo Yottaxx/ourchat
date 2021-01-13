@@ -28,6 +28,11 @@ public class GroupMembersController {
         return groupMembersRepository.save(groupMembers_new);
     }
 
+    @GetMapping(path = "/all/GroupMembers/{group_id}")
+    public List<GroupMembers_new> getAllGroupMembers(@PathVariable("group_id") Integer group_id){
+        return groupMembersRepository.findGroupById(group_id);
+    }
+
 //    @PutMapping("/luckymoneys/{id}")
 //    public Luckymoney update(@PathVariable("id")Integer id,
 //                             @RequestParam("consumer")String consumer) {
